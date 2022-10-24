@@ -21,3 +21,8 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+
+
+java_jh/.classpath
+java_jh/.gitignore
+java_jh/.project
