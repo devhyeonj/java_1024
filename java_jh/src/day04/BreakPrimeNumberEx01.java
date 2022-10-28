@@ -9,6 +9,7 @@ public class BreakPrimeNumberEx01 {
 		int num=11;
 		int i;			//제일 작은수
 		for (i = num-1; i >= 1 ; i--) {
+			System.out.println("========" + i);// 확인용
 			if(num % i == 0) {
 				break;
 			}

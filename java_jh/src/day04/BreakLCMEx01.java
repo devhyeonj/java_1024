@@ -28,11 +28,6 @@ public class BreakLCMEx01 {
 			}
 		}
 		
-		int num11=2,num22 = 3;
-		for (int i = num11; ; i++) {
-			
-		}
-		
 	}
 
 }
