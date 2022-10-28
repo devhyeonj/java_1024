@@ -1,4 +1,4 @@
-package homeStudy;
+package Study;
 //타입 간의 변환 방법 22-10-26
 public class TypeChange {
 

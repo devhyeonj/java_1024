@@ -1,4 +1,4 @@
-package homeStudy;
+package Study;
 
 //for문
 public class Star {

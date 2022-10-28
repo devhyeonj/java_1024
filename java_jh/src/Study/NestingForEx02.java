@@ -1,4 +1,4 @@
-package homeStudy;
+package Study;
 //e
 public class NestingForEx02 {
 

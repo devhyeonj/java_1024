@@ -1,4 +1,4 @@
-package homeStudy;
+package Study;
 
 
 public class ForGCDEx01 {

@@ -1,4 +1,4 @@
-package homeStudy;
+package Study;
 
 //복습하기
 public class BreakLCMEx01 {
