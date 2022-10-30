@@ -8,7 +8,7 @@ public class NestingForEx01 {
 		 */
 		
 		int num = 3, i;
-		for (num = 2; num <= 9; num++) {
+		for (num = 3; num <= 3; num++) {
 			for (i = 1; i <=9 ; i++) {
 				System.out.println(num + "x" + i + "=" + (num * i));
 			

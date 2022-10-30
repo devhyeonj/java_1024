@@ -6,7 +6,7 @@ public class ArrayEx03 {
 		/*
 		 * 5개짜리 배열을 생성하여 2부터 10까지 짝수를 차례대로 저장하고 출력하는 코드를 작성하세요
 		 */
-
+		
 		int[] arr = new int[5];
 
 		for (int j = 0; j < arr.length; j++) {

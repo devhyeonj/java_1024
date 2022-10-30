@@ -11,23 +11,18 @@ public class ForPrimeNumberEx01 {
 		 * 규칙성 : i가 num의 약수이면 count(약수의 개수)를 1증가
 		 * 반복문 종료 후 : count가 2이면 소수라고 출력하고 2보다 크면 소수가 아니라고 출력
 		 */
-		int num = 71 , count =0;
-		
+		int num= 71, count = 0;
 		for (int i = 1; i <=num; i++) {
-			if(num%i ==0 ) {
+			if(num % i == 0) {
 				count++;
-				System.out.print(i+" "); // 약수출력
 			}
 		}
-		
-		System.out.println();
-		
+		// 소수 판별
 		if(count == 2) {
-			System.out.println(num + " 소수 입니다.");
+			System.out.println("소수 입니다.");
 		}else {
-			System.out.println(num +" 소수가 아닙니다.");
-		}
+			System.out.println("소수가 아닙니다.");
+		}	
 
 	}
-
 }

@@ -14,29 +14,14 @@ public class IfEx05 {
 		 */
 		
 		Scanner sc = new Scanner(System.in);
-		System.out.print("배수 입력>>>");
-		int num = sc.nextInt();
-		if(num % 2 == 0 && num %3 !=0) {
-			System.out.println("2의 배수");
-		}else if (num % 3 ==0 && num % 2 != 0 ) {
-			System.out.println("3의 배수");
-		} else if (num % 6 ==0) {
-			System.out.println("6의 배수");
-		} else {
-			System.out.println("2,3,6의 배수가 아닙니다.");
-		}
 		
-		System.out.println("=============================");
+		int num = 6; // 정수
 		
-		if(num % 6 == 0) {
-			System.out.println("6의 배수");
-		}else if (num % 3 ==0) {
-			System.out.println("3의 배수");
-		} else if (num % 2 ==0) {
-			System.out.println("2의 배수");
-		} else {
-			System.out.println("2,3,6의 배수가 아닙니다.");
-		}
+		if(num % 6 == 0) System.out.println("6의 배수");
+		else if(num % 3 ==0) System.out.println("3의 배수");
+		else if(num % 2 ==0) System.out.println("2의 배수");
+		else System.out.println("2,3,6의 배수가 아닙니다.");
+	
 	}
 
 }

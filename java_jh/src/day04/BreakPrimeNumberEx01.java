@@ -1,5 +1,5 @@
 package day04;
-//복습하기
+
 public class BreakPrimeNumberEx01 {
 
 	public static void main(String[] args) {
