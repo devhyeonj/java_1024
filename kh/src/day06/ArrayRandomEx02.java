@@ -1,6 +1,6 @@
 package day06;
 
-// 다시 해보기 ddd
+// 다시 해보기
 public class ArrayRandomEx02 {
 
 	public static void main(String[] args) {

@@ -10,37 +10,31 @@ public class ArrayScoreEx01 {
 		 */
 		Scanner sc = new Scanner(System.in);
 		
+		int stdCount = 5;
 		int[] kor = new int[5];
 		int[] eng = new int[5];
 		int[] math = new int[5];
 		double sum1 =0 , sum2=0, sum3=0; // 국영수 합계 변수
 		
 		for (int i = 0; i <=4; i++) {
-			System.out.print(i+1+"명 학생의"+"국어>>");
+			System.out.print("학생" + (i + 1) + "의 국어,영어,수학 성적을 입력");
 			kor[i] = sc.nextInt();
-			System.out.print(i+1+"명 학생의"+"영어>>");
 			eng[i] = sc.nextInt();
-			System.out.print(i+1+"명 학생의"+"수학>>");
 			math[i] = sc.nextInt();
 			sum1 += kor[i];
 			sum2 += eng[i];
 			sum3 += math[i];
 		}
-		double avg1 = 0.0, avg2 =0.0 , avg3 =0.0;
-		for (int i = 0; i <= kor.length; i++) {
-			avg1 = sum1/kor.length;  
-		}
-		for (int i = 0; i <= eng.length; i++) {
-			avg2 = sum2/eng.length;
-		}
-		for (int i = 0; i <= math.length; i++) {
-			avg3= sum3/math.length;
-		}
+		//과목별 평균
+		System.out.println("5명의 학생의 국어 평균은>>"+  sum1 / kor.length);
+		System.out.println("5명의 학생의 영어 평균은>>"+ sum2 / eng.length);
+		System.out.println("5명의 학생의 수학 평균은>>"+ sum3 / math.length);
 		
-		System.out.println("5명의 학생의 국어 평균은>>"+ avg1);
-		System.out.println("5명의 학생의 영어 평균은>>"+ avg2);
-		System.out.println("5명의 학생의 수학 평균은>>"+ avg3);
-		
+		//학생별 평균
+		for (int i = 0; i < stdCount; i++) {
+			double sum = kor[i] + eng[i] + math[i];
+			System.out.println("학생" + (i + 1) + "의 평균 :" + sum / 3);
+		}
 
 	}
 }

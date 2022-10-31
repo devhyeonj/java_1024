@@ -23,15 +23,12 @@ public class ArrayCopyEx02 {
 		//깊은 복사 예제3
 		arr2 = Arrays.copyOf(arr1, arr1.length);
 		
-		
-		
 		// arr1과 arr2값 확인
 		for (int i = 0; i < arr1.length; i++) {
 			System.out.println("arr1[" + i + "] = " + arr1[i] + ",arr2[" + i + "]=" + arr2[i]);
 		}
 		
 		System.out.println();
-		// 같이 10으로 바뀌는걸 확인 할 수 있다.
 		arr1[0] = 10;
 		for (int i = 0; i < arr1.length; i++) {
 			System.out.println("arr1[" + i + "] = " + arr1[i] + ",arr2[" + i + "]=" + arr2[i]);
