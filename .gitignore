@@ -23,9 +23,9 @@
 hs_err_pid*
 
 
-java_jh/.classpath
-java_jh/.gitignore
-java_jh/.project
+kh/.classpath
+kh/.gitignore
+kh/.project
 .DS_Store
 
 java_jh/.metadata/.lock
