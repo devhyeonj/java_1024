@@ -29,7 +29,7 @@ public class MethodArrayEx02 {
 	 * 메소드명 : random
 	 */
 	public static int random(int min, int max) {
-		return random(min,max);
+		return (int)(Math.random()*(max-min+1)+min);
 	}
 	
 	
