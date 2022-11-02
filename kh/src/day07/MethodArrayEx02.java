@@ -15,13 +15,24 @@ public class MethodArrayEx02 {
 		printArray(arr2);
 	
 	}
-	
+	// 출력하는 메소드
 	public static void printArray(int arr[]) {
 		for (int i = 0; i < arr.length; i++) {
 			System.out.print(arr[i]+" ");
 		}
 		System.out.println();
 	}
+	/*
+	 * 기능 : 최소값과 최대값 사이의 랜덤한 수를 생성하여 알려주는 메소드
+	 * 매개변수 : 최소값, 최대값 => int min, int max
+	 * 리턴타입 : 랜덤한 수 => 정수 => int
+	 * 메소드명 : random
+	 */
+	public static int random(int min, int max) {
+		return random(min,max);
+	}
+	
+	
 	/*
 	 * 기능 : 최소값과 최대값 사이의 랜덤한 수를 주어진 배열에 저장하는 메소드
 	 * 매개변수 : 최소값, 최대값, 배열 => int arr[], int min, int max
@@ -50,15 +61,7 @@ public class MethodArrayEx02 {
 		}
 		return arr;
 	}
-	/*
-	 * 기능 : 최소값과 최대값 사이의 랜덤한 수를 생성하여 알려주는 메소드
-	 * 매개변수 : 최소값, 최대값 => int min, int max
-	 * 리턴타입 : 랜덤한 수 => 정수 => int
-	 * 메소드명 : random
-	 */
-	public static int random(int min, int max) {
-		return random(min,max);
-	}
+
 	
 	
 	

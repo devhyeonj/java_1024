@@ -1,7 +1,5 @@
 package day07;
 
-import java.util.Iterator;
-
 // 다시 해보기
 public class MethodEx03 {
 
