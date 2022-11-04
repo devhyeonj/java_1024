@@ -1,6 +1,6 @@
 package day09;
 
-public class GamePerson {
+public class Player {
 	
 	private String name;
 	private int count;
@@ -19,21 +19,10 @@ public class GamePerson {
 	}
 	
 	public void print() {
-		System.out.println("이름:"+name+count+"회");
+		System.out.println(name+" "+count+"회");
 	}
-	public GamePerson(String name, int count) {
-		super();
+	public Player(String name, int count) {
 		this.name = name;
 		this.count = count;
 	}
-	@Override
-	public String toString() {
-		return "이름:"+name+ count+" 회";
-	}
-	
-	
-	
-	
-	
-
 }

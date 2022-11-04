@@ -1,5 +1,6 @@
 package day09;
 
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class BaseballManager {
@@ -20,16 +21,17 @@ public class BaseballManager {
 		// [new] 회수를 기록(최대 5등), 5등 기준으로 회수가 동일한 경우 먼저 플레이한 사용자 기록을 유지
 		// 2. 기록확인
 		// 3. 종료
-		int menu,count = 0;
-		GamePerson gamePerson[] = new GamePerson[5];
+		int menu;
+		int playerNum = 0;
+		int ranking =0;
+		Player[] player = new Player[5];
 		
 		Scanner sc = new Scanner(System.in);
-		
 		do {
 			printMenu();
 			menu = sc.nextInt();
-			startMenu(menu,count,gamePerson);
-			count++;
+			playerNum = startMenu(menu,player, playerNum);
+			System.out.println(playerNum);
 		}while(menu !=3);
 		
 	}
@@ -43,31 +45,47 @@ public class BaseballManager {
 	}
 	
 	//메뉴에 맞는 기능을 실행 하는 메소드
-	public static void startMenu(int menu,int count,GamePerson[] list) {
-		Scanner sc = new Scanner(System.in);
-		int i = 0;
+	public static int startMenu(int menu,Player[] player,int playerNum) {
+		Scanner sc = new Scanner(System.in);				//현재 저장된 플레이어
+		int i=0;
+		int count = 0;
 		switch (menu) {
 		case 1:
-			i++;
-			BaseballGame.startGame();
-			System.out.print("게임한 사람 이름은>>");
-			String playGamePersonName = sc.next();
-			list[i] = new GamePerson(playGamePersonName, count);
-			break;
+				count = BaseballGame.startGame();
+				System.out.print("게임한 사람 이름은>>");
+				String playGamePersonName = sc.next();
+				player[playerNum] = new Player(playGamePersonName, count);
+				System.out.println("기록 하였습니다.");
+				playerNum++;
+				break;
 		case 2:
-			for (int j = 0; j < list.length; j++) {
-				if(list[j] != null)
-				System.out.println(list[j]);
-			}
+			ranking(player);
+			for (int j = 0; j < playerNum; j++) {
+				player[j].print();
+			}	
+			
 		default:
+			System.out.println("잘못 입력하셨습니다. 다시 입력해주세요!!");
 			break;
 		}
+		return playerNum;
 	}
+	//순위 메소드
+	public static void ranking(Player[] player) {
+		   int i=0, j=0, ranking=1;
+	        for(i=0; i<player.length; i++) {
+	            for(j=0; j<player.length; j++) {
+	                if(player[i].getCount()<player[j].getCount()) {
+	                    ranking++;
+	                }
+	            }
+	            System.out.println(ranking + "위");
+	            ranking=1;
+	        }
 	
-	
-	//기록 순위 매기는 메소드
-	
-	//출력 메소드?
+	}
 }
+
+	//출력 메소드?
 
 

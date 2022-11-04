@@ -4,24 +4,26 @@ import java.util.Scanner;
 
 public class BaseballGame {
 	
-	public static void startGame() {
+	public static int startGame() {
+		int count = 0;
 		int min = 1, max = 9, size = 3;
 		int []com = createRandomArray(min, max, size);
 		printArray(com);
-
 		Scanner scan = new Scanner(System.in);
 
 		int strike = 0, ball;
 		do {
+			count++;
 			System.out.print("입력 : ");
 			int []user = scanArray(scan, size);
-
+			
 			strike = getStrike(com, user);
 			ball = getBall(com, user);
 
 			printGame(strike, ball);
 			//2~3을 반복(3S가 될때까지)
 		}while(strike < 3);
+		return count;
 	}
 	
 	/**
