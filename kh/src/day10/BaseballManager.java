@@ -22,7 +22,7 @@ public class BaseballManager {
 		// [new] 회수를 기록(최대 5등), 5등 기준으로 회수가 동일한 경우 먼저 플레이한 사용자 기록을 유지
 		int menu;
 		Record[] records = new Record [5];
-		
+		//do를 쓰는 이유는 한번은 출력해야하니까
 		do {
 		printMenu( 
 				"--------",
@@ -45,7 +45,7 @@ public class BaseballManager {
 	 * @param menu 실행할 메뉴 번호
 	 * @param recoards 
 	 */										//저장하거나 확인하기 위해서넘겨줌
-	private static void runMenu(int menu, Record[] recoards) {
+	private static void runMenu(int menu, Record[] records) {
 		switch (menu) {
 		case 1 ://플레이
 			//컴퓨터가 랜덤으로 숫자 생성
@@ -64,16 +64,16 @@ public class BaseballManager {
 			}while(bg.getStrike() != 3);
 			//5등 회수를 기록(최대 5등), 5등 기준으로 회수가 동일한 경우 먼저 플레이한 사용자 기록을 유지
 			//기록의 최대 회수를 찾음 (꼴지 횟수)
-			int maxRecordCount = getMaxRecordCount(recoards);
+			int maxRecordCount = getMaxRecordCount(records);
 			//기록된 수를 찾음(꼴찌 순위)
-			int maxRecordRank = getMaxRecordRank(recoards);
+			int maxRecordRank = getMaxRecordRank(records);
 			//기록된 최대 횟수가 내 횟수보다 크거나 기록된 수가 5보다 작으면 기록
 			if(maxRecordCount > tryCount || maxRecordRank < 5) {
-				addRecord(recoards,tryCount);
+				addRecord(records,tryCount);
 			}
 			break;
 		case 2 ://기록하기
-			printRecords(recoards);
+			printRecords(records);
 			break;
 		case 3 ://종료
 			break;
@@ -90,22 +90,22 @@ public class BaseballManager {
 			}
 		}
 	}
-	private static void addRecord(Record[] recoards, int tryCount) {
+	private static void addRecord(Record[] records, int tryCount) {
 		Scanner sc = new Scanner(System.in);
 		System.out.print("이름 입력(예 : JHL): ");
 		String name = sc.next();
 		Record r = new Record(tryCount, name);
 		////////////////////////////////////////////////////////////
 		int index =0; // 내가 몇번째에 껴놔야할지 역할
-		for (Record record : recoards) {
+		for (Record record : records) {
 			if(record != null && record.getCount() <= tryCount) {
 				index++; // 1등이 나보다 기록이 좋으면 index가 1됨.....
 			}
 		} //앞에서 부터 밀면 복사가 되기때문에 뒤에서 부터 함 2-3
-		for (int i = recoards.length -1;i>index; i--) {
-			recoards[i] = recoards[i-1]; // 앞에 있는걸 뒤로 
+		for (int i = records.length -1;i>index; i--) {
+			records[i] = records[i-1]; // 앞에 있는걸 뒤로 
 		}
-		recoards[index] = r; //기록이끝남
+		records[index] = r; //기록이끝남
 		
 	}
 	/*덮어쓰면 안되서 기존의숫자를 밑으로내려줌
@@ -138,38 +138,38 @@ public class BaseballManager {
 	
 	
 	//사람수를 찾는거
-	private static int getMaxRecordRank(Record[] recoards) {
+	private static int getMaxRecordRank(Record[] records) {
 		int count = 9999999;
-		for (Record record : recoards) {
+		for (Record record : records) {
 			if(record != null) {
 				count = record.getCount(); // 1위부터 차례대로 덮어써서 꼴지 기록을 찾음 그런다음에 저장
 			}
 		}
 		return count;
 	}
-	// 내기록이 들어갈수 있는지 확인하는거 (꼴지기록을 확인해서 내가 더 좋으면 넣음 같으면 먼저 등록한사람 우선이라
-	private static int getMaxRecordCount(Record[] recoards) {
+	// 내기록이 들어갈수 있는지 확인하는거 (꼴지기록을 확인해서 내가 더 좋으면 넣음 같으면 먼저 등록한사람 우선
+	private static int getMaxRecordCount(Record[] records) {
 		int rank = 9999999;
-		for (Record record : recoards) {
+		for (Record record : records) {
 			if(record != null) {
 				rank++; //기록있을때부터 횟수를 세줌
 			}
 		}
 		return rank;
 	}
-	
+	//스캐너 입력 받는 메소드
 	private static int selectMenu() {
 		Scanner sc = new Scanner(System.in);
 		return sc.nextInt();
 	}
 	
-
+	//strs.length = 7
 	public static void printMenu(String...strs) {
 		for (int i = 0; i < strs.length; i++) {
 			System.out.print(strs[i]);
 			if(i != strs.length -1) {
-				System.out.println(); 
-			} //마지막꺼 엔터안할라고
+				System.out.println(); //마지막은 엔터안함
+			} 
 		}
 	}
 }

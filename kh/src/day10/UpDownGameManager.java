@@ -74,7 +74,7 @@ public class UpDownGameManager {
 	 * 기록 정보보다 사용자 기록이 좋으면 기록을 추가하는 메소드
 	 * @param record
 	 * @param tryCount
-	 */
+	 */													//시도 횟수
 	public static void writeRecord(Record[] record, int tryCount) {
 		int index = 0; // 몇번지에 수정할것인지 / 
 		for (int i = 0; i < record.length; i++) {
@@ -130,17 +130,6 @@ public class UpDownGameManager {
 		return r;
 		
 	}
-	
-	/*
-	 * public static int getMaxRecordRank(Record[] record) { int count = 999; for
-	 * (Record r : record) { if(r != null) { count = r.getCount(); } } return count;
-	 * }
-	 * 
-	 * 
-	 * public static int getMaxRecordCount(Record[] record) { int rank = 999; for
-	 * (Record r : record) { if(r !=null) { rank++; } } return rank; }
-	 */
-	 
 	
 	public static int insertInt() {
 		Scanner sc = new Scanner(System.in);
