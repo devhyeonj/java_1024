@@ -21,7 +21,7 @@ public class BaseballManager {
 		 */
 		// [new] 회수를 기록(최대 5등), 5등 기준으로 회수가 동일한 경우 먼저 플레이한 사용자 기록을 유지
 		int menu;
-		Record[] recoards = new Record [5];
+		Record[] records = new Record [5];
 		
 		do {
 		printMenu( 
@@ -36,7 +36,7 @@ public class BaseballManager {
 		//메뉴 선택
 		 menu = selectMenu();
 		//선택한 메뉴에 따른 기능 실행
-		runMenu(menu,recoards); // 메뉴를 실행할때마다 기록됨
+		runMenu(menu,records); // 메뉴를 실행할때마다 기록됨
 		}while(menu != 3);
 		
 	}
@@ -95,18 +95,49 @@ public class BaseballManager {
 		System.out.print("이름 입력(예 : JHL): ");
 		String name = sc.next();
 		Record r = new Record(tryCount, name);
-		int index =0;
+		////////////////////////////////////////////////////////////
+		int index =0; // 내가 몇번째에 껴놔야할지 역할
 		for (Record record : recoards) {
-			if(record != null && record.getCount() < tryCount) {
+			if(record != null && record.getCount() <= tryCount) {
 				index++; // 1등이 나보다 기록이 좋으면 index가 1됨.....
 			}
-		}
+		} //앞에서 부터 밀면 복사가 되기때문에 뒤에서 부터 함 2-3
 		for (int i = recoards.length -1;i>index; i--) {
 			recoards[i] = recoards[i-1]; // 앞에 있는걸 뒤로 
 		}
 		recoards[index] = r; //기록이끝남
 		
 	}
+	/*덮어쓰면 안되서 기존의숫자를 밑으로내려줌
+	 * 1. ABC 1
+	 * 2. CDF 2
+	 * 3. FGD 2
+	 * 4. ASD 4
+	 * 5. 
+	 * 
+	 * JHL 3
+	 * 
+	 * 1. ABC 1
+	 * 2. CDF 2
+	 * 3. FGD 2
+	 * 4. JHL 3
+	 * 5. ASD 4
+	 * 
+	 * 1. ABC 1
+	 * 2. CDF 2
+	 * 3. CDF 2
+	 * ....
+	 * 
+	 * 1. ABC 1
+ 	 * 2. JHL 1(INDEX)   
+	 * 3.CDF 2
+	 * 4.FGD  2
+	 * 5. ASD 4
+	 * 
+	 */
+	
+	
+	//사람수를 찾는거
 	private static int getMaxRecordRank(Record[] recoards) {
 		int count = 9999999;
 		for (Record record : recoards) {
@@ -116,6 +147,7 @@ public class BaseballManager {
 		}
 		return count;
 	}
+	// 내기록이 들어갈수 있는지 확인하는거 (꼴지기록을 확인해서 내가 더 좋으면 넣음 같으면 먼저 등록한사람 우선이라
 	private static int getMaxRecordCount(Record[] recoards) {
 		int rank = 9999999;
 		for (Record record : recoards) {
@@ -136,10 +168,9 @@ public class BaseballManager {
 		for (int i = 0; i < strs.length; i++) {
 			System.out.print(strs[i]);
 			if(i != strs.length -1) {
-				System.out.println();
-			}
+				System.out.println(); 
+			} //마지막꺼 엔터안할라고
 		}
-		
 	}
 }
 
