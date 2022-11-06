@@ -3,15 +3,16 @@ package assignment;
 import java.util.Scanner;
 
 public class GameThirtyOne {
+	
+	static int comWin,userWin;
 
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
 		//메뉴 변수선언 
 		int menu = 0;
 		int start= 0;
-		int userWin = 0,comWin = 0;
-		int numN=0;
-		//누가 승리
+		//승리 
+		int comWin=0,userWin=0;
 		// 게임 숫자 저장할 배열 생성
 		int[] game = new int[31];
 		//메뉴출력 , 메뉴 입력
@@ -25,19 +26,19 @@ public class GameThirtyOne {
 					"메뉴 선택>>"
 					);
 			menu = scannerInt(sc);
-			scannerMenu(menu, userWin,comWin, game, sc,start);
+			scannerMenu(menu, game, sc,start);
 		}
 	}
 	//입력에 따른 기능 실행
-	public static void scannerMenu(int menu,int userWin,int comWin,int game[],Scanner sc,int start) {
+	public static void scannerMenu(int menu,int game[],Scanner sc,int start) {
 		switch (menu) {
 		case 1:
 			//1번 선택시 초기화			
 			int lastNum = 0; 
-			gameStart(lastNum, game, sc, start, userWin, comWin);
+			gameStart(lastNum, game, sc, start);
 			break;
 		case 2:
-			printScore(comWin, userWin);
+			printScore();
 			break;
 		case 3:
 			System.out.println("종료");
@@ -62,15 +63,13 @@ public class GameThirtyOne {
 		return  sc.nextInt();
 	}
 	
-	public static void printScore(int comWin, int userWin) {
-		System.out.println("컴퓨터: "+comWin+"승");
-		System.out.println("사용자: "+userWin+"승");
+	public static void printScore() {
+		System.out.println("컴퓨터"+comWin+"승");
+		System.out.println("유저"+userWin+"승");
 	}
 	
-	public static int gameStart(int lastNum,int[] game,Scanner sc,int start,int userWin,int comWin) {
+	public static int gameStart(int lastNum,int[] game,Scanner sc,int start) {
 	int comTurn = (int)(Math.random()*3)+1;
-	System.out.println(""+comWin+userWin);
-	printScore(comWin, userWin);
 	loop : for (int i = 0; i < game.length; i++) {
 		System.out.println("computer turn!");
 		lastNum += comTurn;
@@ -78,7 +77,7 @@ public class GameThirtyOne {
 			for (int j = 0; j <lastNum; j++) {
 				if(j == game.length) {
 					userWin++;
-					System.out.println("userWin확인"+userWin);
+					System.out.println("userWin확인"+ userWin);
 					break loop;
 				}
 				game[j] = j+1;
