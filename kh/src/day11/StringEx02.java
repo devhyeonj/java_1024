@@ -8,13 +8,13 @@ public class StringEx02 {
 		String str = "Hello world! My name is Hong ooo";
 		String search = "oo";
 		
-		//str에서 search가 있는 위치를 찾음
-		//-1이 아니면 부분문자열을 추출
 		String tmp = str;
 		int count = 0;
 		while(true) {
 			System.out.println(tmp);
+			//str에서 search가 있는 위치를 찾음
 			int index = tmp.indexOf(search);
+			//-1이 아니면 부분문자열을 추출
 			if(index == -1) { // else를 안써도 동일하게 동작함
 				break;
 			}
@@ -24,7 +24,6 @@ public class StringEx02 {
 			count++;
 		}
 		System.out.println(str+"에는 " + search +"가"+count+"번 있습니다.");
-
 		
 	}
 
