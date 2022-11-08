@@ -21,24 +21,7 @@ public class InheritanceEx01 {
 	}
 
 }
-class Child1 extends Parent1 {
-	public Child1() {
-		super(1, 2, 3);
-		//super(); // 자동으로 추가된거임
-		//num1 = 10; // private은 본인만 가능하다 자식도X
-		num2 = 20; // 접근제한자가 디폴트이어서 같은 패키지에 있기 때문에 가능
-						//상속여부가 상관이 없다.
-		num3 = 30; // 접근제한자가 protected이어서 자식 클래스에서 사용할수있음
-				// 다른 패키지이어도 사용 가능
-	}
 
-	@Override // 오버라이딩 하기로 했는데 에러표시를 해줌
-	public void print() {
-		super.print();
-		System.out.println("자식클래스의 메소드입니다.");
-	}
-	
-}
 class Parent1 {
 	
 	private int num1 = 1;
@@ -59,5 +42,24 @@ class Parent1 {
 		this.num3 = num3;
 	}
 	
+	
+}
+
+class Child1 extends Parent1 {
+	public Child1() {
+		super(1, 2, 3);
+		//super(); // 자동으로 추가된거임
+		//num1 = 10; // private은 본인만 가능하다 자식도X
+		num2 = 20; // 접근제한자가 디폴트이어서 같은 패키지에 있기 때문에 가능
+						//상속여부가 상관이 없다.
+		num3 = 30; // 접근제한자가 protected이어서 자식 클래스에서 사용할수있음
+				// 다른 패키지이어도 사용 가능
+	}
+
+	@Override // 오버라이딩 하기로 했는데 에러표시를 해줌
+	public void print() {
+		super.print();
+		System.out.println("자식클래스의 메소드입니다.");
+	}
 	
 }

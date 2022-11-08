@@ -2,7 +2,9 @@ package example;
 
 import java.util.Scanner;
 
-public class StudentManager {
+import day12.ProgramManager;
+
+public class StudentManager implements ProgramManager {
 
 	private Scanner scan;
 	private int maxStudent;

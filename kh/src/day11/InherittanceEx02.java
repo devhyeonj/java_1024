@@ -55,7 +55,7 @@ public class InherittanceEx02 {
 class Tire {
 	public String company;
 	public int size;
-	public boolean isSnow; //제조일자
+	public boolean isSnow; 
 	public boolean isStop;
 
 	public void print() {
