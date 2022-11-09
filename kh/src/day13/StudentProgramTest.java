@@ -2,7 +2,6 @@ package day13;
 
 import java.util.Scanner;
 
-import Student.Score;
 import day12.Student;
 
 public class StudentProgramTest {

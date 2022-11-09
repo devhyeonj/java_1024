@@ -1,7 +1,5 @@
 package day13;
 
-import Student.Score;
-
 public class HighStudent {
 	//필드
 	private int grade;//학년
