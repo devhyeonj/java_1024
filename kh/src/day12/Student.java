@@ -38,6 +38,10 @@ public class Student {
 	public String toString() {
 		return "Student [grade=" + grade + ", classNum=" + classNum + ", num=" + num + ", name=" + name + "]";
 	}
+
+	public void printScore() {
+		
+	}
 	
 	
 }

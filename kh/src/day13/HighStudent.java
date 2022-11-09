@@ -1,5 +1,7 @@
 package day13;
 
+import lombok.Data;
+
 public class HighStudent {
 	//필드
 	private int grade;//학년
