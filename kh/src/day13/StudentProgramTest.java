@@ -1,6 +1,9 @@
-package Student;
+package day13;
 
 import java.util.Scanner;
+
+import Student.Score;
+import day12.Student;
 
 public class StudentProgramTest {
 	/*
@@ -39,6 +42,8 @@ public class StudentProgramTest {
 	public static void main(String[] args) {
 		
 		Scanner sc = new Scanner(System.in);
+		HighStudent[] stds = new HighStudent[30]; // 고정
+		int count = 0; // 현재 저장된 학생 수
 		
 		int menu=0;
 		 // 반복
@@ -61,10 +66,22 @@ public class StudentProgramTest {
 				int classNum = sc.nextInt();
 				int num = sc.nextInt();
 				String name = sc.next(); // next써야 이름입력 할 수 있음
+				
 				// 입력한 학생 정보가 없으면 추가
 				// 학생 정보들 중에서 하나씩 비교하여 학년, 반, 번호가 같은 학생이 있는지 확인해서
 				// 없으면 마지막 학생 뒤에 추가
-				System.out.println(grade + "학년" + classNum + "반" + num + "번"  + "이름"+name);
+				// 기존 학생정보가 있는지 없는지 확인
+				int index = -1; // 학생정보가 있으면 몇번지에 있는지 알려줄 변수
+				HighStudent tmp = new HighStudent(grade, classNum, num, name);
+				for (int i = 0; i < count; i++) {
+					if(stds[i].equals(tmp)) {
+						index = i; // 일차하는 학생의 위치(번지)를 index에 저장함
+					}
+				}
+					if(index == -1 && count < stds.length) {
+						stds[count] = tmp; // 생성자에 의해 만들어지고 조건문에 의해 초기화가 되기 때문에 ㄱㅊ다
+						count ++; // 한명 증가했으니까 cout++;
+					}
 			}else if(menu ==2) {
 					//2. 학생 성적 ㅊ가
 					// 학생 정보를 입력(학년,반,번호)
@@ -72,9 +89,19 @@ public class StudentProgramTest {
 					int grade = sc.nextInt();
 					int classNum = sc.nextInt();
 					int num = sc.nextInt();
-					// 입력한 학생 정보가 없으면 끝
-					// 학생 정보들 중에서 하나씩 비교하여 학년 , 반 ,번호가 같은 학생이 
+					// 입력한 성적 정보가 없으면 끝
+					// 성적 정보들 중에서 하나씩 비교하여 학년 , 반 ,번호가 같은 학생이 
 					//없으면 조건문 종료
+					int index = -1;
+					HighStudent tmp = new HighStudent(grade, classNum, num);
+					for (int i = 0; i < count; i++) {
+						if(stds[i].equals(tmp)) {
+							index = i; // 일차하는 학생의 위치(번지)를 index에 저장함
+						}
+					}
+					if(index == -1) {
+						continue;
+					}
 					
 					// 성적 정보를 입력(과목,학기 ,중간 기말, 수행평가)
 					System.out.println("성적 정보를 입력하세요");
@@ -84,11 +111,21 @@ public class StudentProgramTest {
 					int midScoer = sc.nextInt();
 					int finalScore = sc.nextInt();
 					int performance = sc.nextInt();
+					boolean res = stds[index].addScore(new Score(title, term, midScoer, finalScore, performance));
+					if(res) {
+						System.out.println("성적을 등록했습니다.");
+						stds[index].printScore();
+					}else {
+						System.out.println("성적 등록에 실패했습니다.");
+					}
 					// 입력한 성적 정보가 없으면 추가
 					//선택한 학생의 성적 정보들 중에서 과목, 학기가 같은 성적 정보가 없으면 추가 
 				}else if(menu ==3) {
 					//3. 학생 정보 출력
 					// 저장된 정보 출력
+					for (int i = 0; i < count; i++) {
+						System.out.println(stds[i]);
+					}
 				}else if(menu ==4) {
 					System.out.println("프로그램 종료");
 				}else {
