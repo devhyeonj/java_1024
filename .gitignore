@@ -98,3 +98,5 @@ java_jh/.metadata/version.ini
 /bin/
 
 .classpath
+
+kh/src/day15/WordListMain.java
