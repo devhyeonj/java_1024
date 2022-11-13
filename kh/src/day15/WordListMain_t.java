@@ -184,7 +184,8 @@ public class WordListMain_t {
 		}
 		return list;
 	}
-
+	
+	
 	private static void printWord(ArrayList<Word> wordList) {
 		if(wordList == null || wordList.size() == 0) {
 			System.out.println("---------------");

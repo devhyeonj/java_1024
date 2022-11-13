@@ -20,11 +20,11 @@ public class Word {
 			return true;
 		if (obj == null)
 			return false;
-		if (getClass() != obj.getClass()) {
-			if (!(obj instanceof String)) {
-				return false;
+		if (getClass() != obj.getClass()) { //해당객체가 런타임 아니면
+			if (!(obj instanceof String)) { // 같은 객체가 아니면
+				return false;				// 펄스
 			}
-			return word.equals(obj);
+			return word.equals(obj);		// word랑 obj랑 비교함
 		}
 		Word other = (Word) obj;
 		if (word == null) {
