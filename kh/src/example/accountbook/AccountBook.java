@@ -7,6 +7,7 @@ import java.util.Scanner;
 public class AccountBook {
 	ArrayList<Item> list = new ArrayList<>();
 	AccountService accountService = new AccountServiceImp();
+	
 	Scanner sc;
 	public void run() {
 		System.out.println("가계부 프로그램 실행합니다.");
