@@ -3,6 +3,7 @@ package example.accountbook.copy;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.function.Predicate;
 
 public interface AccountService { // 기능
 void insertItem(ArrayList<Item> list, Item item);//가계부에 있는 내역 리스트, 추가할 아이템
@@ -10,6 +11,8 @@ void insertItem(ArrayList<Item> list, Item item);//가계부에 있는 내역 �
 	void printItem(ArrayList<Item> list);//가계부에 있는 내역 리스트
 	
 	void printItem(ArrayList<Item> list, int ...days);
+	
+	void printItem(ArrayList<Item> list, Predicate<Item> p);
 	
 	boolean updateItem(ArrayList<Item> list, int index, Item item);//가계부에 있는 내역 리스트,몇번지, 수정할 아이템
 	
