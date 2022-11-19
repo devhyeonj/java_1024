@@ -24,6 +24,7 @@ class Phonebook{
 		num = count;
 	}
 	
+	//업데이트
 	public void update(String lastName, String firstName, String job) {
 		this.lastName = lastName;
 		this.firstName = firstName;
@@ -57,6 +58,10 @@ class Phonebook{
 		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
 		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
 		return result;
+	}
+
+	public void delete(Phone p1) {
+		phones.remove(p1);
 	}
 }
 @Data
@@ -141,7 +146,16 @@ public class PhoneListMain {
 			int submenuNum = sc.nextInt();
 			subMenu(tmp, sc, submenuNum, phonebookList, phoneList);
 			break;
-		case 3:
+		case 3://삭제
+			Phonebook tmp1 = select(phonebookList, sc);
+			for (int i = 0; i < tmp1.getPhones().size(); i++) {
+				System.out.println((i+1)+""+tmp1.getPhones().get(i));
+			}
+			System.out.print("삭제할 전화번호를 선택해주세요>>");
+			int num =sc.nextInt();
+			Phone p1 = tmp1.getPhones().get(num-1);
+			tmp1.delete(p1);
+			System.out.println("삭제에 성공 하셨습니다.");
 			break;
 		case 4:
 			System.out.println("4. 전화번호 조회");
