@@ -191,7 +191,7 @@ public class PhoneListMain {
 				System.out.println("수정을 시작합니다.");
 				System.out.print("이름: "); name1 = sc.next();
 				System.out.print("번호: "); phoneNumber1 = sc.next();
-				tmp.getPhones().get(num).update(name1,phoneNumber1);
+				tmp.getPhones().get(num-1).update(name1,phoneNumber1);
 				System.out.println("기존 전화번호를 수정하였습니다.");
 				break;
 		case 3://새 전화번호 추가
