@@ -1,6 +1,7 @@
 package day20;
 
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.function.Predicate;
 
@@ -14,15 +15,29 @@ class Phonebook{
 	private String lastName;
 	private String firstName;
 	private String Job;
-	private ArrayList<Phone> phones; //전화번호들??
+	private ArrayList<Phone> phones= new ArrayList<>();; //전화번호들??
 	
-	public Phonebook(String lastName, String firstName, String job, ArrayList<Phone> phones) {
+	public Phonebook(String lastName, String firstName, String job) {
 		this.lastName = lastName;
 		this.firstName = firstName;
 		this.Job = job;
-		this.phones = phones;
 		count++;
 		num = count;
+	}
+	
+	public void insertPhone(String name, String Phonenumber) {
+		try {
+			Phone p = new Phone(name, Phonenumber);
+			phones.add(p);
+		}catch (Exception e) {
+			System.out.println("null!");
+		}
+	}
+	
+	@Override
+	public String toString() {
+		return "[" + num + "]"+"성명:"+lastName+firstName+" 직장:"+ Job
+				+ phones;
 	}
 
 	public Phonebook(String lastName, String firstName) {
@@ -30,36 +45,6 @@ class Phonebook{
 		this.firstName = firstName;
 	}
 	
-	
-	
-	
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass()) {
-			if(!(obj instanceof String)) {
-				return false;
-			}
-			return lastName.equals(obj) && firstName.equals(obj);
-		}
-		Phonebook other = (Phonebook) obj;
-		if (firstName == null) {
-			if (other.firstName != null)
-				return false;
-		} else if (!firstName.equals(other.firstName))
-			return false;
-		if (lastName == null) {
-			if (other.lastName != null)
-				return false;
-		} else if (!lastName.equals(other.lastName))
-			return false;
-		return true;
-	}
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -68,18 +53,6 @@ class Phonebook{
 		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
 		return result;
 	}
-
-	@Override
-	public String toString() {
-		return "[" + num + "]"+"성명:"+lastName+firstName+" 직장:"+ Job
-				+ phones;
-	}
-
-	
-
-	
-	
-	
 }
 @Data
 class Phone {
@@ -131,17 +104,26 @@ public class PhoneListMain {
 		ArrayList<Phone> phoneList = new ArrayList<Phone>();
 		do {
 			printMenu();
-			menu = sc.nextInt();
+			try {
+				menu = sc.nextInt();
+			}catch(InputMismatchException e){
+				System.out.print("정수로 다시 입력해주세요>>");
+				menu = sc.nextInt();
+			}
 			runMenu(phonebookList, menu, phoneList);
 		}while(menu != 5);
 
 	}
 
 	public static void runMenu(ArrayList<Phonebook> phonebookList, int menu,ArrayList<Phone> phoneList) {
+		Phonebook phonebook = null;
+		Phone phone = null;
 		switch (menu) {
 		case 1:
-			insert(phonebookList,inputPhonebook(sc, phoneList));
-			phonebookList.forEach((b)-> System.out.println(b));
+			inputPhones(sc, phonebook, phonebookList);
+			for (Phonebook p : phonebookList) {
+				System.out.println(p);
+			}
 			break;
 		case 2:
 			System.out.println("2. 전화번호 수정");
@@ -159,48 +141,45 @@ public class PhoneListMain {
 		}
 	}
 	public static void select(ArrayList<Phonebook> phonebookList,Scanner sc) {
-		System.out.println("전화번호부를 검색합니다.");
-		System.out.print("성명을 입력하세요>>");
-		String name = sc.next();
-		detailSelect(phonebookList, (p) -> p.getLastName().contains(name) || p.getFirstName().contains(name));
-	}
-
-	public static void insert(ArrayList<Phonebook> phonebookList, Phonebook inputPhonebook) {
-		if(inputPhonebook == null) {
-			System.out.println("등록할 데이터가 없습니다.");
+		String lastName,firstName;
+		System.out.print("성: "); lastName = sc.next();
+		System.out.print("이름: "); firstName = sc.next();
+		Phonebook p = new Phonebook(lastName, firstName);
+		for (Phonebook phonebook : phonebookList) {
+			if(phonebook.getLastName().contains(lastName) || phonebook.getFirstName().contains(firstName)) {
+				System.out.println("["+(phonebook.getNum())+"]"+phonebook.getLastName()+phonebook.getFirstName());
+			
+			}
 		}
-//		String tmpLastname = inputPhonebook.getLastName();
-//		String tmpFirstname = inputPhonebook.getFirstName();
-//		boolean isData = detailSelect(phonebookList, (p) -> p.getLastName().equals(inputPhonebook.getLastName() == tmpLastname && p.getFirstName().equals(inputPhonebook.getFirstName() == tmpFirstname)));
-//		if(isData) {
-//			System.out.println("등록된 이름이 있습니다.");
-//		}
-		phonebookList.add(inputPhonebook);
-		System.out.println("등록에 성공하였습니다.");
-		
-		//더 등록할건지 물어보기 y 면 등록 n 면 등록완료
+		System.out.print("자세히 보고싶은 전화번호부 번호를 입력하세요>>");
+		int num = sc.nextInt();
+		System.out.println(phonebookList.get(num-1));
+	
 	}
 
-	public static Phonebook inputPhonebook(Scanner sc,ArrayList<Phone> phoneList) {
+	public static Phonebook inputPhonebook(Scanner sc) {
 		String lastName,firstName,Job;
 		System.out.println("전화번호부를 등록 합니다.");
 		System.out.print("성: "); lastName = sc.next();
 		System.out.print("이름: "); firstName = sc.next();
 		System.out.print("직장: "); Job = sc.next();
-		ArrayList<Phone> phoneTmp = inputPhones(sc,phoneList);
-		return new Phonebook(lastName, firstName, Job, phoneTmp) ;
+		return new Phonebook(lastName, firstName, Job);
+		
 	}
 
-	@SuppressWarnings("null")
-	public static ArrayList<Phone> inputPhones(Scanner sc,ArrayList<Phone>phoneList) {
+	public static void inputPhones(Scanner sc, Phonebook inputPhonebook,ArrayList<Phonebook> phonebookList) {
+		inputPhonebook = inputPhonebook(sc);
+		char insert;
+		do {
 		String name;
 		String phoneNumber;
 		System.out.print("이름: "); name = sc.next();
 		System.out.print("번호: "); phoneNumber = sc.next();
-		Phone tmp = new Phone(name, phoneNumber);
-		phoneList.add(tmp);
-		return phoneList;
-		
+		System.out.println("전화번호를 더 등록 하시겠습니까?");
+		insert = sc.next().charAt(0);
+		inputPhonebook.insertPhone(name, phoneNumber);
+		}while(insert != 'n');
+		phonebookList.add(inputPhonebook);
 	}
 
 	public static void printMenu() {
@@ -212,14 +191,11 @@ public class PhoneListMain {
 		System.out.print("메뉴선택:");
 	}
 	
-	public static boolean detailSelect(ArrayList<Phonebook> phoneList,Predicate<Phonebook> p) {
-		for (Phonebook tmp : phoneList) {
-			if(p.test(tmp)) {
-				System.out.println(tmp);
-				return true;
-			}
-		}
-		return false;
-	}
-
+//	public static void detailSelect(ArrayList<Phonebook> phoneList,Predicate<Phonebook> p) {
+//		for (Phonebook tmp : phoneList) {
+//			if(p.test(tmp)) {
+//				System.out.println("["+(tmp.getNum()+1)+"]"+tmp.getLastName()+tmp.getFirstName());
+//			}
+//		}
+//	}
 }
