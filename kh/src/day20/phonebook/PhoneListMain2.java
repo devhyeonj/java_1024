@@ -63,13 +63,25 @@ public class PhoneListMain2 {
 	
 
 	public static void RunsubMenu(ArrayList<PhoneBook> phonebookList, ArrayList<Integer> search, int subMenu,PhoneBook updatePhoneBook) {
-		int index=0;
 		switch (subMenu) {
 		case 1:// 이름 직장 수정
+			if(!updatePerson(search,phonebookList)) {
+				System.out.println("이름 직장을 수정에 실패 하였습니다.");
+			}
+			System.out.println("이름 직장을 수정 하였습니다.");
 			break;
 		case 2:// 기존 전화번호 수정
+			printPhones(search, phonebookList);
+			if(!updatePhone(search, phonebookList)) {
+				System.out.println("기존 전화번호 수정에 실패하였습니다.");
+			}
+			System.out.println("기존 전화번호를 수정 하였습니다.");
 			break;
 		case 3:// 새 전화번호 추가 
+			if(!addPhone(search, phonebookList)) {
+				System.out.println("새 전화번호 추가에 실패하였습니다.");
+			}
+			System.out.println("새 전화번호를 추가하였습니다.");
 			break;
 		case 4:
 			System.out.println("메뉴를 취소합니다.");
@@ -77,22 +89,53 @@ public class PhoneListMain2 {
 		}
 	}
 
-	private static void printAll(ArrayList<PhoneBook> phonebookList) {
-		for (int i = 0; i < phonebookList.size(); i++) {
-			System.out.println(i+1+""+phonebookList.get(i));
+	public static boolean addPhone(ArrayList<Integer> search, ArrayList<PhoneBook> phonebookList) {
+		sc.nextLine();
+		System.out.print("이름:");String name = sc.nextLine();
+		System.out.print("번호:");String number = sc.nextLine();
+		for (int i = 0; i < search.size(); i++) {
+			phonebookList.get(search.get(i)).addPhone(name, number);
 		}
+		return true;
+	}
+
+	public static boolean updatePhone(ArrayList<Integer> search, ArrayList<PhoneBook> phonebookList) {
+		System.out.println("수정 할 전화번호를 선택해주세요");
+		int updateNum = sc.nextInt()-1;
+		System.out.println("수정 할 이름 번호를 입력해주세요");
+		sc.nextLine();
+		System.out.print("이름:");String name = sc.nextLine();
+		System.out.print("번호:");String number = sc.nextLine();
+		Phone p = new Phone(name, number);
+		for (int i = 0; i < search.size(); i++) {
+			phonebookList.get(search.get(i)).getPhoneList().set(updateNum, p);
+		}
+		return true;
+		
+	}
+
+	public static void printPhones(ArrayList<Integer> search, ArrayList<PhoneBook> phonebookList) {
+		for (int i = 0; i < search.size(); i++) {
+			System.out.println(phonebookList.get(search.get(i)).getPhoneList());
+			
+		}
+	}
+
+	public static boolean updatePerson(ArrayList<Integer> search, ArrayList<PhoneBook> phonebookList) {
+		sc.nextLine();
+		System.out.print("성:");String lastName = sc.nextLine();
+		System.out.print("이름:");String firstName = sc.nextLine();
+		System.out.print("직장:");String work = sc.nextLine();
+		for (int i = 0; i < search.size(); i++) {
+			phonebookList.get(search.get(i)).updatePerson(lastName, firstName, work);
+		}
+		return true;
 	}
 
 	public static void printSubMenu() {
 		System.out.println("1. 이름,직장 수정");
 		System.out.println("2. 기존 전화번호 수정");
 		System.out.println("3. 새 전화번호 추가");
-	}
-	
-	public static void ScannerNameNum() {
-		String lastName = null,firstName = null;
-		System.out.print("성:");lastName = sc.nextLine();
-		System.out.print("이름:");firstName = sc.nextLine();
 	}
 	
 	public static boolean delete(ArrayList<PhoneBook> phonebookList, ArrayList<Integer> indexList) {
