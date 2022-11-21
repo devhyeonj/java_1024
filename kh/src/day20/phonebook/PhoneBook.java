@@ -10,7 +10,7 @@ public class PhoneBook {
 	private String lastName;
 	private String firstName;
 	private String work;
-	private ArrayList<Phone> phoneList= new ArrayList<>();;
+	private ArrayList<Phone> phoneList= new ArrayList<>();
 	
 	public PhoneBook(String lastName, String firstName, String work) {
 		this.lastName = lastName;
