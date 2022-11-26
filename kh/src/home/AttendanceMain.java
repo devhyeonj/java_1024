@@ -86,6 +86,7 @@ public class AttendanceMain {
 			break;
 		case 6:printStr("취소 합니다."); break;
 		default: printStr("메뉴를 잘못 입력했습니다."); 
+		}
 	}
 
 
