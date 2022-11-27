@@ -155,6 +155,7 @@ public class BoardManagementProgram {
 
 	private static void updateBoard(ArrayList<Board> boardList, int num) {
 		System.out.println("게시글 수정");
+		sc.nextLine();
 		System.out.print("제목:");
 		String title = sc.nextLine();
 		System.out.print("내용:");
