@@ -13,7 +13,6 @@ public class Board implements Serializable{
 	private String title; // 제목
 	private String contents; // 내용
 	private int views; // 조회수
-	private int like; // 좋아요
 	private Date date;
 	private Member member; // 게시판은 멤버 정보를 가지고있다.
 	
@@ -23,7 +22,17 @@ public class Board implements Serializable{
 		date = new Date();
 		++boardNum;
 		num = boardNum;
+		this.views = 0;
 		this.member = member;
+	}
+	
+	public void updateViews() {
+		views++;
+	}
+	
+	public void update(String title, String content) {
+		this.title = title;
+		this.contents = contents;
 	}
 	
 }

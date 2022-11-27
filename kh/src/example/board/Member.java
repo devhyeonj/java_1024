@@ -13,9 +13,10 @@ public class Member implements Serializable{
 	private String id; // 아이디
 	private String password; // 비밀번호
 	private String nickname; // 닉네임
+	private Category category; // 게시글 종류
 	private Membership membership; // 멤버등급
 	private Date signUpDate; // 회원가입 날짜
-	private ArrayList<Board> boardList; // 멤버는 게시판 정보들을 가지고있다
+	// ArrayList<Board> boardList; 멤버는 게시판 정보들을 가지고있다 ?
 	
 	public Member(String id, String password, String nickname) {
 		this.id = id;
@@ -23,10 +24,6 @@ public class Member implements Serializable{
 		this.nickname = nickname;
 		this.membership = Membership.MEMBER; //가입하면 기본으로 멤버등급은 멤버
 		signUpDate = new Date();
-	}
-	
-	public void addBoard(Board board) {
-		boardList.add(board);
 	}
 	
 	public String getDate() {
@@ -39,10 +36,15 @@ public class Member implements Serializable{
 		this.password = password;
 	}
 	
+	
 	public String print() {
 		return "아이디: "+ id + " 비밀번호: " + password + " 닉네임: " + nickname
 				+ " 회원등급 " + membership +" 회원가입 날짜:" + getDate(); 
 	}
+
+
+
+
 	
 	
 	
