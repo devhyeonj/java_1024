@@ -13,7 +13,6 @@ public class Member implements Serializable{
 	private String id; // 아이디
 	private String password; // 비밀번호
 	private String nickname; // 닉네임
-	private Category category; // 게시글 종류
 	private Membership membership; // 멤버등급
 	private Date signUpDate; // 회원가입 날짜
 	// ArrayList<Board> boardList; 멤버는 게시판 정보들을 가지고있다 ?

@@ -66,13 +66,14 @@ public class BoardManagementProgram {
 								//로그인 한 객체
 	private static void board(Member loginMember, ArrayList<Board> boardList) {
 		String fileName = "board.txt";
+		ArrayList<Category> categoryList = new ArrayList<Category>();
 		load(boardList,fileName);
 		int menu = -1;
 		do {
 			try {
 				boardsubMenu();
 				menu = sc.nextInt();
-				runboardSubMenu(menu,loginMember, boardList);
+				runboardSubMenu(menu,loginMember, boardList,categoryList);
 			}catch (InputMismatchException e) {
 				sc.nextLine(); // 잘못 입력한거 날려버리기
 				System.out.println("정수로 다시 입력 해주세요!!");
@@ -88,17 +89,37 @@ public class BoardManagementProgram {
 
 
 
-	private static void runboardSubMenu(int menu, Member loginMember, ArrayList<Board> boardList) {
+	private static void runboardSubMenu(int menu, Member loginMember, ArrayList<Board> boardList, ArrayList<Category> categoryList) {
 		switch (menu) {
 		case 1: //게시글 작성
-			insert(loginMember,boardList);
+			insert(loginMember,boardList,categoryList);
 			break;
 		case 2://게시물 목록
 			boardAll(boardList,loginMember);
 			break;
 		case 0:
 			break;
+		case 3://카테고리 
+			
+			insertCategory(categoryList);
+			break;
 		default:
+		}
+	}
+
+
+
+	private static void insertCategory(ArrayList<Category> categoryList) {
+		if(categoryList == null) {
+			System.out.println("카테고리 리스트가 생성되지 않았습니다.");
+			return ;
+		}
+		System.out.print("추가할 카테고리 이름을 입력 해주세요>>");
+		String categoryName = sc.next();
+		categoryList.add(new Category(categoryName));
+		System.out.println("카테고리 추가에 성공 하셨습니다.");
+		for (Category c : categoryList) {
+			System.out.println(c);
 		}
 	}
 
@@ -170,6 +191,7 @@ public class BoardManagementProgram {
 		System.out.println("===============");
 		System.out.println("1. 게시글 작성");
 		System.out.println("2. 게시글 목록");
+		System.out.println("3. 카테고리 만들기");
 		System.out.println("0. 돌아가기");
 		System.out.println("===============");
 		System.out.print("메뉴 선택>>");
@@ -177,7 +199,7 @@ public class BoardManagementProgram {
 
 
 
-	private static void insert(Member loginMember, ArrayList<Board> boardList) {
+	private static void insert(Member loginMember, ArrayList<Board> boardList, ArrayList<Category> categoryList) {
 		if(loginMember == null) {
 			System.out.println("로그인 정보가 없습니다.");
 		}
@@ -185,8 +207,14 @@ public class BoardManagementProgram {
 		sc.nextLine();
 		System.out.print("제목:");String title = sc.nextLine();
 		System.out.print("내용:");String contents = sc.nextLine();
-		System.out.println("게시글 작성에 성공 하셨습니다.");
 		Board tmp = new Board(title, contents, loginMember);
+		for (int i = 0; i < categoryList.size(); i++) {
+			System.out.println((i+1)+""+categoryList.get(i));
+		}
+		System.out.print("입력할 카데고리를 선택해주세요>>");
+		int categoryNum = sc.nextInt()-1;
+		tmp.addCategory(categoryList.get(categoryNum));
+		System.out.println("게시글 작성에 성공 하셨습니다.");
 		boardList.add(tmp);
 	}
 
@@ -200,16 +228,16 @@ public class BoardManagementProgram {
 		System.out.print("비밀번호:"); String pw = sc.next();
 		
 		Member loginMember = search(memberList, (m) -> m.getId().equals(id) && m.getPassword().equals(pw));
-		
+		String str = null;
 		// 입력한 아이디 비밀번호가 일치하는지?
 		for (int i = 0; i < memberList.size(); i++) {
 			if(memberList.get(i).getId().equals(id) && memberList.get(i).getPassword().equals(pw)) {
-				System.out.println("로그인에 성공!!");
+				str = "로그인에 성공!!";
 			}else {
-				System.out.println("로그인에 실패!!");
+				str = "로그인에 실패!!";
 			}
-			
 		}
+		System.out.println(str);
 		return loginMember; // 로그인에 성공하면 로그인한 아이디 비밀번호 정보를 가져간다.
 		
 	}

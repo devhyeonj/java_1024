@@ -15,6 +15,7 @@ public class Board implements Serializable{
 	private int views; // 조회수
 	private Date date;
 	private Member member; // 게시판은 멤버 정보를 가지고있다.
+	private Category category; // 게시글 종류
 	
 	public Board(String title, String contents, Member member) {
 		this.title = title;
@@ -24,6 +25,10 @@ public class Board implements Serializable{
 		num = boardNum;
 		this.views = 0;
 		this.member = member;
+	}
+	
+	public void addCategory(Category category) {
+		this.category = category;
 	}
 	
 	public void updateViews() {

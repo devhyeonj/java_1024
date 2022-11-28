@@ -1,6 +1,5 @@
 package example.board;
 
-import java.util.Date;
 
 import lombok.Data;
 
@@ -10,7 +9,7 @@ public class Category {
 	private int num;
 	private String categoryName;
 	
-	public Category(int num, String state) {
+	public Category(String categoryName) {
 		categoryNum++;
 		num = categoryNum;
 		this.categoryName = categoryName;
