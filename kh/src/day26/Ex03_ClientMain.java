@@ -17,7 +17,7 @@ public class Ex03_ClientMain {
 		
 		try {
 			socket = new Socket();
-			socket.connect(new InetSocketAddress("192.168.10.6",5001));
+			socket.connect(new InetSocketAddress("192.168.10.9",5001));
 			System.out.println("[연결 완료]");
 			send(socket);
 		}catch(Exception e) {

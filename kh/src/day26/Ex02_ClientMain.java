@@ -23,7 +23,7 @@ public class Ex02_ClientMain {
 		Scanner scan = new Scanner(System.in);
 		try {
 			socket = new Socket();
-			socket.connect(new InetSocketAddress("192.168.10.6",5001));
+			socket.connect(new InetSocketAddress("192.168.10.9",5001));
 			System.out.println("[연결 완료]");
 			OutputStream os = socket.getOutputStream();
 			while(true) {
