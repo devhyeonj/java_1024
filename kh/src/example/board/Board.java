@@ -11,20 +11,21 @@ public class Board implements Serializable{
 	private static int boardNum = 0; // 게시글 번호
 	private int num;
 	private String title; // 제목
-	private String contents; // 내용
+	private String content; // 내용
 	private int views; // 조회수
 	private Date date;
-	private Member member; // 게시판은 멤버 정보를 가지고있다.
+	private String loginId; // 게시글은 아이디만 가지고 있다.
 	private Category category; // 게시글 종류
+	private Notice notice;
 	
-	public Board(String title, String contents, Member member) {
+	public Board(String title, String content, String loginId) {
 		this.title = title;
-		this.contents = contents;
+		this.content = content;
 		date = new Date();
 		++boardNum;
 		num = boardNum;
 		this.views = 0;
-		this.member = member;
+		this.loginId = loginId;
 	}
 	
 	public void addCategory(Category category) {
@@ -37,7 +38,7 @@ public class Board implements Serializable{
 	
 	public void update(String title, String content) {
 		this.title = title;
-		this.contents = contents;
+		this.content = content;
 	}
 	
 }
