@@ -46,8 +46,8 @@ public class BoardMain {
 	 * */
 	public static void main(String[] args) {
 		int menu = -1;
-		loadMember("member.txt");
-		loadCategory("category.txt");
+		load("member.txt",memberList);
+		load("category.txt",categoryList);
 		do {
 			try {
 				printMenu();
@@ -63,50 +63,15 @@ public class BoardMain {
 				e.printStackTrace();
 			}
 		}while(menu != 4);
-		saveMember("member.txt");
-		saveCategory("category.txt");
+		save("member.txt",memberList);
+		save("category.txt",categoryList);
 	}
 	
-	private static void saveCategory(String filename) {
+	private static <T> void save(String filename, List<T> list){
 		try(ObjectOutputStream oos 
 				= new ObjectOutputStream(new FileOutputStream(filename))){
-			for(String category : categoryList) {
-				oos.writeObject(category);
-			}
-			printStr("저장 완료");
-		}catch(IOException e) {
-			printStr("저장 실패");
-		}
-		
-	}
-
-	private static void loadCategory(String filename) {
-		try(ObjectInputStream ois 
-				= new ObjectInputStream(new FileInputStream(filename))){
-			while(true) {
-				String category = (String)ois.readObject();
-				categoryList.add(category);
-			}
-		}catch(ClassNotFoundException e) {
-			printStr("불러오기 실패");
-		}catch(EOFException e) {
-			if(categoryList.size() == 0)
-				categoryList 
-					= new ArrayList<String>(Arrays.asList("공지","자유"));
-			printStr("불러오기 성공");
-		}catch(IOException e) {
-			printStr("불러오기 실패");
-		}
-		
-	}
-
-	private static void saveMember(String filename) {
-		if(memberList.size() == 0)
-			return;
-		try(ObjectOutputStream oos 
-				= new ObjectOutputStream(new FileOutputStream(filename))){
-			for(Member member : memberList) {
-				oos.writeObject(member);
+			for(T tmp : list) {
+				oos.writeObject(tmp);
 			}
 			printStr("저장 완료");
 		}catch(IOException e) {
@@ -114,12 +79,12 @@ public class BoardMain {
 		}
 	}
 
-	private static void loadMember(String filename) {
+	private static <T> void load(String filename, List<T> list) {
 		try(ObjectInputStream ois 
 				= new ObjectInputStream(new FileInputStream(filename))){
 			while(true) {
-				Member member = (Member)ois.readObject();
-				memberList.add(member);
+				T obj = (T)ois.readObject();
+				list.add(obj);
 			}
 		}catch(ClassNotFoundException e) {
 			printStr("불러오기 실패");
