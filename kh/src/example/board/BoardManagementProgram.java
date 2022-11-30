@@ -24,14 +24,18 @@ public class BoardManagementProgram {
 	 * 
 	 * */
 	private static Scanner sc = new Scanner(System.in);
-
+	private static ArrayList<Member> memberList = new ArrayList<>();
+	private static ArrayList<Board> boardList = new ArrayList<>();
+	private static ArrayList<Category> categoryList = new ArrayList<Category>();
+	private static ArrayList<Notice> noticeList = new ArrayList<Notice>();
+	
 	public static void main(String[] args) {
 		
 		String fileName1 = "member.txt";
 		String fileName2 = "board.txt";
 		int menu = -1;
-		ArrayList<Member> memberList = new ArrayList<>();
-		ArrayList<Board> boardList = new ArrayList<>();
+		
+		
 		load(memberList,fileName1);
 		load(boardList,fileName2);
 		do {
@@ -44,14 +48,14 @@ public class BoardManagementProgram {
 				System.out.print("메뉴 선택>>");
 				menu = sc.nextInt();
 			}
-			runMainMenu(memberList,menu, boardList);
+			runMainMenu(menu);
 		}while(menu != 4);
 		save(memberList,fileName1);
 		save(boardList,fileName2);
 		
 	}
 	//로그인 안한사람이 보이는 메뉴
-	private static void runMainMenu(ArrayList<Member> memberList, int menu, ArrayList<Board> boardList) {
+	private static void runMainMenu(ArrayList<Member> memberList, int menu) {
 		Member loginMember = null;
 		switch (menu) {
 		case 1://회원가입
@@ -70,19 +74,21 @@ public class BoardManagementProgram {
 								//로그인 한 객체
 	private static void board(Member loginMember, ArrayList<Board> boardList) {
 		
-		ArrayList<Category> categoryList = new ArrayList<Category>();
-		ArrayList<Notice> noticeList = new ArrayList<Notice>();
+		
 	
 		int menu = -1;
 		do {
 			try {
-				boardMembersubMenu();
-				//로그인 한 아이디가 관리자 아이디면 관리자 메뉴도 보이게 설정
 				if(loginMember.getMembership().equals(Membership.MANAGER)) {
-					boardManagersubMenu();
+					membershipMenu(2);
+					menu = sc.nextInt();
+					runManagerMenu(menu,categoryList,noticeList);
+				}else {
+					membershipMenu(1);
+					menu = sc.nextInt();
+					runMemberMenu(menu, loginMember, boardList, categoryList, noticeList);
 				}
-				menu = sc.nextInt();
-				runboardSubMenu(menu,loginMember, boardList,categoryList,noticeList);
+				
 			}catch (InputMismatchException e) {
 				sc.nextLine(); // 잘못 입력한거 날려버리기
 				System.out.println("정수로 다시 입력 해주세요!!");
@@ -98,7 +104,7 @@ public class BoardManagementProgram {
 
 
 
-	private static void runboardSubMenu(int menu, Member loginMember, ArrayList<Board> boardList, ArrayList<Category> categoryList, ArrayList<Notice> noticeList) {
+	private static void runMemberMenu(int menu, Member loginMember, ArrayList<Board> boardList, ArrayList<Category> categoryList, ArrayList<Notice> noticeList) {
 		switch (menu) {
 		case 1: //게시글 작성
 			insert(loginMember,boardList,categoryList);
@@ -111,23 +117,20 @@ public class BoardManagementProgram {
 		default:
 		}
 	}
-
-
-
-	private static void insertNotice(ArrayList<Notice> noticeList) {
-		if(noticeList == null) {
-			System.out.println("공지 리스트가 생성되지 않았습니다.");
-			return ;
+	
+	private static void runManagerMenu(int menu, ArrayList<Category> categoryList, ArrayList<Notice> noticeList) {
+		switch (menu) {
+		case 1: // 카테고리 작성
+			insertCategory(categoryList);
+			break;
+		case 2:// 카테고리 수정
+			break;
+		case 3: // 카테고리 삭제
+			break;
+		default:
 		}
-		System.out.println("공지사항을 작성합니다.");
-		System.out.print("제목:");
-		String title = sc.nextLine();
-		System.out.print("내용:");
-		String content = sc.nextLine();
-		
-		noticeList.add(new Notice(title, content));
-		System.out.println("공지를 작성하였습니다.");
 	}
+
 	private static void insertCategory(ArrayList<Category> categoryList) {
 		if(categoryList == null) {
 			System.out.println("카테고리 리스트가 생성되지 않았습니다.");
@@ -214,26 +217,29 @@ public class BoardManagementProgram {
 		System.out.println("게시글 수정에 성공하였습니다.");
 	}
 
-
-	// 회원 서브 메뉴
-	private static void boardMembersubMenu() {
-		System.out.println("===============");
-		System.out.println("1. 게시글 작성");
-		System.out.println("2. 게시글 목록");
-		System.out.println("0. 돌아가기");
-		System.out.println("===============");
-		System.out.print("메뉴 선택>>");
+	private static void membershipMenu(int num) {
+		switch (num) {
+		case 1:
+			System.out.println("===============");
+			System.out.println("1. 게시글 작성");
+			System.out.println("2. 게시글 목록");
+			System.out.println("0. 돌아가기");
+			System.out.println("===============");
+			System.out.print("메뉴 선택>>");
+			break;
+		case 2:
+			System.out.println("===============");
+			System.out.println("1. 게시글 관리");
+			System.out.println("2. 카테고리 관리");
+			System.out.println("0. 돌아가기");
+			System.out.println("===============");
+			System.out.print("메뉴 선택>>");
+			break;
+		default:
+			break;
+		}
+		
 	}
-	// 관리자 서브 메뉴
-	private static void boardManagersubMenu() {
-		System.out.println("===============");
-		System.out.println("3. 카테고리 관리");
-		System.out.println("0. 돌아가기");
-		System.out.println("===============");
-		System.out.print("메뉴 선택>>");
-	}
-
-
 
 	private static void insert(Member loginMember, ArrayList<Board> boardList, ArrayList<Category> categoryList) {
 		if(loginMember == null) {
