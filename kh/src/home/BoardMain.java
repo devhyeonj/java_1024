@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
+import java.util.function.Predicate;
 
 import home.Member;
 
@@ -19,12 +20,15 @@ public class BoardMain {
 	
 	private static Scanner sc = new Scanner(System.in);
 	private static List<Member> memberList = new ArrayList<>();
+	private static List<Board> boardList = new ArrayList<>();
 	private static List<String> categoryList = new ArrayList<>();
 	private static Member user;
-	
+
 	public static void main(String[] args) {
 		int menu = -1;
-		
+		load("member.txt", memberList);
+		load("category.txt", categoryList);
+		loadBoard("board.txt");
 		do {
 			try {
 				printMenu();
@@ -42,6 +46,38 @@ public class BoardMain {
 		}while(menu!= 4);
 		save("member.txt", memberList);
 		save("category.txt", categoryList);
+		saveBoard("board.txt");
+	}
+	
+	private static void saveBoard(String filename) {
+		try(ObjectOutputStream oos =
+				new ObjectOutputStream(new FileOutputStream(filename))) {
+			oos.writeInt(Board.getCount());
+			for (Board board : boardList) {
+				oos.writeObject(board);
+			}
+				printStr("저장 완료");
+		}catch (IOException e) {
+				printStr("저장 실패");
+			}
+	}
+		
+	private static void loadBoard(String filename) {
+		try(ObjectInputStream ois =
+				new ObjectInputStream(new FileInputStream(filename))) {
+			int count = ois.readInt();
+			Board.setCount(count);
+			while(true) {
+				Board board = (Board)ois.readObject();
+				boardList.add(board);
+			}
+			}catch(ClassNotFoundException e) {
+				printStr("불러오기 실패");
+			}catch(EOFException e) {
+				printStr("불러오기 성공");
+			}catch(IOException e) {
+				printStr("불러오기 실패");
+			}
 	}
 	
 	private static <T> void save(String filename, List<T> list) {
@@ -61,7 +97,8 @@ public class BoardMain {
 				new ObjectInputStream(new FileInputStream(filename))) {
 			while(true) {
 				T obj = (T)ois.readObject();
-				list.add(obj);}
+				list.add(obj);
+			}
 			}catch(ClassNotFoundException e) {
 				printStr("불러오기 실패");
 			}catch(EOFException e) {
@@ -91,8 +128,194 @@ public class BoardMain {
 	}
 
 	private static void boardMenu() {
-		// TODO Auto-generated method stub
+		int submenu = -1;
+		do {
+			printSubmenu(2);
+			submenu = sc.nextInt();
+			sc.nextLine();
+			printBar();
+			
+			runBoardMenu(submenu);
+		}while(submenu != 5);
+	}
+
+	private static void runBoardMenu(int submenu) {
+		switch (submenu) {
+		case 1://게시글 등록
+			insertBoard();
+			break;
+		case 2:// 게시글 수정
+			updateBoard();
+			break;
+		case 3:// 게시글 삭제
+			deleteBoard();
+			break;
+		case 4:// 게시글 목록
+			printBoard();
+			break;
+		case 5:// 이전
+			printStr("이전 메뉴로 돌아갑니다.");
+			break;
+		default:
+			printStr("잘못된 메뉴를 선택했습니다.");
+			break;
+		}
+	}
+
+	private static void printBoard() {
+		int detailMenu = -1;
+		do {
+		printDetailMenu();
+		detailMenu = sc.nextInt();
+		sc.nextLine();
+		printBar();
+		runPrintMenu(detailMenu);
+		}while(detailMenu!=4);
+	}
+
+	private static void runPrintMenu(int detailMenu) {
+		switch (detailMenu) {
+		case 1://게시글 목록
+			printBoardListAll();
+			break;
+		case 2:// 게시글 검색
+			printBoardSearch();
+			break;
+		case 3:// 게시글 확인
+			printBoardDetail();
+			break;
+		case 4:
+			printStr("이전 메뉴로 돌아갑니다.");
+			break;
+		default:
+			printStr("잘못된 메뉴를 선택했습니다.");
+			break;
+		}
+	}
+	
+	private static void printBoardDetail() {
+		System.out.print("게시글 번호 : ");
+		int num = sc.nextInt();
+		sc.nextLine();
+		int index = boardList.indexOf(new Board(num));
+		if(index == -1) {
+			printStr("등록되지 않거나 삭제된 게시글 입니다.");
+			return;
+		}
+		Board board = boardList.get(index);
+		int views = board.getViews();
+		board.equals(views+1);
+		board.print();
+		printBar();
+	}
+
+
+
+	private static void printBoardSearch() {
+		System.out.print("검색어 : ");
+		String search = sc.nextLine();
+		printBoardList(b -> b.getTitle().contains(search.trim()));
+	}
+
+	private static void printBoardListAll() {
+		printBoardList(b -> true);
+	}
+
+	private static void printBoardList(Predicate<Board> p) {
+		if(boardList.size() == 0) {
+			printStr("등록된 게시글이 없습니다.");
+			return;
+		}
+		for (Board board : boardList) {
+			if(p.test(board)) 
+				System.out.println(board);
+		}
+	}
+
+	private static void printDetailMenu() {
+		System.out.println("===게시글 목록 메뉴===");
+		System.out.println("1. 게시글 목록 확인");
+		System.out.println("2. 게시글 검색");
+		System.out.println("3. 게시글 확인");
+		System.out.println("4. 이전");
+		printBar();
+		System.out.print("메뉴선택>>");
+	}
+
+	private static void deleteBoard() {
+		if(checkLogin(false)) {
+			return ;
+		}
 		
+		System.out.print("게시글 번호 : ");
+		int num = sc.nextInt();
+		sc.nextLine();
+		int index = boardList.indexOf(new Board(num));
+		
+		if (index == -1) {
+			printStr("등록되지 않거나 삭제된 게시글입니다.");
+			return;
+		}
+		Board board = boardList.get(index);
+		if(!board.getWriter().equals(user.getId())) {
+			printStr("작성자가 아닌 사용자는 삭제할 수 없습니다.");
+			return;
+		}
+		boardList.remove(index);
+		printStr("게시글 삭제가 완료됐습니다.");
+		
+	}
+
+	private static void updateBoard() {
+		if(checkLogin(false)) {
+			return ;
+		}
+		System.out.print("게시글 번호 : ");
+		int num = sc.nextInt();
+		sc.nextLine();
+		int index = boardList.indexOf(new Board(num));
+		
+		if(index == -1) {
+			printStr("등록되지 않거나 삭제된 게시글 입니다.");
+			return;
+		}
+		Board board = boardList.get(index);
+		if(!board.getWriter().equals(user.getId())) {
+			printStr("작성자가 아닌 사용자는 수정할 수 없습니다.");
+			return ;
+		}
+		
+		System.out.print("제목 : ");
+		String title = sc.nextLine();
+		System.out.print("내용 : ");
+		String cotents = sc.nextLine();
+		board.update(title, cotents);
+		printStr("게시글 수정이 완료됐습니다.");
+		
+	}
+
+	private static void insertBoard() {
+		if(checkLogin(false)) {
+			return ;
+		}
+		printCategory();
+		printBar();
+		
+		String category = null;
+		do {
+			if (category !=null)
+				printStr("등록되지 않은 카테고리입니다.");
+			System.out.print("카테고리 : ");
+			category = sc.nextLine();
+		}while(categoryList.contains(category));
+		System.out.print("제목 : ");
+		String title = sc.nextLine();
+		System.out.print("내용 : ");
+		String contents = sc.nextLine();
+		printBar();
+		Board board = new Board(title, contents, user.getId(), category);
+		boardList.add(board);
+		printStr("게시글 등록이 완료됐습니다.");
 	}
 
 	private static void categoryMenu() {
@@ -128,7 +351,6 @@ public class BoardMain {
 		case 5:
 			printStr("이전 메뉴로 돌아갑니다.");
 			break;
-
 		default:
 			printStr("잘못된 메뉴를 선택했습니다.");
 		}
@@ -345,4 +567,4 @@ public class BoardMain {
 	private static void printBar() {
 		System.out.println("===================");
 	}
-}
+}	
