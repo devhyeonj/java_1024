@@ -27,7 +27,6 @@ public class BoardManagementProgram {
 	private static ArrayList<Member> memberList = new ArrayList<>();
 	private static ArrayList<Board> boardList = new ArrayList<>();
 	private static ArrayList<Category> categoryList = new ArrayList<Category>();
-	private static ArrayList<Notice> noticeList = new ArrayList<Notice>();
 	
 	public static void main(String[] args) {
 		
@@ -55,24 +54,24 @@ public class BoardManagementProgram {
 		
 	}
 	//로그인 안한사람이 보이는 메뉴
-	private static void runMainMenu(ArrayList<Member> memberList, int menu) {
+	private static void runMainMenu(int menu) {
 		Member loginMember = null;
 		switch (menu) {
 		case 1://회원가입
-			join(memberList);
+			join();
 			break;
 		case 2://로그인
-			loginMember = login(memberList);
+			loginMember = login();
 			if(loginMember != null)
-				board(loginMember, boardList); // 로그인에 성공하면 게시판 메소드로 이동
+				board(loginMember); // 로그인에 성공하면 게시판 메소드로 이동
 			break;
 		case 3://게시글 목록
-			boardAll(boardList, loginMember);
+			boardAll(loginMember);
 		default:
 		}
 	}
 								//로그인 한 객체
-	private static void board(Member loginMember, ArrayList<Board> boardList) {
+	private static void board(Member loginMember) {
 		
 		
 	
@@ -82,11 +81,11 @@ public class BoardManagementProgram {
 				if(loginMember.getMembership().equals(Membership.MANAGER)) {
 					membershipMenu(2);
 					menu = sc.nextInt();
-					runManagerMenu(menu,categoryList,noticeList);
+					runManagerMenu(menu);
 				}else {
 					membershipMenu(1);
 					menu = sc.nextInt();
-					runMemberMenu(menu, loginMember, boardList, categoryList, noticeList);
+					runMemberMenu(menu, loginMember);
 				}
 				
 			}catch (InputMismatchException e) {
@@ -104,13 +103,13 @@ public class BoardManagementProgram {
 
 
 
-	private static void runMemberMenu(int menu, Member loginMember, ArrayList<Board> boardList, ArrayList<Category> categoryList, ArrayList<Notice> noticeList) {
+	private static void runMemberMenu(int menu, Member loginMember) {
 		switch (menu) {
 		case 1: //게시글 작성
-			insert(loginMember,boardList,categoryList);
+			insert(loginMember);
 			break;
 		case 2://게시물 목록
-			boardAll(boardList,loginMember);
+			boardAll(loginMember);
 			break;
 		case 0:
 			break;
@@ -118,10 +117,10 @@ public class BoardManagementProgram {
 		}
 	}
 	
-	private static void runManagerMenu(int menu, ArrayList<Category> categoryList, ArrayList<Notice> noticeList) {
+	private static void runManagerMenu(int menu) {
 		switch (menu) {
 		case 1: // 카테고리 작성
-			insertCategory(categoryList);
+			insertCategory();
 			break;
 		case 2:// 카테고리 수정
 			break;
@@ -131,7 +130,7 @@ public class BoardManagementProgram {
 		}
 	}
 
-	private static void insertCategory(ArrayList<Category> categoryList) {
+	private static void insertCategory() {
 		if(categoryList == null) {
 			System.out.println("카테고리 리스트가 생성되지 않았습니다.");
 			return ;
@@ -158,20 +157,20 @@ public class BoardManagementProgram {
 
 
 
-	private static void boardAll(ArrayList<Board> boardList, Member loginMember) {
+	private static void boardAll(Member loginMember) {
 		if(boardList.size() == 0 || boardList == null) {
 			throw new RuntimeException("게시글이 없습니다.");
 		}
 		for (Board board : boardList) {
 			System.out.println("["+board.getNum()+"] 제목:"+board.getTitle()+" 글쓴이:"+board.getLoginId());
 		}
-		detailBoard(boardList,loginMember);
+		detailBoard(loginMember);
 		
 	}
 
 
 
-	private static void detailBoard(ArrayList<Board> boardList, Member loginMember) {
+	private static void detailBoard(Member loginMember) {
 		System.out.print("상세보기 할 글번호를 입력하세요.");
 		int num = sc.nextInt()-1;
 		boardList.get(num).updateViews();
@@ -183,10 +182,10 @@ public class BoardManagementProgram {
 			int select =sc.nextInt();
 			switch (select) {
 			case 1:
-				updateBoard(boardList,num);
+				updateBoard(num);
 				break;
 			case 2:
-				deleteBoard(boardList,num);
+				deleteBoard(num);
 				break;
 			case 3:
 				break;
@@ -198,7 +197,7 @@ public class BoardManagementProgram {
 
 
 
-	private static void deleteBoard(ArrayList<Board> boardList, int num) {
+	private static void deleteBoard(int num) {
 		System.out.println("게시글 삭제");
 		boardList.remove(num);
 		System.out.println("게시글 삭제에 성공하였습니다.");
@@ -206,7 +205,7 @@ public class BoardManagementProgram {
 
 
 
-	private static void updateBoard(ArrayList<Board> boardList, int num) {
+	private static void updateBoard(int num) {
 		System.out.println("게시글 수정");
 		sc.nextLine();
 		System.out.print("제목:");
@@ -241,7 +240,7 @@ public class BoardManagementProgram {
 		
 	}
 
-	private static void insert(Member loginMember, ArrayList<Board> boardList, ArrayList<Category> categoryList) {
+	private static void insert(Member loginMember) {
 		if(loginMember == null) {
 			System.out.println("로그인 정보가 없습니다.");
 		}
@@ -330,7 +329,7 @@ public class BoardManagementProgram {
 		System.out.print("메뉴 선택>>");
 	}
 	
-	private static void join(ArrayList<Member> memberList) {
+	private static void join() {
 		if(memberList == null ) 
 			throw new RuntimeException("예외 발생 : 멤버를 관리할 리스트가 생성 되지 않았습니다.");
 		
@@ -362,7 +361,7 @@ public class BoardManagementProgram {
 		}
 	}
 	
-	private static Member login(ArrayList<Member> memberList) {
+	private static Member login() {
 		if(memberList == null) 
 			throw new RuntimeException("예외 발생 : 멤버를 관리할 리스트가 생성 되지 않았습니다.");
 		System.out.println("로그인 해주세요.");
