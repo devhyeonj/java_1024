@@ -101,19 +101,19 @@ public class ProductMain {
 		Product product = scanProductName();
 		if(product == null) 
 			return ;
-		int Quantity;
+		int sellingQuantity;
 		do {
 			System.out.print("판매하신 수량을 입력해주세요>>");
-			Quantity = sc.nextInt();
-			if(product.getQuantity() < Quantity) {
+			sellingQuantity = sc.nextInt();
+			if(product.getQuantity() < sellingQuantity) {
 			System.out.println("가지고 있는 수량 보다 적게 입력하세요.");
 			System.out.println("현재수량:"+product.getQuantity());
 			}
-		}while(product.getQuantity() < Quantity);
+		}while(product.getQuantity() < sellingQuantity);
 		
 		System.out.print("판매하신 날짜를 입력해주세요 (예: 2022-12-03)");
 		String sellingdate = sc.next(); 
-		product.sellingProduct(Quantity, sellingdate);
+		product.sellingProduct(sellingdate, sellingQuantity);
 		
 		//확인용
 		System.out.println(product);
@@ -206,27 +206,95 @@ public class ProductMain {
 		System.out.println("제품 등록에 성공 하였습니다.");
 	}
 	private static void runSales(int salesNum) {
-		int num = sc.nextInt();
+		//int num = sc.nextInt();
+		String year,month,day;
 		switch (salesNum) {
 		case 1: // 년별
-			printSelect();
-			num = sc.nextInt();
+			year = inputYear();
+			printProductDate(year);
+//			printSelect();
+//			num = sc.nextInt();
+//			runSelect(num);
+			break;
 		case 2: // 월별
-			printSelect();
-			num = sc.nextInt();
+			year = inputYear();
+			month = inputMonth();
+			printProductDate(year,month);
+//			printSelect();
+//			num = sc.nextInt();
+//			runSelect(num);
 			break;
 		case 3:// 일별
-			printSelect();
-			num = sc.nextInt();
+			year = inputYear();
+			month = inputMonth();
+			day = inputDay();
+			printProductDate(year,month,day);
+//			printSelect();
+//			num = sc.nextInt();
+//			runSelect(num);
 			break;
 		case 4:
 			break;
 		}
 	}
+
+	private static String inputYear() {
+		System.out.print("연도 입력 : ");
+		String year = sc.next();
+		return year;
+	}
+
+	private static String inputMonth() {
+		System.out.print("월 입력 : ");
+		String month = sc.next();
+		return month;
+	}
+
+	private static String inputDay() {
+		System.out.print("일 입력 : ");
+		String day = sc.next();
+		return day;
+	}
+
+	private static void runSelect(int num) {
+		switch (num) {
+		case 1://제품별
+			System.out.println("매출액 확인하실 제품명을 입력해주세요");
+			Product product = scanProductName();
+			printProduct(productList,product.getProductName(),"매출액", (p) -> p.getSellingQuantity()*p.getSellingPrice());
+			break;
+		case 2://전체
+			break;
+		case 3:
+			break;
+		}
+	}
 	
-	public static void printProduct(ArrayList<Product> list, Function<Product,String> f) {
-		for (Product product : list) {
-			System.out.println(f.apply(product));
+	private static void printProductDate(String... dates) {
+		int size = dates.length;
+		
+		for (Product product : productList) {
+			if(product.getSellingDate().substring(0, size).equals(dates)) {
+				System.out.println(product);
+			}
+		}
+		
+	}
+
+	//판매날짜가 같은 번지를 정수형 리스트에 저장
+	private static ArrayList<Integer> searchProduct(ArrayList<Product> list, Predicate<Product> p) {
+		ArrayList<Integer> indexs = new ArrayList<Integer>();
+		for (int i = 0; i < list.size(); i++) {
+			if(p.test(list.get(i))) {
+				indexs.add(i);
+			}
+		}
+		return indexs;
+	}
+	
+	public static void printProduct(ArrayList<Product> list,String product,String selling, Function<Product,Integer> f) {
+		for (Product p : list) {
+			System.out.println(product+" "+selling + f.apply(p));
 		}
 	}
 

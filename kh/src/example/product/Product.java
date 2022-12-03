@@ -13,6 +13,7 @@ public class Product {
 	private String Classification; //분류
 	private String productName; //제품명
 	private int Quantity; //수량
+	private int sellingQuantity; // 판매수량
 	private int purchasePrice; //구매가격
 	private int sellingPrice; //판매가격
 	private Date sellingDate; // 판매 날짜
@@ -46,10 +47,11 @@ public class Product {
 		this.sellingDate = format.parse(date);
 	}
 	
-	public void sellingProduct(int Quantity,String sellingdate) throws ParseException {
+	public void sellingProduct(String sellingdate,int sellingQuantity) throws ParseException {
 		if(Quantity == 0)
 			return ;
-		this.Quantity -= Quantity;
+		this.sellingQuantity = sellingQuantity;
+		this.Quantity -= sellingQuantity;
 		setSellingDate(sellingdate);
 	}
 	
@@ -60,30 +62,17 @@ public class Product {
 	public String toString() {
 		return "분류 : " + Classification + " 제품명 : " + productName + " 수량 : " + Quantity
 				+ " 구매가격 : " + purchasePrice + " 판매가격 : " + sellingPrice + " 판매날짜 : "
-				+ getSellingDate();
+				+ getSellingDate() +" 판매수량 : " +getSellingQuantity();
 	}
 	
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Product other = (Product) obj;
-		return Objects.equals(productName, other.productName) && Objects.equals(sellingDate, other.sellingDate);
-	}
+	
+	
+
 	
 	public void updateProduct(String classification, String productName, int quantity) {
 		this.Classification = classification;
 		this.productName = productName;
 		this.Quantity = quantity;
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(productName, sellingDate);
 	}
 	
 	
