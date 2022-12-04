@@ -1,11 +1,18 @@
 package example.product;
 
+import java.io.EOFException;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 public class ProductMain {
 	/* 제품을 관리하는 프로그램을 작성하세요.
@@ -37,9 +44,11 @@ public class ProductMain {
 	
 	private static Scanner sc = new Scanner(System.in);
 	private static ArrayList<Product> productList = new ArrayList<>();
+	private static String filename = "product.txt";
 	
 	public static void main(String[] args) {
 		int menu = -1;
+			load();
 			do {
 				try {
 				printMenu();
@@ -54,6 +63,33 @@ public class ProductMain {
 					e.printStackTrace();
 				}
 			}while(menu !=7);
+			save();
+	}
+
+	private static void load() {
+		try(ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filename))) {
+			while (true) {
+				Product product = (Product) ois.readObject();
+				productList.add(product);
+			}
+		} catch (ClassNotFoundException e) {
+			System.out.println("불러오기 실패");
+		} catch (EOFException e) {
+			System.out.println("불러오기 성공");
+		} catch (IOException e) {
+			System.out.println("불러오기 실패");
+		}
+	}
+
+	private static void save() {
+		try(ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filename))) {
+			for (Product product : productList) {
+				oos.writeObject(product);
+			}
+			System.out.println("저장 완료");
+		} catch (IOException e) {
+			System.out.println("저장 실패");
+		}
 	}
 
 	private static void runMenu(int menu) throws ParseException {
@@ -90,6 +126,11 @@ public class ProductMain {
 		case 7:
 			System.out.println("프로그램을 종료 합니다.");
 			break;
+		case 0:
+			for (Product product : productList) {
+				System.out.println(product);
+			}
+			break;
 		default:
 			System.out.println("잘못된 메뉴를 선택 하셨습니다.");
 			break;
@@ -117,6 +158,14 @@ public class ProductMain {
 		
 		//확인용
 		System.out.println(product);
+	}
+
+	private static void search(Predicate<Product> p) {
+		for (Product product : productList) {
+			if(p.test(product)) {
+				System.out.println(product);
+			}
+		}
 	}
 
 	private static void purchaseProduct() {
@@ -206,32 +255,33 @@ public class ProductMain {
 		System.out.println("제품 등록에 성공 하였습니다.");
 	}
 	private static void runSales(int salesNum) {
-		//int num = sc.nextInt();
 		String year,month,day;
+		//int num = sc.nextInt();
 		switch (salesNum) {
 		case 1: // 년별
 			year = inputYear();
 			printProductDate(year);
-//			printSelect();
-//			num = sc.nextInt();
-//			runSelect(num);
+			
+			/*
+			 * printSelect(); num = sc.nextInt(); runSelect(num);
+			 */
 			break;
 		case 2: // 월별
 			year = inputYear();
 			month = inputMonth();
 			printProductDate(year,month);
-//			printSelect();
-//			num = sc.nextInt();
-//			runSelect(num);
+			/*
+			 * printSelect(); num = sc.nextInt(); runSelect(num);
+			 */
 			break;
 		case 3:// 일별
 			year = inputYear();
 			month = inputMonth();
 			day = inputDay();
 			printProductDate(year,month,day);
-//			printSelect();
-//			num = sc.nextInt();
-//			runSelect(num);
+			/*
+			 * printSelect(); num = sc.nextInt(); runSelect(num);
+			 */
 			break;
 		case 4:
 			break;
@@ -280,12 +330,13 @@ public class ProductMain {
 		}
 		
 	}
+	
 
 	//판매날짜가 같은 번지를 정수형 리스트에 저장
-	private static ArrayList<Integer> searchProduct(ArrayList<Product> list, Predicate<Product> p) {
+	private static ArrayList<Integer> searchProduct(Predicate<Product> p) {
 		ArrayList<Integer> indexs = new ArrayList<Integer>();
-		for (int i = 0; i < list.size(); i++) {
-			if(p.test(list.get(i))) {
+		for (int i = 0; i < productList.size(); i++) {
+			if(p.test(productList.get(i))) {
 				indexs.add(i);
 			}
 		}
