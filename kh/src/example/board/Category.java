@@ -1,20 +1,23 @@
 package example.board;
 
 
+import java.io.Serializable;
+
 import lombok.Data;
 
 @Data
-public class Category {
-	private static int categoryNum = 0; // 카테고리 번호
+public class Category implements Serializable{
+	private static final long serialVersionUID = 1570107296387591040L;
+	private static int count = 0; 
 	private int num;
 	private String categoryName;
 	
 	public Category(String categoryName) {
-		categoryNum++;
-		num = categoryNum;
+		count++;
+		num = count;
 		this.categoryName = categoryName;
 	}
-
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -38,6 +41,10 @@ public class Category {
 		int result = 1;
 		result = prime * result + ((categoryName == null) ? 0 : categoryName.hashCode());
 		return result;
+	}
+
+	public void update(String newCategory) {
+		this.categoryName = newCategory;
 	}
 	
 	
