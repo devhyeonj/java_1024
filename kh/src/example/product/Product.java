@@ -16,10 +16,8 @@ public class Product implements Serializable{
 	private String Classification; //분류
 	private String productName; //제품명
 	private int Quantity; //수량
-	private int sellingQuantity; // 판매수량
 	private int purchasePrice; //구매가격
 	private int sellingPrice; //판매가격
-	private Date sellingDate; // 판매 날짜
 	
 	public Product(String classification, String productName, int quantity, int purchasePrice, int sellingPrice) {
 		this.Classification = classification;
@@ -33,13 +31,6 @@ public class Product implements Serializable{
 		this.productName = productName;
 	}
 	
-	public Product(String sellingdate,int sellingQuantity) throws ParseException {
-		if(Quantity == 0)
-			return ;
-		this.sellingQuantity = sellingQuantity;
-		this.Quantity -= sellingQuantity;
-		setSellingDate(sellingdate);
-	}
 	
 	public void purchaseProduct(int Quantity) {
 		if(Quantity == 0)
@@ -47,34 +38,12 @@ public class Product implements Serializable{
 		this.Quantity += Quantity;
 	}
 	
-	public String getSellingDate() {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		return sdf.format(sellingDate);
-	}
-	
-	
-	public void sellingProduct(String sellingdate,int sellingQuantity) throws ParseException {
-		if(Quantity == 0)
-			return ;
-		this.sellingQuantity = sellingQuantity;
-		this.Quantity -= sellingQuantity;
-		setSellingDate(sellingdate);
-	}
-	
-	public void setSellingDate(String date) throws ParseException{
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-		this.sellingDate = format.parse(date);
-	}
 	
 	@Override
 	public String toString() {
-		if(sellingDate == null)
 			return "분류 : " + Classification + " 제품명 : " + productName + " 수량 : " + Quantity
 					+ " 구매가격 : " + purchasePrice + " 판매가격 : " + sellingPrice;
-		return productName +" "+ sellingQuantity+"개 판매"+"("+getSellingDate()+")";
 	}
-	
-		
 	
 	
 
