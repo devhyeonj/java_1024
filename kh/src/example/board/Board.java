@@ -11,7 +11,7 @@ import lombok.Data;
 public class Board implements Serializable{
 	private static final long serialVersionUID = -8089813421478865761L;
 	private static int count = 0; 
-	private int num;
+	private int num; // 코드 구현에서 사용을 안해서 굳이 필요한지..?
 	private String title; 
 	private String contents; 
 	private int views;
@@ -26,7 +26,7 @@ public class Board implements Serializable{
 		this.views = 0;
 		this.writer = writer;
 		
-		++count;
+		++count; // 수정 삭제 할때도 증가하기 때문에 == 0 으로 설정하던지 메소드를 따로 만들어야함
 		num = count;
 	}
 	
