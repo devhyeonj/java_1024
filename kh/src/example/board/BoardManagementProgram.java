@@ -144,7 +144,7 @@ public class BoardManagementProgram {
 		}
 		sc.nextLine();
 		System.out.print("카테고리:");String categoryName =sc.nextLine();
-		int index = categoryList.indexOf(new Category(categoryName));
+		int index = categoryList.indexOf(new Category(categoryName,true));
 		if(index == -1) {
 			System.out.println("해당 카테고리가 없습니다.");
 			return;
@@ -152,7 +152,7 @@ public class BoardManagementProgram {
 		System.out.print("제목:");String title = sc.nextLine();
 		System.out.print("내용:");String contents = sc.nextLine();
 		Board board = new Board(title, contents, user.getNickname());
-		board.setCategory(new Category(categoryName));
+		board.setCategory(new Category(categoryName,true));
 		boardList.add(board);
 		printStr("게시글 등록이 완료됐습니다.");
 		

@@ -221,9 +221,8 @@ public class ProductMain {
 		
 		System.out.print("분류 : ");String Classification = sc.nextLine();
 		System.out.print("제품명 : ");String productName = sc.nextLine();
-		System.out.print("수량:");int Quantity = sc.nextInt();
 		
-		product.updateProduct(Classification, productName, Quantity);
+		product.updateProduct(Classification, productName, 0);
 		
 		System.out.println("수정하였습니다.");
 		
@@ -249,10 +248,9 @@ public class ProductMain {
 			System.out.println("제품 관리 리스트가 생성되지 않았습니다.");
 		System.out.print("분류 : ");String Classification = sc.nextLine();
 		System.out.print("제품명 : ");String productName = sc.nextLine();
-		System.out.print("수량 : ");int Quantity = sc.nextInt();
 		System.out.print("구매가격 : ");int purchasePrice = sc.nextInt();
 		System.out.print("판매가격 : ");int sellingPrice = sc.nextInt();
-		Product product = new Product(Classification, productName, Quantity, purchasePrice, sellingPrice);
+		Product product = new Product(Classification, productName, 0, purchasePrice, sellingPrice);
 		if(productList.indexOf(product) != -1) {
 			System.out.println("중복된 제품이 있습니다.");
 			return ;
