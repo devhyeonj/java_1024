@@ -189,7 +189,7 @@ public class BoardManagementProgram {
 		System.out.print("삭제 하고 싶은 카테고리명 : ");
 		
 		String category = sc.nextLine();
-		int index = categoryList.indexOf(new Category(category));
+		int index = categoryList.indexOf(new Category(category,false));
 		Category tmp = categoryList.get(index);
 		
 		indexList = search(boardList, (b) -> b.getCategory().getCategoryName().equals(category));
@@ -219,7 +219,7 @@ public class BoardManagementProgram {
 		sc.nextLine();
 		System.out.print("수정 하고 싶은 카테고리명 : ");
 		String category = sc.nextLine();
-		int index = categoryList.indexOf(new Category(category));
+		int index = categoryList.indexOf(new Category(category,false));
 		Category tmp = categoryList.get(index);
 		
 		indexList = search(boardList, (b) -> b.getCategory().getCategoryName().equals(category));
@@ -262,13 +262,13 @@ public class BoardManagementProgram {
 		System.out.print("카테고리명 : ");
 		String category = sc.nextLine();
 		
+		Category tmp = new Category(category,true);
 		//카테고리 중복확인
-		int index = categoryList.indexOf(category);
+		int index = categoryList.indexOf(tmp);
 		if(index != -1) {
 			printStr("이미 있는 카테고리 입니다.");
 			return ;
 		}
-		Category tmp = new Category(category);
 		categoryList.add(tmp);
 		printStr("새 카테고리를 추가했습니다.");
 		

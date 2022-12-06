@@ -12,7 +12,8 @@ public class Category implements Serializable{
 	private int num;
 	private String categoryName;
 	
-	public Category(String categoryName) {
+	public Category(String categoryName, boolean res) {
+		if(res)
 		count++;
 		num = count;
 		this.categoryName = categoryName;
