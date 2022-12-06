@@ -286,14 +286,23 @@ public class ProductMain {
 
 	private static void yearSelect(int num) {
 		ProductLog p = null;
+		String year;
 		switch (num) {
 		case 1://제품별
+			System.out.print("연도 입력 : ");
+			year = sc.next();
+			sc.nextLine();
 			System.out.println("매출액 확인하실 제품명을 입력해주세요");
 			Product product = scanProductName();
+			indexList = searchLog(l -> l.getSellingDate().substring(0, 4).equals(year) && l.getProduct().getProductName().equals(product.getProductName()));
+			for (int i = 0; i < indexList.size(); i++) {
+				p = logList.get(indexList.get(i));
+				System.out.println(p.getProduct().getProductName()+" "+" 매출액 : " + p.getSales());
+			}
 			break;
 		case 2://전체
 			System.out.print("연도 입력 : ");
-			String year = sc.next();
+			year = sc.next();
 			indexList = searchLog(l -> l.getSellingDate().substring(0, 4).equals(year));
 			for (int i = 0; i < indexList.size(); i++) {
 				p = logList.get(indexList.get(i));
@@ -307,14 +316,23 @@ public class ProductMain {
 	
 	private static void monthSelect(int num) {
 		ProductLog p = null;
+		String month;
 		switch (num) {
 		case 1://제품별
+			System.out.print("월 입력 : ");
+			month = sc.next();
+			sc.nextLine();
 			System.out.println("매출액 확인하실 제품명을 입력해주세요");
 			Product product = scanProductName();
+			indexList = searchLog(l -> l.getSellingDate().substring(5, 7).equals(month) && l.getProduct().getProductName().equals(product.getProductName()));
+			for (int i = 0; i < indexList.size(); i++) {
+				p = logList.get(indexList.get(i));
+				System.out.println(p.getProduct().getProductName()+" "+" 매출액 : " + p.getSales());
+			}
 			break;
 		case 2://전체
 			System.out.print("월 입력 : ");
-			String month = sc.next();
+			month = sc.next();
 			indexList = searchLog(l -> l.getSellingDate().substring(5, 7).equals(month));
 			for (int i = 0; i < indexList.size(); i++) {
 				p = logList.get(indexList.get(i));
@@ -328,14 +346,23 @@ public class ProductMain {
 	
 	private static void daySelect(int num) {
 		ProductLog p = null;
+		String day;
 		switch (num) {
 		case 1://제품별
+			System.out.print("일 입력 : ");
+			day = sc.next();
+			sc.nextLine();
 			System.out.println("매출액 확인하실 제품명을 입력해주세요");
 			Product product = scanProductName();
+			indexList = searchLog(l -> l.getSellingDate().substring(8, 10).equals(day)&& l.getProduct().getProductName().equals(product.getProductName()));
+			for (int i = 0; i < indexList.size(); i++) {
+				p = logList.get(indexList.get(i));
+				System.out.println(p.getProduct().getProductName()+" "+" 매출액 : " + p.getSales());
+			}
 			break;
 		case 2://전체
 			System.out.print("일 입력 : ");
-			String day = sc.next();
+			day = sc.next();
 			indexList = searchLog(l -> l.getSellingDate().substring(8, 10).equals(day));
 			for (int i = 0; i < indexList.size(); i++) {
 				p = logList.get(indexList.get(i));
