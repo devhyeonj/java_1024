@@ -13,11 +13,11 @@ public class Member {
 	private Authority authority;
 	private Date joinDate;
 	
-	public Member(String id, String pw, Authority authority, Date joinDate) {
-		super();
+	public Member(String id, String pw, Authority authority) {
 		this.id = id;
 		this.pw = pw;
 		this.joinDate = new Date();
+		this.authority = authority;
 	}
 	
 	public String getDate() {
