@@ -1,5 +1,6 @@
 package assignment.db;
 
+import java.sql.SQLException;
 import java.util.Scanner;
 
 import assignment.db.vo.Department;
@@ -9,8 +10,16 @@ public class UniversityMain {
 	private static Scanner sc = new Scanner(System.in);
 	private static UniversityDB universityDB;
 
-	public static void main(String[] args) {
-
+	public static void main(String[] args) throws SQLException {
+		
+		try {
+			universityDB = new UniversityDB();
+		} catch (Exception e) {
+			System.out.println("[DB연결 실패]");
+			System.out.println("[프로그램 종료]");
+			return ;
+		}
+		
 		final int EXIT = 7;
 		int menu = -1;
 		printMenu();
@@ -21,7 +30,7 @@ public class UniversityMain {
 
 	}
 
-	private static void runMenu(int subMenu) {
+	private static void runMenu(int subMenu) throws SQLException {
 		int num = -1;
 		switch (subMenu) {
 		case 1: // 학부
@@ -50,22 +59,71 @@ public class UniversityMain {
 		}
 	}
 
-	private static void runDepartment(int num) {
+	private static void runDepartment(int num) throws SQLException {
 		switch (num) {
 		case 1:// 등록
 			insertDepartment();
 			break;
 		case 2:// 수정
-			
+			updateDepartment();
 			break;
-			
 		case 3:// 삭제
-			
+			deleteDepartment();
 			break;
 		case 4:// 조회
+			findByde_num();
 			break;
 		default:
 			break;
+		}
+	}
+
+
+	private static Department findByde_num() throws SQLException {
+		System.out.println("검색할 학부 번호를 입력해주세요.");
+		System.out.print("학부 번호 : ");
+		int de_num = sc.nextInt();
+		Department findDepartment = universityDB.findByDeNum(de_num);
+		System.out.println(findDepartment);
+		return findDepartment;
+	}
+
+	private static void updateDepartment() throws SQLException {
+		Department isDepartment = findByde_num();
+		if(isDepartment == null) {
+			System.out.println("해당 하는 학부가 없습니다.");
+			return ;
+		}
+		System.out.println("수정을 시작 합니다.");
+		System.out.print("학부 번호 : ");
+		int de_num = sc.nextInt();
+		sc.nextLine();
+		System.out.println("학부명 : ");
+		String de_name = sc.nextLine();
+		System.out.println("학부 주소 : ");
+		String de_address = sc.nextLine();
+		System.out.println("학부 전화번호 : ");
+		String de_tel = sc.nextLine();
+		System.out.println("학부 교수번호 : ");
+		int de_pr_num = sc.nextInt();
+		Department department = new Department(de_num, de_name, de_address, de_tel, de_pr_num);
+		universityDB.update(department,isDepartment.getDe_num());
+	}
+	
+	private static void deleteDepartment() throws SQLException {
+		Department isDepartment = findByde_num();
+		if(isDepartment == null) {
+			System.out.println("해당 하는 학부가 없습니다.");
+			return ;
+		}
+		System.out.println("삭제 하겠습니까? (y/n)");
+		if(sc.next().charAt(0) != 'y') {
+			return ;
+		}
+		if(universityDB.delete(isDepartment.getDe_num())) {
+			System.out.println("삭제에 성공하였습니다.");
+		}else {
+			System.out.println("삭제에 실패하였습니다.");
 		}
 	}
 
@@ -79,7 +137,7 @@ public class UniversityMain {
 		String de_address = sc.nextLine();
 		System.out.println("학부 전화번호 : ");
 		String de_tel = sc.nextLine();
-		System.out.println("학부 교수 : ");
+		System.out.println("학부 교수번호 : ");
 		int de_pr_num = sc.nextInt();
 		Department department = new Department(de_num, de_name, de_address, de_tel, de_pr_num);
 		universityDB.insertDepartment(department);
