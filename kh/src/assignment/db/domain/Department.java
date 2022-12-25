@@ -1,4 +1,4 @@
-package assignment.db.vo;
+package assignment.db.domain;
 
 import lombok.Data;
 
@@ -22,9 +22,4 @@ public class Department {
 		this.de_pr_num = de_pr_num;
 	}
 
-
-
-
-	
-	
 }

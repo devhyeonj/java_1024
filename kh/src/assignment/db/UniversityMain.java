@@ -4,7 +4,8 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Scanner;
 
-import assignment.db.vo.Department;
+import assignment.db.domain.Department;
+import assignment.db.domain.Lecture;
 
 public class UniversityMain {
 
@@ -41,6 +42,8 @@ public class UniversityMain {
 			break;
 		case 2: // 강좌
 			subMenuPrint(2);
+			num = sc.nextInt();
+			runLecture(num);
 			break;
 		case 3: // 학생
 			subMenuPrint(3);
@@ -60,6 +63,112 @@ public class UniversityMain {
 		}
 	}
 
+	private static void runLecture(int num) throws SQLException {
+		switch (num) {
+		case 1:// 등록
+			insertLecture();
+			break;
+		case 2:// 수정
+			updateLecture();
+			break;
+		case 3:// 삭제
+			deleteLecture();
+			break;
+		case 4:// 조회
+			System.out.println("1. 전체 조회");
+			System.out.println("2. 강좌명으로 검색");
+			int selectNum = sc.nextInt();
+			selectLectureMenu(selectNum);
+			break;
+		default:
+			break;
+		}
+	}
+
+	private static void selectLectureMenu(int selectNum) throws SQLException {
+		switch (selectNum) {
+		case 1:
+			findAllLecture();
+			break;
+		case 2: 
+			findByle_name();
+			break;
+		}
+	}
+
+	private static Lecture findByle_name() throws SQLException {
+		System.out.println("검색 할 강좌명을 입력해주세요.");
+		sc.nextLine();
+		System.out.print("강좌명 : ");
+		String le_name = sc.nextLine();
+		Lecture lecture = universityDB.findByLeName(le_name);
+		System.out.println(lecture);
+		return lecture;
+	}
+
+	private static void findAllLecture() throws SQLException {
+		List<Lecture> leList = universityDB.findAllLecture();
+		leList.forEach(l -> System.out.println(l));
+	}
+
+	private static void deleteLecture() throws SQLException {
+		findAllLecture();
+		System.out.println("삭제 할 강좌명을 입력 해주세요.");
+		sc.nextLine();
+		System.out.print("강좌명 입력 >> ");
+		String searchName = sc.nextLine();
+		if(universityDB.deleteLecture(searchName)) {
+			System.out.println("삭제에 성공하였습니다.");
+		}else {
+			System.out.println("삭제에 실패하였습니다.");
+		}
+	}
+
+	private static void updateLecture() throws SQLException {
+		findAllLecture();
+		System.out.println("수정 할 강좌명을 입력 해주세요.");
+		sc.nextLine();
+		System.out.print("강좌명 입력 >> ");
+		String searchName = sc.nextLine();
+		System.out.println("수정을 시작합니다.");
+		System.out.print("강좌명 : ");
+		String le_name = sc.nextLine();
+		System.out.print("스케쥴 : ");
+		String le_schedule = sc.nextLine();
+		System.out.print("학점 : ");
+		int le_point = sc.nextInt();
+		System.out.print("클래스 : ");
+		int le_class = sc.nextInt();
+		System.out.print("연도 : ");
+		int le_year = sc.nextInt();
+		System.out.print("학기 : ");
+		String le_term =sc.next();
+		System.out.print("담당 교수번호 : ");
+		int le_pr_num = sc.nextInt();
+		Lecture lecture = new Lecture(le_pr_num, le_name, le_schedule, le_point, le_class, le_year, le_term, le_pr_num);
+		universityDB.updateLecture(lecture, searchName);
+	}
+
+	private static void insertLecture() {
+		sc.nextLine();
+		System.out.print("강좌명 : ");
+		String le_name = sc.nextLine();
+		System.out.print("스케쥴 : ");
+		String le_schedule = sc.nextLine();
+		System.out.print("학점 : ");
+		int le_point = sc.nextInt();
+		System.out.print("클래스 : ");
+		int le_class = sc.nextInt();
+		System.out.print("연도 : ");
+		int le_year = sc.nextInt();
+		System.out.print("학기 : ");
+		String le_term =sc.next();
+		System.out.print("담당 교수번호 : ");
+		int le_pr_num = sc.nextInt();
+		Lecture lecture = new Lecture(le_pr_num, le_name, le_schedule, le_point, le_class, le_year, le_term, le_pr_num);
+		universityDB.insertLecture(lecture);
+	}
+
 	private static void runDepartment(int num) throws SQLException {
 		switch (num) {
 		case 1:// 등록
@@ -73,43 +182,44 @@ public class UniversityMain {
 			break;
 		case 4:// 조회
 			System.out.println("1. 전체 조회");
-			System.out.println("2. 학부번호로 검색");
+			System.out.println("2. 학부 명으로 검색");
 			int selectNum = sc.nextInt();
-			selectMenu(selectNum);
+			selectDepartmentMenu(selectNum);
 			break;
 		default:
 			break;
 		}
 	}
-	private static void selectMenu(int selectNum) throws SQLException {
+	private static void selectDepartmentMenu(int selectNum) throws SQLException {
 		switch (selectNum) {
 		case 1:
-			findAll();
+			findAllDepartment();
 			break;
 		case 2: 
-			findByde_num();
+			findByde_Name();
 			break;
 		}
 	}
 
 	//전체조회
-	private static void findAll() throws SQLException {
-		List<Department> deList = universityDB.findAll();
+	private static void findAllDepartment() throws SQLException {
+		List<Department> deList = universityDB.findAllDepartment();
 		deList.forEach(d -> System.out.println(d));
 	}
 	
-	//학부번호 검색
-	private static Department findByde_num() throws SQLException {
-		System.out.println("검색할 학부 번호를 입력해주세요.");
-		System.out.print("학부 번호 : ");
-		int de_num = sc.nextInt();
-		Department findDepartment = universityDB.findByDeNum(de_num);
+	//학부명으로 검색
+	private static Department findByde_Name() throws SQLException {
+		System.out.println("검색할 학부 명을 입력해주세요.");
+		System.out.print("학부 명 : ");
+		sc.nextLine();
+		String de_name = sc.nextLine();
+		Department findDepartment = universityDB.findByDeName(de_name);
 		System.out.println(findDepartment);
 		return findDepartment;
 	}
 
 	private static void updateDepartment() throws SQLException {
-		Department isDepartment = findByde_num();
+		Department isDepartment = findByde_Name();
 		if(isDepartment == null) {
 			System.out.println("해당 하는 학부가 없습니다.");
 			return ;
@@ -127,11 +237,11 @@ public class UniversityMain {
 		System.out.println("학부 교수번호 : ");
 		int de_pr_num = sc.nextInt();
 		Department department = new Department(de_num, de_name, de_address, de_tel, de_pr_num);
-		universityDB.update(department,isDepartment.getDe_num());
+		universityDB.updateDepartment(department,isDepartment.getDe_num());
 	}
 	
 	private static void deleteDepartment() throws SQLException {
-		Department isDepartment = findByde_num();
+		Department isDepartment = findByde_Name();
 		if(isDepartment == null) {
 			System.out.println("해당 하는 학부가 없습니다.");
 			return ;
@@ -140,7 +250,7 @@ public class UniversityMain {
 		if(sc.next().charAt(0) != 'y') {
 			return ;
 		}
-		if(universityDB.delete(isDepartment.getDe_num())) {
+		if(universityDB.deleteDepartment(isDepartment.getDe_num())) {
 			System.out.println("삭제에 성공하였습니다.");
 		}else {
 			System.out.println("삭제에 실패하였습니다.");
