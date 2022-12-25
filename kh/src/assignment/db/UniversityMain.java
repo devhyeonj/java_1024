@@ -1,6 +1,7 @@
 package assignment.db;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Scanner;
 
 import assignment.db.vo.Department;
@@ -71,14 +72,33 @@ public class UniversityMain {
 			deleteDepartment();
 			break;
 		case 4:// 조회
-			findByde_num();
+			System.out.println("1. 전체 조회");
+			System.out.println("2. 학부번호로 검색");
+			int selectNum = sc.nextInt();
+			selectMenu(selectNum);
 			break;
 		default:
 			break;
 		}
 	}
+	private static void selectMenu(int selectNum) throws SQLException {
+		switch (selectNum) {
+		case 1:
+			findAll();
+			break;
+		case 2: 
+			findByde_num();
+			break;
+		}
+	}
 
-
+	//전체조회
+	private static void findAll() throws SQLException {
+		List<Department> deList = universityDB.findAll();
+		deList.forEach(d -> System.out.println(d));
+	}
+	
+	//학부번호 검색
 	private static Department findByde_num() throws SQLException {
 		System.out.println("검색할 학부 번호를 입력해주세요.");
 		System.out.print("학부 번호 : ");

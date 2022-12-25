@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import assignment.db.vo.Department;
@@ -104,6 +106,27 @@ public class UniversityDB {
 			System.out.println("해당 학부 번호를 조회 할수가 없습니다.");
 		}
 		return department;
+	}
+	
+	public List<Department> findAll() throws SQLException {
+		String sql = "select de_num,de_name,de_address,de_tel,de_pr_num from department";
+		List<Department> deList = new ArrayList<>();
+		try {
+			rs = stmt.executeQuery(sql);
+			while(rs.next()) {
+				Department department = new Department();
+				department.setDe_num(rs.getInt("de_num"));
+				department.setDe_name(rs.getString("de_name"));
+				department.setDe_address(rs.getString("de_address"));
+				department.setDe_tel(rs.getString("de_tel"));
+				department.setDe_pr_num(rs.getInt("de_pr_num"));
+				deList.add(department);
+			}
+			
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		return deList;
 	}
 	
 	
