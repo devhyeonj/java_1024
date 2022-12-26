@@ -8,6 +8,7 @@ import assignment.db.domain.Course;
 import assignment.db.domain.Department;
 import assignment.db.domain.Lecture;
 import assignment.db.domain.Professor;
+import assignment.db.domain.Score;
 import assignment.db.domain.Student;
 
 public class UniversityMain {
@@ -65,11 +66,54 @@ public class UniversityMain {
 			break;
 		case 6: // 성적
 			subMenuPrint(6);
+			num = sc.nextInt();
+			runScore(num);
 			break;
 		case 7: // 종료
 			subMenuPrint(7);
 			break;
 		}
+	}
+
+	private static void runScore(int num) {
+		switch (num) {
+		case 1:// 성적추가
+			insertScore();
+			break;
+		case 2:// 성적수정
+			updateScore();
+			break;
+		case 3:// 성적조회
+			findAll();
+			break;
+			
+		}
+	}
+
+	private static void findAll() throws SQLException {
+		List<Score> scList = universityDB.findAllScore();
+		scList.forEach(s -> System.out.println(s));
+	}
+
+	private static void updateScore() {
+		
+	}
+	
+	private static void insertScore() {
+		System.out.print("중간 : ");
+		int sc_mid = sc.nextInt();
+		System.out.print("기말 : ");
+		int sc_final = sc.nextInt();
+		System.out.print("과제 : ");
+		int sc_homework = sc.nextInt();
+		System.out.print("출석 : ");
+		int sc_attendance = sc.nextInt();
+		System.out.print("총점 : ");
+		int sc_total = sc.nextInt();
+		System.out.print("수강번호 : ");
+		int sc_co_num = sc.nextInt();
+		Score score = new Score(sc_co_num, sc_mid, sc_final, sc_homework, sc_attendance, sc_total, sc_co_num);
+		universityDB.insertScore(score);
 	}
 
 	private static void runCourse(int num) throws SQLException {

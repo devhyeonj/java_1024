@@ -13,6 +13,7 @@ import assignment.db.domain.Course;
 import assignment.db.domain.Department;
 import assignment.db.domain.Lecture;
 import assignment.db.domain.Professor;
+import assignment.db.domain.Score;
 import assignment.db.domain.Student;
 
 public class UniversityDB {
@@ -28,6 +29,79 @@ public class UniversityDB {
 		con = getConnection();
 		stmt = con.createStatement();
 	}
+	
+	public List<Score> findAllScore() throws SQLException {
+		String sql = "select sc_mid,sc_final,sc_homework,sc_attendance,sc_total,sc_co_num from score";
+		List<Score> scList = new ArrayList<>();
+		try {
+			rs = stmt.executeQuery(sql);
+			while(rs.next()) {
+				Score score = new Score();
+				score.setSc_mid(rs.getInt("sc_mid"));
+				score.setSc_final(rs.getInt("sc_final"));
+				score.setSc_homework(rs.getInt("sc_homework"));
+				score.setSc_attendance(rs.getInt("sc_attendance"));
+				score.setSc_total(rs.getInt("sc_total"));
+				score.setSc_co_num(rs.getInt("sc_co_num"));
+				scList.add(score);
+			}
+			
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		return scList;
+	}
+	
+	public void updateScore(Score score, int searchNum) throws SQLException {
+		String sql = "update sc_mid=?,sc_final=?,sc_homework=?,sc_attendance=?,sc_total=?,sc_co_num=? where sc_co_num = ?";
+		try {
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, score.getSc_mid());
+			pstmt.setInt(2, score.getSc_final());
+			pstmt.setInt(3, score.getSc_homework());
+			pstmt.setInt(4, score.getSc_attendance());
+			pstmt.setInt(5, score.getSc_total());
+			pstmt.setInt(6, score.getSc_co_num());
+			pstmt.setInt(7, searchNum);
+			int count = pstmt.executeUpdate();
+			if (count == 0) {
+				System.out.println("[수정 실패]");
+			} else {
+				System.out.println("[수정 성공]");
+			}
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}finally {
+			close();
+		}
+	}
+	
+	public boolean insertScore(Score score) {
+		String sql = "insert into score(sc_mid,sc_final,sc_homework,sc_attendance,sc_total,sc_co_num) values(?,?,?,?,?,?)";
+		try {
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, score.getSc_mid());
+			pstmt.setInt(2, score.getSc_final());
+			pstmt.setInt(3, score.getSc_homework());
+			pstmt.setInt(4, score.getSc_attendance());
+			pstmt.setInt(5, score.getSc_total());
+			pstmt.setInt(6, score.getSc_co_num());
+			int count = pstmt.executeUpdate();
+			if(count == 0) {
+				System.out.println("[추가 실패]");
+				return false;
+			}else {
+				System.out.println("[추가 성공]");
+				}
+			}catch (SQLException e) {
+				System.out.println(e.getMessage());
+			} finally {
+				close();
+			}
+		return true;
+		}
+	
+	
 	
 	public boolean insertCourse(Course course) {
 		String sql = "insert into course(co_st_num,co_le_num,co_type,co_grade) values(?,?,?,?)";
