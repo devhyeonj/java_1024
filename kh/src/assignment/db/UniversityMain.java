@@ -75,7 +75,7 @@ public class UniversityMain {
 		}
 	}
 
-	private static void runScore(int num) {
+	private static void runScore(int num) throws SQLException {
 		switch (num) {
 		case 1:// 성적추가
 			insertScore();
@@ -95,8 +95,24 @@ public class UniversityMain {
 		scList.forEach(s -> System.out.println(s));
 	}
 
-	private static void updateScore() {
-		
+	private static void updateScore() throws SQLException {
+		findAll();
+		System.out.println("수정 할 성적번호를 입력 해주세요");
+		int num = sc.nextInt();
+		System.out.print("중간 : ");
+		int sc_mid = sc.nextInt();
+		System.out.print("기말 : ");
+		int sc_final = sc.nextInt();
+		System.out.print("과제 : ");
+		int sc_homework = sc.nextInt();
+		System.out.print("출석 : ");
+		int sc_attendance = sc.nextInt();
+		System.out.print("총점 : ");
+		int sc_total = sc.nextInt();
+		System.out.print("수강번호 : ");
+		int sc_co_num = sc.nextInt();
+		Score score = new Score(sc_co_num, sc_mid, sc_final, sc_homework, sc_attendance, sc_total, sc_co_num);
+		universityDB.updateScore(score, num);
 	}
 	
 	private static void insertScore() {

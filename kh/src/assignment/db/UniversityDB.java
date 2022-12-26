@@ -31,12 +31,13 @@ public class UniversityDB {
 	}
 	
 	public List<Score> findAllScore() throws SQLException {
-		String sql = "select sc_mid,sc_final,sc_homework,sc_attendance,sc_total,sc_co_num from score";
+		String sql = "select sc_num,sc_mid,sc_final,sc_homework,sc_attendance,sc_total,sc_co_num from score";
 		List<Score> scList = new ArrayList<>();
 		try {
 			rs = stmt.executeQuery(sql);
 			while(rs.next()) {
 				Score score = new Score();
+				score.setSc_num(rs.getInt("sc_num"));
 				score.setSc_mid(rs.getInt("sc_mid"));
 				score.setSc_final(rs.getInt("sc_final"));
 				score.setSc_homework(rs.getInt("sc_homework"));
@@ -53,7 +54,7 @@ public class UniversityDB {
 	}
 	
 	public void updateScore(Score score, int searchNum) throws SQLException {
-		String sql = "update sc_mid=?,sc_final=?,sc_homework=?,sc_attendance=?,sc_total=?,sc_co_num=? where sc_co_num = ?";
+		String sql = "update score set sc_mid=?,sc_final=?,sc_homework=?,sc_attendance=?,sc_total=?,sc_co_num=? where sc_num = ?";
 		try {
 			pstmt = con.prepareStatement(sql);
 			pstmt.setInt(1, score.getSc_mid());
