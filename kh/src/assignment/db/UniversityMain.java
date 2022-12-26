@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Scanner;
 
+import assignment.db.domain.Course;
 import assignment.db.domain.Department;
 import assignment.db.domain.Lecture;
 import assignment.db.domain.Professor;
@@ -59,6 +60,8 @@ public class UniversityMain {
 			break;
 		case 5: // 수강
 			subMenuPrint(5);
+			num = sc.nextInt();
+			runCourse(num);
 			break;
 		case 6: // 성적
 			subMenuPrint(6);
@@ -67,6 +70,45 @@ public class UniversityMain {
 			subMenuPrint(7);
 			break;
 		}
+	}
+
+	private static void runCourse(int num) throws SQLException {
+		switch (num) {
+		case 1:// 수강신청
+			insertCourse();
+			break;
+		case 2:// 수강취소
+			deleteCourse();
+			break;
+		}
+	}
+
+	private static void deleteCourse() throws SQLException {
+		Course c = findByCourse();
+		System.out.println(c);
+		System.out.print("수강취소할 번호를 입력해주세요>>");
+		int num = sc.nextInt();
+		if(universityDB.deleteCourse(num)) {
+			System.out.println("수강 취소 완료");
+		}else {
+			System.out.println("수강 취소 실패");
+		}
+		
+		
+	
+	}
+	
+	private static Course findByCourse() throws SQLException {
+		System.out.println("검색 할 학번을 입력하세요.");
+		System.out.print("학번 : ");
+		int num = sc.nextInt();
+		Course c = universityDB.findByCoStNum(num);
+		if(c == null) {
+			System.out.println("검색 결과가 없습니다.");
+			return null;
+		}
+		return c;
+		
 	}
 
 	private static void runProfessor(int num) throws SQLException {
@@ -151,6 +193,23 @@ public class UniversityMain {
 		String pr_tel = sc.nextLine();
 		Professor newProfessor = new Professor(pr_num, pr_name, pr_state, pr_de_num, pr_tel);
 		universityDB.updateProfessor(newProfessor, professor.getPr_num());
+	}
+	private static void insertCourse() {
+		System.out.print("학번 : ");
+		int co_st_num = sc.nextInt();
+		System.out.print("강좌 번호 : ");
+		int co_le_num = sc.nextInt();
+		sc.nextLine();
+		System.out.print("타입 : ");
+		String co_type = sc.nextLine();
+		System.out.print("성적 : ");
+		String co_grade = sc.nextLine();
+		Course course = new Course(co_le_num, co_st_num, co_le_num, co_type, co_grade);
+		if(universityDB.insertCourse(course)) {
+			System.out.println("수강 신청 완료");
+		}else {
+			System.out.println("수강 신청 실패");
+		}
 	}
 
 	private static void insertProfessor() {

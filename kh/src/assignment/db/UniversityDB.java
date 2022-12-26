@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import assignment.db.domain.Course;
 import assignment.db.domain.Department;
 import assignment.db.domain.Lecture;
 import assignment.db.domain.Professor;
@@ -26,6 +27,65 @@ public class UniversityDB {
 	public UniversityDB() throws SQLException {
 		con = getConnection();
 		stmt = con.createStatement();
+	}
+	
+	public boolean insertCourse(Course course) {
+		String sql = "insert into course(co_st_num,co_le_num,co_type,co_grade) values(?,?,?,?)";
+		try {
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, course.getCo_st_num());
+			pstmt.setInt(2, course.getCo_le_num());
+			pstmt.setString(3, course.getCo_type());
+			pstmt.setString(4, course.getCo_grade());
+			int count = pstmt.executeUpdate();
+			if(count == 0) {
+				System.out.println("[추가 실패]");
+				return false;
+			}else {
+				System.out.println("[추가 성공]");
+				}
+			}catch (SQLException e) {
+				System.out.println(e.getMessage());
+			} finally {
+				close();
+			}
+		return true;
+		}
+	public boolean deleteCourse(int searchNum) throws SQLException {
+		String sql = "delete from course where co_num = ?";
+		try {
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, searchNum);
+			pstmt.executeUpdate();
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}finally {
+			close();
+		}
+		return true;
+	}
+	
+	public Course findByCoStNum(int co_st_num) throws SQLException {
+		String sql = "select co_num,co_st_num,co_le_num,co_type,co_grade from course where co_st_num = ?";
+		Course course = new Course();
+		try {
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, co_st_num);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				course.setCo_num(rs.getInt("co_num"));
+				course.setCo_st_num(rs.getInt("co_st_num"));
+				course.setCo_le_num(rs.getInt("co_le_num"));
+				course.setCo_type(rs.getString("co_type"));
+				course.setCo_grade(rs.getString("co_grade"));
+			}
+			
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		} catch (NoSuchElementException e) {
+			System.out.println("해당 수강신청된 학번을 조회 할수가 없습니다.");
+		}
+		return course;
 	}
 	
 	public void insertProfessor(Professor professor) {
