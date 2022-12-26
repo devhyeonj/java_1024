@@ -6,6 +6,7 @@ import java.util.Scanner;
 
 import assignment.db.domain.Department;
 import assignment.db.domain.Lecture;
+import assignment.db.domain.Student;
 
 public class UniversityMain {
 
@@ -47,6 +48,8 @@ public class UniversityMain {
 			break;
 		case 3: // 학생
 			subMenuPrint(3);
+			num = sc.nextInt();
+			runStudent(num);
 			break;
 		case 4: // 교수
 			subMenuPrint(4);
@@ -61,6 +64,108 @@ public class UniversityMain {
 			subMenuPrint(7);
 			break;
 		}
+	}
+
+	private static void runStudent(int num) throws SQLException {
+		switch (num) {
+		case 1:// 등록
+			insertStudent();
+			break;
+		case 2:// 수정
+			updateStudent();
+			break;
+		case 3:// 삭제
+			deleteStudent();
+			break;
+		case 4:// 조회
+			System.out.println("1. 전체 조회");
+			System.out.println("2. 학번으로 검색");
+			int selectNum = sc.nextInt();
+			selectStudentMenu(selectNum);
+			break;
+		default:
+			break;
+		}
+	}
+
+	private static void selectStudentMenu(int selectNum) throws SQLException {
+		switch (selectNum) {
+		case 1:
+			findAllStudent();
+			break;
+		case 2: 
+			findBySt_num();
+			break;
+		}
+	}
+
+	private static Student findBySt_num() throws SQLException {
+		System.out.println("검색할 학생의 학번을 입력해주세요.");
+		System.out.print("학번 : ");
+		int st_num = sc.nextInt();
+		Student findStudent = universityDB.findByStNum(st_num);
+		System.out.println(findStudent);
+		return findStudent;
+	}
+
+	private static void findAllStudent() throws SQLException {
+		List<Student> stList = universityDB.findAllStudent();
+		stList.forEach(s -> System.out.println(s));
+	}
+
+	private static void deleteStudent() throws SQLException {
+		findAllStudent();
+		Student s = findBySt_num();
+		if(s == null) {
+			System.out.println("검색한 학생이 없습니다.");
+			return ;
+		}
+		if(universityDB.deleteStudent(s.getSt_num())) {
+			System.out.println("삭제완료");
+		}else {
+			System.out.println("삭제실패");
+		}
+	}
+
+	private static void updateStudent() throws SQLException {
+		findAllStudent();
+		Student s = findBySt_num();
+		if(s == null) {
+			System.out.println("검색한 학생이 없습니다.");
+			return ;
+		}
+		System.out.println("수정을 시작 합니다.");
+		System.out.println("학번 : ");
+		int st_num = sc.nextInt();
+		sc.nextLine();
+		System.out.print("이름 : ");
+		String st_name = sc.nextLine();
+		System.out.print("학기 :");
+		int st_semester = sc.nextInt();
+		sc.nextLine();
+		System.out.print("상태(재학/휴학/자퇴/퇴학) :");
+		String st_state = sc.nextLine();
+		System.out.print("지도교수 번호 : ");
+		int st_pr_num = sc.nextInt();
+		Student student = new Student(st_num, st_name, st_semester, st_state, st_pr_num);
+		universityDB.updateStudent(student, s.getSt_num());
+	}
+
+	private static void insertStudent() {
+		System.out.println("학번 : ");
+		int st_num = sc.nextInt();
+		sc.nextLine();
+		System.out.print("이름 : ");
+		String st_name = sc.nextLine();
+		System.out.print("학기 :");
+		int st_semester = sc.nextInt();
+		sc.nextLine();
+		System.out.print("상태(재학/휴학/자퇴/퇴학) :");
+		String st_state = sc.nextLine();
+		System.out.print("지도교수 번호 : ");
+		int st_pr_num = sc.nextInt();
+		Student student = new Student(st_num, st_name, st_semester, st_state, st_pr_num);
+		universityDB.insertStudent(student);
 	}
 
 	private static void runLecture(int num) throws SQLException {

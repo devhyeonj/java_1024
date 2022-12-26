@@ -11,6 +11,7 @@ import java.util.NoSuchElementException;
 
 import assignment.db.domain.Department;
 import assignment.db.domain.Lecture;
+import assignment.db.domain.Student;
 
 public class UniversityDB {
 
@@ -246,6 +247,113 @@ public class UniversityDB {
 		}
 		return lecture;
 	}
+	
+	public void insertStudent(Student student) {
+		String sql = "insert into student(st_num,st_name,st_semester,st_state,st_pr_num) values(?,?,?,?,?)";
+		try {
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, student.getSt_num());
+			pstmt.setString(2, student.getSt_name());
+			pstmt.setInt(3, student.getSt_semester());
+			pstmt.setString(4, student.getSt_state());
+			pstmt.setInt(5, student.getSt_pr_num());
+			int count = pstmt.executeUpdate();
+			if (count == 0) {
+				System.out.println("[추가 실패]");
+			} else {
+				System.out.println("[추가 성공]");
+			}
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		} finally {
+			close();
+		}
+	}
+	
+	public void updateStudent(Student student, int st_num) throws SQLException {
+		String sql = "update student set st_num=?,st_name=?,st_semester=?,st_state=?,st_pr_num=? where st_num = ?";
+		try {
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, student.getSt_num());
+			pstmt.setString(2, student.getSt_name());
+			pstmt.setInt(3, student.getSt_semester());
+			pstmt.setString(4, student.getSt_state());
+			pstmt.setInt(5, student.getSt_pr_num());
+			pstmt.setInt(6, st_num);
+			int count = pstmt.executeUpdate();
+			if (count == 0) {
+				System.out.println("[수정 실패]");
+			} else {
+				System.out.println("[수정 성공]");
+			}
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}finally {
+			close();
+		}
+	}
+	
+	
+	public boolean deleteStudent(int st_num) throws SQLException {
+		String sql = "delete from student where st_num = ?";
+		try {
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, st_num);
+			pstmt.executeUpdate();
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}finally {
+			close();
+		}
+		return true;
+	}
+	
+	
+	public List<Student> findAllStudent() throws SQLException {
+		String sql = "select st_num,st_name,st_semester,st_state,st_pr_num from student";
+		List<Student> stList = new ArrayList<>();
+		try {
+			rs = stmt.executeQuery(sql);
+			while(rs.next()) {
+				Student student = new Student();
+				student.setSt_num(rs.getInt("st_num"));
+				student.setSt_name(rs.getString("st_name"));
+				student.setSt_semester(rs.getInt("st_semester"));
+				student.setSt_state(rs.getString("st_state"));
+				student.setSt_pr_num(rs.getInt("st_pr_num"));
+				stList.add(student);
+			}
+			
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		return stList;
+	}
+	
+	public Student findByStNum(int st_num) throws SQLException {
+		String sql = "select st_num,st_name,st_semester,st_state,st_pr_num from student where st_num = ?";
+		Student student = new Student();
+		try {
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, st_num);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				student.setSt_num(rs.getInt("st_num"));
+				student.setSt_name(rs.getString("st_name"));
+				student.setSt_semester(rs.getInt("st_semester"));
+				student.setSt_state(rs.getString("st_state"));
+				student.setSt_pr_num(rs.getInt("st_pr_num"));
+				student.setSt_num(rs.getInt("st_num"));
+			}
+			
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		} catch (NoSuchElementException e) {
+			System.out.println("해당 학생을 조회 할수가 없습니다.");
+		}
+		return student;
+	}
+	
 	
 	
 
