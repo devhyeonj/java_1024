@@ -6,6 +6,7 @@ import java.util.Scanner;
 
 import assignment.db.domain.Department;
 import assignment.db.domain.Lecture;
+import assignment.db.domain.Professor;
 import assignment.db.domain.Student;
 
 public class UniversityMain {
@@ -53,6 +54,8 @@ public class UniversityMain {
 			break;
 		case 4: // 교수
 			subMenuPrint(4);
+			num = sc.nextInt();	
+			runProfessor(num);
 			break;
 		case 5: // 수강
 			subMenuPrint(5);
@@ -64,6 +67,108 @@ public class UniversityMain {
 			subMenuPrint(7);
 			break;
 		}
+	}
+
+	private static void runProfessor(int num) throws SQLException {
+		switch (num) {
+		case 1:// 등록
+			insertProfessor();
+			break;
+		case 2:// 수정
+			updateProfessor();
+			break;
+		case 3:// 삭제
+			deleteProfessor();
+			break;
+		case 4:// 조회
+			System.out.println("1. 전체 조회");
+			System.out.println("2. 교수 번호로 검색");
+			int selectNum = sc.nextInt();
+			selectProfessorMenu(selectNum);
+			break;
+		default:
+			break;
+		}
+	}
+
+	private static void selectProfessorMenu(int selectNum) throws SQLException {
+			switch (selectNum) {
+			case 1:
+				findAllProfessor();
+				break;
+			case 2: 
+				findByPr_num();
+				break;
+			}
+	}
+
+	private static Professor findByPr_num() throws SQLException {
+		System.out.println("검색 할 교수번호를 입력 해주세요.");
+		System.out.print("교수번호 : ");
+		int num = sc.nextInt();
+		Professor professor = universityDB.findByPrNum(num);
+		System.out.println(professor);
+		return professor;
+	}
+
+	private static void findAllProfessor() throws SQLException {
+		List<Professor> prList = universityDB.findAllProfessor();
+		prList.forEach(p -> System.out.println(p));
+	}
+
+	private static void deleteProfessor() throws SQLException {
+		findAllProfessor();
+		Professor professor = findByPr_num();
+		if(professor == null) {
+			System.out.println("검색 한 교수번호가 없습니다.");
+			return ;
+		}
+		if(universityDB.deleteProfessor(professor.getPr_num())) {
+			System.out.println("삭제 성공");
+		}else {
+			System.out.println("삭제 실패");
+		}
+	}
+
+	private static void updateProfessor() throws SQLException {
+		findAllProfessor();
+		Professor professor = findByPr_num();
+		if(professor == null) {
+			System.out.println("검색 한 교수번호가 없습니다.");
+			return ;
+		}
+		System.out.print("교수번호 : ");
+		int pr_num = sc.nextInt();
+		sc.nextLine();
+		System.out.print("이름 : ");
+		String pr_name = sc.nextLine();
+		System.out.print("state : ");
+		String pr_state = sc.nextLine();
+		System.out.print("학부 번호 : ");
+		int pr_de_num = sc.nextInt();
+		sc.nextLine();
+		System.out.print("전화번호 : ");
+		String pr_tel = sc.nextLine();
+		Professor newProfessor = new Professor(pr_num, pr_name, pr_state, pr_de_num, pr_tel);
+		universityDB.updateProfessor(newProfessor, professor.getPr_num());
+	}
+
+	private static void insertProfessor() {
+		System.out.print("교수번호 : ");
+		int pr_num = sc.nextInt();
+		sc.nextLine();
+		System.out.print("이름 : ");
+		String pr_name = sc.nextLine();
+		System.out.print("state : ");
+		String pr_state = sc.nextLine();
+		System.out.print("학부 번호 : ");
+		int pr_de_num = sc.nextInt();
+		sc.nextLine();
+		System.out.print("전화번호 : ");
+		String pr_tel = sc.nextLine();
+		Professor professor = new Professor(pr_num, pr_name, pr_state, pr_de_num, pr_tel);
+		universityDB.insertProfessor(professor);
+				
 	}
 
 	private static void runStudent(int num) throws SQLException {

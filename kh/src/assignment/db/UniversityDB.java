@@ -11,6 +11,7 @@ import java.util.NoSuchElementException;
 
 import assignment.db.domain.Department;
 import assignment.db.domain.Lecture;
+import assignment.db.domain.Professor;
 import assignment.db.domain.Student;
 
 public class UniversityDB {
@@ -26,6 +27,110 @@ public class UniversityDB {
 		con = getConnection();
 		stmt = con.createStatement();
 	}
+	
+	public void insertProfessor(Professor professor) {
+		String sql = "insert into professor(pr_num,pr_name,pr_state,pr_de_num,pr_tel) values(?,?,?,?,?)";
+		try {
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, professor.getPr_num());
+			pstmt.setString(2, professor.getPr_name());
+			pstmt.setString(3, professor.getPr_state());
+			pstmt.setInt(4, professor.getPr_de_num());
+			pstmt.setString(5, professor.getPr_tel());
+			int count = pstmt.executeUpdate();
+			if(count == 0) {
+				System.out.println("[추가 실패]");
+			}else {
+				System.out.println("[추가 성공]");
+				}
+			}catch (SQLException e) {
+				System.out.println(e.getMessage());
+			} finally {
+				close();
+			}
+		}
+	
+	public void updateProfessor(Professor professor, int searchNum) throws SQLException {
+		String sql = "update professor set pr_num=?,pr_name=?,pr_state=?,pr_de_num=?,pr_tel=? where pr_num = ?";
+		try {
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, professor.getPr_num());
+			pstmt.setString(2, professor.getPr_name());
+			pstmt.setString(3, professor.getPr_state());
+			pstmt.setInt(4, professor.getPr_de_num());
+			pstmt.setString(5, professor.getPr_tel());
+			pstmt.setInt(6, searchNum);
+			int count = pstmt.executeUpdate();
+			if (count == 0) {
+				System.out.println("[수정 실패]");
+			} else {
+				System.out.println("[수정 성공]");
+			}
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}finally {
+			close();
+		}
+	}
+	
+	public boolean deleteProfessor(int searchNum) throws SQLException {
+		String sql = "delete from professor where pr_num = ?";
+		try {
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, searchNum);
+			pstmt.executeUpdate();
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}finally {
+			close();
+		}
+		return true;
+	}
+	
+	public Professor findByPrNum(int pr_num) throws SQLException {
+		String sql = "select pr_num,pr_name,pr_state,pr_de_num,pr_tel from professor where pr_num = ?";
+		Professor professor = new Professor();
+		try {
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, pr_num);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				professor.setPr_num(rs.getInt("pr_num"));
+				professor.setPr_name(rs.getString("pr_name"));
+				professor.setPr_state(rs.getString("pr_state"));
+				professor.setPr_de_num(rs.getInt("pr_de_num"));
+				professor.setPr_tel(rs.getString("pr_tel"));
+			}
+			
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		} catch (NoSuchElementException e) {
+			System.out.println("해당 학생을 조회 할수가 없습니다.");
+		}
+		return professor;
+	}
+	
+	public List<Professor> findAllProfessor() throws SQLException {
+		String sql = "select pr_num,pr_name,pr_state,pr_de_num,pr_tel from professor";
+		List<Professor> prList = new ArrayList<>();
+		try {
+			rs = stmt.executeQuery(sql);
+			while(rs.next()) {
+				Professor professor = new Professor();
+				professor.setPr_num(rs.getInt("pr_num"));
+				professor.setPr_name(rs.getString("pr_name"));
+				professor.setPr_state(rs.getString("pr_state"));
+				professor.setPr_de_num(rs.getInt("pr_de_num"));
+				professor.setPr_tel(rs.getString("pr_tel"));;
+				prList.add(professor);
+			}
+			
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		return prList;
+	}
+	
 
 	public void insertDepartment(Department department) {
 		String sql = "insert into department(de_num,de_name,de_address,de_tel,de_pr_num) values(?,?,?,?,?)";
@@ -48,6 +153,7 @@ public class UniversityDB {
 			close();
 		}
 	}
+	
 	
 	public void updateDepartment(Department department, int searchNum) throws SQLException {
 		String sql = "update department set de_num = ?, de_name = ?, de_address =? , de_tel = ? , de_pr_num = ? where de_num = ?";
