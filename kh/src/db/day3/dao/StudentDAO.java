@@ -6,4 +6,5 @@ public interface StudentDAO {
 	
 	void insertStudent(StudentVO std);
 	void updateStudent(StudentVO std);
+	StudentVO selectStudent(String st_num);
 }
