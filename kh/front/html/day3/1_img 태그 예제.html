@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!--
+        width : 가로
+        height : 높이
+        - 기본 픽셀단위
+        - auto : 비율에 맞게 크기를 조절. 보통 가로 또는 세로 하나만 지정 한 후,
+        다른 속성에 auto를 추가하여 이미지 비율이 깨지지 않게 함
+
+    -->
+
+    <input  width="300" height="300" type="image" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRw0Hwdes7Nqu2l4U3_es_IvRDyTzOVue7uMHbLnF2GlBbiGOVhOKUjyzNm9Z629t1bbl4&usqp=CAU" alt="춘식이"> <br>
+    <!-- 절대 경로 : root폴더(최상위 폴더) : html 폴더. /로 시작-->
+    <input  width="300" height="300" type="image" src="/img/춘식이.png" alt="춘식이"> <br>
+    <!-- 상대 경로 
+    ../ : 상위 폴더로 이동
+    ./ 현재 폴더
+    -->
+    <input  width="300" height="300" type="image" src="../img/춘식이.png" alt="춘식이" > <br>
+    <img width="300" height="300" src="../img/춘식이.png" alt="춘식이"> <br>
+</body>
+</html>

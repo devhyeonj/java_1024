@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>picture 태그 예제</title>
+</head>
+<body>
+    <!-- 
+        이미지 태그와 유사
+        이미지 태그로 규현 가능(css 활용)
+        화면 크기에 따라 보여질 이미지를 다르게 선택
+     -->
+     <picture>
+        <!--  
+            source
+            - media : 화면 크기를 지정
+        -->
+        <!-- 
+            브라우저 가로가 1200px 이상이면 춘식2
+            브라우저 가로가 1200px 미만이고 800px 이상이면 춘식3
+            브라우저 가로가 800px 미만이면 춘식이 화면에 출력
+         -->
+        <source media="(min-width:1200px)" srcset="../img/춘식2.jfif">
+        <source media="(min-width:800px)" srcset="../img/춘식3.jfif">
+        <img src="../img/춘식이.png" alt="춘식이" width="300" height="auto">
+     </picture>
+</body>
+</html>
