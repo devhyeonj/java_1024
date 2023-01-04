@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>박스 3분할 예제</title>
+    <style>
+        *{margin: 0;}
+        .container-box{
+            border: 5px solid red;
+        }
+        .container-box::after{
+            content: ''; clear: both; display: block;
+            
+        }
+        .box{
+            height: 100px; width: 33.33%; background: yellow;
+            float: left;
+            /* box-sizing */
+        }
+        .box~.box{border-left: 5px solid red; margin-left: -5px;}
+        .box2{background: gray;}
+        .box3{background: blue;}
+    </style>
+
+</head>
+<body>
+    <div class="container-box">
+        <a href="http://www.naver.com">
+        <div class="box box1">메뉴1</div>
+        </a>
+        <a href="https://www.daum.net/">
+        <div class="box box2">메뉴2</div>
+        </a>
+        <a href="https://www.google.co.kr/">
+        <div class="box box3">메뉴3</div>
+        </a>
+    </div>
+</body>
+</html>
