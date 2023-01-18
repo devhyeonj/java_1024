@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>forEach 예제</title>
+</head>
+<body>
+    <script>
+        let arr = ['a', 1, 'bcd'];
+        arr.forEach(function(item, index, arr) {
+            console.log(`arr[${index}] = ${item}`);
+            console.log(`arr[${index}] = ${arr[index]}`);
+        });
+        arr.forEach(function(item,index){
+            console.log(`arr[${index}] = ${item}`);
+        });
+        arr.forEach(item => {
+            console.log(`${item}`);
+        });
+        arr.forEach(item=>console.log(`${item}`));
+    </script>
+</body>
+</html>
