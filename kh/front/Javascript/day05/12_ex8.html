@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="num_box">
+        <button class="back"><</button>
+        <span class="backNum">1</span>
+        /
+        <span class="forwordNum">6</span>
+        <button class="forword">></button>
+    </div>
+    <script>
+        let back = document.querySelector('.back');
+        let forword = document.querySelector('.forword');
+        let backNum = document.querySelector('.backNum');
+        let forwordNum = document.querySelector('.forwordNum');
+        backNum = backNum.textContent;
+        backNum = +backNum;
+        forwordNum = forwordNum.textContent;
+        forwordNum = +forwordNum
+        back.onclick = ()=> {
+           
+        }
+        forword.onclick = ()=> {
+            backNum.innerHTML = backNum+1;
+            
+        }
+    </script>
+</body>
+</html>

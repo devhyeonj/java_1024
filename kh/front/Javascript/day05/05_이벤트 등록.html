@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>이벤트 예제</title>
+</head>
+<body>
+    <input type="text" onclick="alert('인풋창 선택')">
+    <input type="text" id="text2">
+    <script>
+        // 속성은 여러개가 있어도 마지막꺼로 덮어쓰기됨
+        let text2 = document.querySelector('#text2');
+        text2.onclick = function() {
+            alert('인풋창2 선택');
+        }
+        text2.onclick = () => alert('인풋창3 선택');
+    </script>
+</body>
+</html>
