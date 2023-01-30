@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+          .box {
+            background-color: yellow; height: 300px; position: relative; /*top이랑 bottom쓰려면 positon relative필요*/
+           
+        }
+    </style>
+    <script src="../js/jquery.min.js"></script>
+    <!-- 버튼과 박스를 배치하고, 버튼을 클릭하면 박스가 아래로 100px 천천히 
+    내려가도록 코드를 작성하세요.-->
+  
+</head>
+<body>
+    <button class="btn">버튼</button>
+    <div class="box"></div>
+    <div></div>
+    <script>
+        $('.btn').on('click',function() {
+            $('.box').animate( {
+                top : '+=100px' // += 를 붙이면 기존값에서 계속 내려가게 해줌
+            },1000) //시간
+        });
+    </script>
+</body>
+</html>

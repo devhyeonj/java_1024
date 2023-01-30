@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../js/jquery.min.js"></script>
+    <style>
+    .box {
+         width: 150px; height: 50px;
+        border: 1px solid black;
+        text-align: center; line-height: 100px; font-size: 30px; /*가운데 정렬*/
+        float: left; /*1*/
+        margin-right: 10px; /*1*/
+    }
+
+    .container-box::after {  /*2*/
+        content: ''; display: block; clear: both;
+        margin-bottom: 20px;
+    }
+    </style>
+</head>
+<!--
+    체크박스,텍스트 박스를 배치하고 , 체크박스를 선택하면
+    바나나가 텍스트 박스에 추가되고, 체크를 해제하면
+    바나나 텍스트가 박스에서 삭제되도록 코드를 작성하세요
+    prop() 표준 속성인 경우 사용하는걸 추천
+    attr() 비 표준속성인 경우 사용하는걸 추천
+-->
+<body>
+    <div class="container-box">
+        <div class="box"></div>
+        <div class="box"></div>
+        <div class="box"></div>
+    </div>
+   
+    <label>
+        <input type="checkbox" name="fruit" value="바나나">바나나
+    </label>
+    <label>
+        <input type="checkbox" name="fruit" value="사과">사과
+    </label>
+    <label>
+        <input type="checkbox" name="fruit" value="오렌지">오렌지
+    </label>
+
+    <script>
+        /*
+        체크박스 클릭 이벤트 등록
+        - 모든 체크박스 중에서 체크된 박스들의 value를 배열에 추가
+            => 체크박스 각 요소마다 체크 여부를 확인해서 value를 배열에 추가
+        - .box에 모든 text를 ''로 수정
+        - 배열에 있는 값 하나하나를 .box에 text로 추가해줌
+        */
+
+         $('[name=fruit]').click(function(){
+            
+            let arr = getCheckValue();
+            $('.box').text('');
+            arr.forEach(function(item,arrIndex, arr) {
+                $('.box').eq(arrIndex).text(item);
+                
+            });
+         });
+
+         function  getCheckValue() {
+            let arr = [];
+            //체크박스 각 요소마다 체크 여부를 확인해서 value를 배열에 추가
+            let checkboxList = $('[name=fruit]');
+            if(!checkboxList) //예외처리 
+                return;
+            checkboxList.each(function() {
+                //체크박스가 체크된 상태이면
+                if($(this).prop('checked'))
+                // 체크박스의 value를 배열에 추가
+                    arr.push($(this).val());
+            });
+            return arr;
+         }
+    </script>
+</body>
+</html>
