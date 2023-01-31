@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../js/jquery.min.js"></script>
+    <style>
+        *{padding: 0; margin: 0;}
+        a{text-decoration: none;}
+        ul{list-style: none;}
+        .container {
+            height: 50px; margin-top: 30px; border: 3px solid black;
+            overflow: hidden;
+
+        }
+        .item-news {
+            height: 50px; line-height: 50px; padding-left: 20px;
+            background-color: yellow;
+        }
+        .item-news:nth-child(2n) {
+            background-color: aqua;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        /*
+        부모박스는 그대로 있고
+        자식박스가 1초마다 위로 올라감
+        롤링기능...
+        */
+    </script>
+    <div class="container">
+       <ul class="list-news">
+            <li class="item-news">
+                <a href="#" class="link-news">안녕하세요1</a>
+            </li>
+            <li class="item-news">
+                <a href="#" class="link-news">안녕하세요2</a>
+            </li>
+            <li class="item-news">
+                <a href="#" class="link-news">안녕하세요3</a>
+            </li>
+            <li class="item-news">
+                <a href="#" class="link-news">안녕하세요4</a>
+            </li>
+            <li class="item-news">
+                <a href="#" class="link-news">안녕하세요5</a>
+            </li>
+       </ul>
+    </div>
+    <script>
+
+            setInterval(function(){
+                if(!$('.item-news').first().is(':animated')) {
+                    $('.item-news').first().animate({
+                        marginTop : '-=50px'
+                    },900,function(){
+                        //첫번째 요소를 떼서 ul 태그 자식 요소 긑 다음에 추가 후 style 제거
+                        $(this).detach().appendTo('.list-news').removeAttr('style');
+                        
+                    });
+                }
+            },1000);
+            
+    </script>
+</body>
+</html>
