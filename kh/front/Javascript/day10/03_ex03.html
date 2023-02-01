@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="../js/jquery.min.js"></script>
+    <title>회원가입</title>
+    <style>
+        .container{
+            border: 1px solid black;
+            width: 400px; height: 200px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div>
+            <h6>회원가입</h6>
+        </div>
+        <div>
+            <form action="joinOk" id="form" >
+                <input type="text" class="id" placeholder="ID"/><br>
+                <input type="password" class="pw" placeholder="PW"/><br>
+                <input type="password" class="pw2" placeholder="PW2"/><br>
+                <input type="radio" name="list" value="남성">남성
+                <input type="radio" name="list" value="여성">여성<br>
+                <input type="submit" value="회원가입"/>
+            </form>
+       </div>
+    <script>
+        $('#form').submit(function(){
+            if($('.id').val() == '') {
+                alert('아이디를 입력해주세요.');
+                return false;
+            }
+            if($('.pw').val() == '' ) {
+                alert('비밀번호를 입력해주세요.');
+                return false;
+            }
+            if(!($('.pw').val() == $('.pw2').val())) {
+                alert('비밀번호가 서로 일치 하지않습니다.')
+                return false;
+            }
+            if(!($('input:radio[name=list]').is(":checked"))) {
+                alert('성별을 선택해주세요.');
+                return false;
+            }
+        })
+    </script>
+</body>
+</html>

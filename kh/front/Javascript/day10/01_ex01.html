@@ -84,9 +84,10 @@
        </ul>
     </div>
     <script>
-
+        
           
           $('.btn-next').click(function(){
+            //애니메이션 실행 후 , 요소를 때서 붙임
               let width = $('.item-news').innerWidth();
               if(!$('.item-news').first().is(':animated')){
             $('.item-news').first().animate({
@@ -96,9 +97,23 @@
                     });
                 }
             });
-            /*뒤에를 떼서 앞에껄 붙임 -marginleft */
-  
-        
+            //이전 버튼 클릭 이벤트를 등록
+            $('.btn-prev').click(function(){
+                //요소를 때서 붙인후 애니메이션 실행
+                let width = $('.item-news').innerWidth();
+                if(!$('.item-news').first().is(':animated')) {
+                    $('.item-news').last().detach().prependTo('.list-news')
+                    .css('marginLeft',`-${width}px`)
+                    .animate({
+                        marginLeft : 0
+                    },1000);
+                }
+            });
+                //=> 마지막 요소를 떼서 앞에 붙이고 , margin-left를 지정함
+                // last(), prependTo() , css();
+
+            
+            
     </script>
 </body>
 </html>

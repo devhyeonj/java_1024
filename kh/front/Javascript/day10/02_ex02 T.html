@@ -84,21 +84,55 @@
        </ul>
     </div>
     <script>
-
+        
           
           $('.btn-next').click(function(){
-              let width = $('.item-news').innerWidth();
+            //애니메이션 실행 후 , 요소를 때서 붙임
+                moveLeft(1000);
+            });
+            //이전 버튼 클릭 이벤트를 등록
+            $('.btn-prev').click(function(){
+                moveRight(1000);
+            });
+
+            let id = rolling();
+
+           $('.container').hover(function() {
+                 clearInterval(id);
+           }, function(){
+               id = rolling();
+           });
+
+
+            function moveLeft(time) {
+                let width = $('.item-news').innerWidth();
               if(!$('.item-news').first().is(':animated')){
             $('.item-news').first().animate({
                         marginLeft : `-${width}px`
-                    },1000,function(){
+                    },time,function(){
                       $(this).detach().appendTo('.list-news').removeAttr('style');                        
                     });
                 }
-            });
-            /*뒤에를 떼서 앞에껄 붙임 -marginleft */
-  
-        
+            }
+
+            function moveRight(time) {
+              
+                //요소를 때서 붙인후 애니메이션 실행
+                let width = $('.item-news').innerWidth();
+                if(!$('.item-news').first().is(':animated')) {
+                    $('.item-news').last().detach().prependTo('.list-news')
+                    .css('marginLeft',`-${width}px`)
+                    .animate({
+                        marginLeft : 0
+                    },time);
+                }
+            };
+            
+               
+            function rolling() {
+                return setInterval(moveLeft,2000,1200);
+            }
+            
     </script>
 </body>
 </html>
