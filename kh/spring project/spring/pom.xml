@@ -166,7 +166,15 @@
 	    <groupId>org.springframework</groupId>
 	    <artifactId>spring-jdbc</artifactId>
 	    <version>${org.springframework-version}</version>
-	</dependency>       
+	</dependency>
+	
+	<!-- 롬복 -->
+	<dependency>
+		<groupId>org.projectlombok</groupId>
+		<artifactId>lombok</artifactId>
+		<version>1.18.26</version>
+	</dependency>
+	       
 	</dependencies>
     <build>
         <plugins>

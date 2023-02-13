@@ -17,7 +17,7 @@
     <!-- MySQL 버전이 6인 경우 아래 코드 반영 -->
     <!-- <property name="driverClassName" value="com.mysql.cj.jdbc.Driver"></property> -->
     <property name="url"
-              value="jdbc:mysql://localhost:3306/university?useSSL=false&amp;serverTimezone=Asia/Seoul">
+              value="jdbc:mysql://localhost:3306/spring?useSSL=false&amp;serverTimezone=Asia/Seoul">
     </property>
     <property name="username" value="root"></property>
     <property name="password" value="root"></property>

@@ -1,7 +1,11 @@
 package kr.kh.spring.service;
 
+import kr.kh.spring.vo.MemberVO;
+
 public interface MemberService {
 
-	String getNameByNum(String num);
+	boolean signup(MemberVO member);
+
+	void emailAuthentication(String me_id);
 
 }
