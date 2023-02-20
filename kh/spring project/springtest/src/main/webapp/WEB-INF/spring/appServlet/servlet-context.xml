@@ -35,6 +35,16 @@
 	    </beans:property>
 	</beans:bean>
 	
+	<beans:bean id="loginInterceptor" 
+		class="kr.kh.test.interceptor.LoginInterceptor"></beans:bean>
+	<!-- 내가 지정한 상황에서만 동작하도록 설정 -->
+	<interceptors>
+		<interceptor>
+			<mapping path="/login"/>
+			<beans:ref bean="loginInterceptor"/>
+		</interceptor>
+	</interceptors>
+	
 	<context:component-scan base-package="kr.kh.test.*" />
 	
 </beans:beans>

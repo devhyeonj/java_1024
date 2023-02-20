@@ -45,4 +45,14 @@ public class MemberServiceImp implements MemberService {
 		// 회원가입
 		return memberDao.insertMember(member) != 0;
 	}
+
+	@Override
+	public MemberVO login(MemberVO member) {
+		MemberVO dbMember = memberDao.selectMemberById(member.getMe_id());
+		if(member == null)
+			return null;
+		if(passwordEncoder.matches(member.getMe_pw(), dbMember.getMe_pw()))
+			return dbMember;
+		return null;
+	}
 }
