@@ -22,11 +22,29 @@
     <property name="username" value="root"></property>
     <property name="password" value="root"></property>
 </bean> 
+	
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+	    <property name="dataSource" ref="dataSource" />
+	    <property name="mapperLocations" value="classpath:mappers/**/*Mapper.xml"></property>
+	</bean>
 
-<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
-    <property name="dataSource" ref="dataSource" />
-    <property name="mapperLocations" value="classpath:mappers/**/*Mapper.xml"></property>
-</bean>
+	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+	    <property name="host" value="smtp.gmail.com" />
+	    <property name="port" value="587" />
+	    <property name="username" value="jeonghyeon.dev@gmail.com" />
+	    <property name="password" value="scfgazlyrgdkrepf" />
+	    <property name="javaMailProperties">
+	        <props>
+	            <prop key="mail.transport.protocol">smtp</prop>
+	            <prop key="mail.smtp.auth">true</prop>
+	            <prop key="mail.smtp.starttls.enable">true</prop>
+	            <prop key="mail.debug">true</prop>
+	            <prop key="mail.smtp.ssl.protocols">TLSv1.2</prop>
+	        </props>
+	    </property>
+	</bean>
+
+
 <mybatis-spring:scan base-package="kr.kh.test.dao"/>
 
 		

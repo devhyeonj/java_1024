@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import kr.kh.test.service.MemberService;
+import kr.kh.test.vo.MemberOKVO;
 import kr.kh.test.vo.MemberVO;
 
 /**
@@ -77,6 +78,12 @@ public class HomeController {
 			mv.setViewName("redirect:/");
 			
 		}
+		return mv;
+	}
+	
+	@RequestMapping(value = "/email/authentication", method = RequestMethod.GET) 
+	public ModelAndView authentication(ModelAndView mv,MemberOKVO mok) {
+		memberService.authentication(mok.getMo_me_id(),mok.getMo_me_id());
 		return mv;
 	}
 }

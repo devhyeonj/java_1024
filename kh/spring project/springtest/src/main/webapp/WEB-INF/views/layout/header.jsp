@@ -25,6 +25,11 @@
 		      	<li class="nav-item">
 		        	<a class="nav-link" href="<c:url value='/logout'></c:url>">로그아웃</a>
 		      	</li> 
+		      	<!-- a태그는 get -->
+		      	<!-- post로 하고싶으면
+		      	<form action="<c:url value='/logout'></c:url>" method= "post">
+		      	 	<button class="nav-link" style="background:transparent;border:0">로그아웃</button>
+		      	 form 태그는 주소입력이 아니라 폼태그를 무조건 눌러야지 로그아웃이 된다.-->
 		     </c:if>   
 	    	</ul>
 		</div> 

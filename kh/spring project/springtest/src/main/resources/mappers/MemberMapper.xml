@@ -15,4 +15,24 @@
 	<select id="selectMemberById" resultType="kr.kh.test.vo.MemberVO">
 		select * from member where me_id = #{me_id}
 	</select>
+	
+	<insert id="insertMemberOK">
+		insert into member_ok(mo_me_id, mo_num, mo_valid_time)
+			values(#{mok.mo_me_id},#{mok.mo_num},
+				date_add(now(),interval 1 hour))
+	</insert>
+	
+	<delete id="deleteMemberOK">
+		delete * from member_ok 
+		where mo_me_id = #{mo_me_id} and mo_num = #{mo_num} and 
+		mo_valid_time >= now()
+	</delete>
+	
+	<update id="updateAuthentication">
+		update member
+			set
+				me_authority = #{me_authority}
+			where
+				me_id = #{me_id}
+	</update>
 </mapper>
