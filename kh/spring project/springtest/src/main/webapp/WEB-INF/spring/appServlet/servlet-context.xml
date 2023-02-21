@@ -34,10 +34,10 @@
 	        </beans:list>
 	    </beans:property>
 	</beans:bean>
-	
+	<!-- 인터셉터 등록 -->
 	<beans:bean id="loginInterceptor" 
 		class="kr.kh.test.interceptor.LoginInterceptor"></beans:bean>
-	<!-- 내가 지정한 상황에서만 동작하도록 설정 -->
+	<!-- 어느 url에서 인터셉터들이 동작할 건지를 설정 -->
 	<interceptors>
 		<interceptor>
 			<mapping path="/login"/>

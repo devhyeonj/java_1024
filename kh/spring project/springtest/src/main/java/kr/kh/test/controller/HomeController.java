@@ -1,6 +1,8 @@
 package kr.kh.test.controller;
 
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -56,17 +58,25 @@ public class HomeController {
 	
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public ModelAndView login(ModelAndView mv,MemberVO member) {
-		if(member == null)
-			return null;
-		 MemberVO loginMember = memberService.login(member);
-		 if(loginMember != null) {
+		 MemberVO user = memberService.login(member);
+		 // 그외의 다른정보들을 세션에 저장해놓았다가 로그인 할때마다 꺼내쓰기 위해서 객체를 씀
+		 mv.addObject("user", user);
+		 if(user != null) {
 			 mv.setViewName("redirect:/");
 		 }
 		 else {
-			 mv.setViewName("redirect:/member/login");
+			 mv.setViewName("redirect:/login"); //url입력하는거임 /member/login x
 		 }
-		 mv.addObject("member", member);
 		return mv;
 	}
-	
+	@RequestMapping(value = "/logout")
+	public ModelAndView logout(ModelAndView mv,HttpSession session) {
+		MemberVO member	= (MemberVO) session.getAttribute("user");
+		if(member != null) {
+			session.removeAttribute("user");
+			mv.setViewName("redirect:/");
+			
+		}
+		return mv;
+	}
 }

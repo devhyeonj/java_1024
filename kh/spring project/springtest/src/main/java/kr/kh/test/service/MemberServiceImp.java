@@ -48,8 +48,10 @@ public class MemberServiceImp implements MemberService {
 
 	@Override
 	public MemberVO login(MemberVO member) {
-		MemberVO dbMember = memberDao.selectMemberById(member.getMe_id());
 		if(member == null)
+			return null;
+		MemberVO dbMember = memberDao.selectMemberById(member.getMe_id());
+		if(dbMember == null) 
 			return null;
 		if(passwordEncoder.matches(member.getMe_pw(), dbMember.getMe_pw()))
 			return dbMember;
