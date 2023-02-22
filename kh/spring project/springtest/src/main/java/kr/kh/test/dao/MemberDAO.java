@@ -15,8 +15,8 @@ public interface MemberDAO {
 	
 	int insertMemberOK(@Param("mok") MemberOKVO memberOKVO);
 
-	int updateAuthentication(@Param("me_id")String me_id, @Param("me_authority")int me_authority);
+	int deleteMemberOK(@Param("mok") MemberOKVO mok);
 
-	int deleteMemberOK(@Param("mo_me_id")String mo_me_id, @Param("mo_num")String mo_num);
-
+	int updateMemberAuthority(@Param("me_id")String mo_me_id, @Param("me_authority")int me_authority);
+	//dao 가 두개 이상이면 반드시 param을 붙여야함 
 }

@@ -11,7 +11,7 @@ public interface MemberService {
 	
 	MemberVO login(MemberVO member);
 
-	boolean authentication(String mo_me_id, String mo_me_id2);
+	boolean emailAuthentication(MemberOKVO mok);
 
 
 }

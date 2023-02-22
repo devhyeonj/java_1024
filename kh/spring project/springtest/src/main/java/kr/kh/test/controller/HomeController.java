@@ -61,8 +61,9 @@ public class HomeController {
 	public ModelAndView login(ModelAndView mv,MemberVO member) {
 		 MemberVO user = memberService.login(member);
 		 // 그외의 다른정보들을 세션에 저장해놓았다가 로그인 할때마다 꺼내쓰기 위해서 객체를 씀
-		 mv.addObject("user", user);
-		 if(user != null) {
+		 //인증한 회원들만 로그인 하도록 
+		 if(user != null && user.getMe_authority() > 0) {
+			 mv.addObject("user", user);
 			 mv.setViewName("redirect:/");
 		 }
 		 else {
@@ -82,8 +83,14 @@ public class HomeController {
 	}
 	
 	@RequestMapping(value = "/email/authentication", method = RequestMethod.GET) 
-	public ModelAndView authentication(ModelAndView mv,MemberOKVO mok) {
-		memberService.authentication(mok.getMo_me_id(),mok.getMo_me_id());
+	public ModelAndView emailAuthentication(ModelAndView mv,MemberOKVO mok) {
+		boolean res = memberService.emailAuthentication(mok);
+		if(res) {
+			//인증 성공 메세지
+		}else {
+			//인증 실패 메세지
+		}
+		mv.setViewName("redirect:/");
 		return mv;
 	}
 }
