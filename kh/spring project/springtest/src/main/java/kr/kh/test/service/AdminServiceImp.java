@@ -21,7 +21,7 @@ public class AdminServiceImp implements AdminService {
 	}
 
 	@Override
-	public BoardTypeVO getBoard(String bt_name) {
+	public BoardTypeVO getBoardType(String bt_name) {
 		if(bt_name == null)
 			return null;
 		BoardTypeVO board = boardDAO.selectOne(bt_name);
@@ -31,11 +31,11 @@ public class AdminServiceImp implements AdminService {
 	}
 
 	@Override
-	public boolean setBoard(BoardTypeVO board) {
+	public boolean setBoardType(BoardTypeVO board) {
 				if(!checkBoardType(board))
 					return false;
 				
-				int res = boardDAO.insertBoard(board);
+				int res = boardDAO.insertBoardType(board);
 				return res != 0;
 				// return boardDao.insertBoardType(bt) != 0;
 				
@@ -43,15 +43,15 @@ public class AdminServiceImp implements AdminService {
 		}
 
 	@Override
-	public boolean updateBoard(BoardTypeVO board) {	
+	public boolean updateBoardType(BoardTypeVO board) {	
 		if(!checkBoardType(board))
 			return false;
 		if(board.getBt_num() < 1)
 			return false;
-		BoardTypeVO dbBoard = getBoard(board.getBt_name());
+		BoardTypeVO dbBoard = getBoardType(board.getBt_name());
 		if(dbBoard != null)
 			return false;
-		return boardDAO.updateBoard(board) != 0;
+		return boardDAO.updateBoardType(board) != 0;
 	}
 	//BoardTypeVO 체크(bt_num제외)
 	private boolean checkBoardType(BoardTypeVO bt) {
@@ -71,7 +71,7 @@ public class AdminServiceImp implements AdminService {
 					return false;
 				//게시판명 중복 체크
 				//다오에게 게시판명을 주면서 게시판정보를 가져오라고 시킴
-				BoardTypeVO boardTypeVO = getBoard(bt.getBt_name());
+				BoardTypeVO boardTypeVO = getBoardType(bt.getBt_name());
 				//가져온 게시판이 있는 경우
 				// 1. 서로 다른 게시판인데 이름이 중복되는 경우(중복이므로 false)
 				// 2. 같은 게시판인 경우(자기자신이므로  true)
@@ -79,6 +79,15 @@ public class AdminServiceImp implements AdminService {
 					 return false;
 				return true;
 		
+	}
+
+	@Override
+	public boolean deleteBoardType(Integer bt_num) {
+		//번호 체크
+		if(bt_num == null || bt_num < 1) 
+			return false;
+		//다오에게 게시판 번호 주면서 삭제 요청
+		return boardDAO.deleteBoardType(bt_num);
 	}
 }
 	

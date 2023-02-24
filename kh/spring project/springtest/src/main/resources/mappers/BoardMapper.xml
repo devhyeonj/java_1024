@@ -11,12 +11,12 @@
 		select * from board_type where bt_name = #{bt_name}
 	</select>
 	
-	<insert id="insertBoard">
+	<insert id="insertBoardType">
 		insert into board_type(bt_num,bt_type,bt_name,bt_r_authority,bt_w_authority)
 			values(#{bt.bt_num},#{bt.bt_type},#{bt.bt_name},#{bt.bt_r_authority},#{bt.bt_w_authority})
 	</insert>
 	
-	<update id="updateBoard">
+	<update id="updateBoardType">
 		update board_type
 		set 
 			bt_type = #{bt.bt_type},
@@ -26,4 +26,10 @@
 		where 
 			bt_num = #{bt.bt_num}						
 	</update>
+	<!-- update insert delete 는 resultType지정 안해도 알아서 됨 -->
+	<delete id="deleteBoardType">
+		delete 
+		from board_type
+		where bt_num = #{bt_num}
+	</delete>
 </mapper>

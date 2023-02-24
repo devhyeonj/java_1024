@@ -8,11 +8,13 @@ public interface AdminService {
 	
 	ArrayList<BoardTypeVO> getBoardType();
 	
-	BoardTypeVO getBoard(String bt_name);
+	BoardTypeVO getBoardType(String bt_name);
 	
-	boolean setBoard(BoardTypeVO boardTypeVO);
+	boolean setBoardType(BoardTypeVO boardTypeVO);
 	
-	boolean updateBoard(BoardTypeVO boardTypeVO);
+	boolean updateBoardType(BoardTypeVO boardTypeVO);
+	
+	boolean deleteBoardType(Integer bt_num);
 	
 	
 
