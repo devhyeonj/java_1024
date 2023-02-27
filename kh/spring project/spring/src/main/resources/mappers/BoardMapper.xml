@@ -4,11 +4,13 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.kh.spring.dao.BoardDAO">
   	<select id="selectAllBoardType" resultType="kr.kh.spring.vo.BoardTypeVO">
-  		select * from board_type
+  		<![CDATA[
+  		select * from board_type where bt_w_authority <= #{authority}
+  		]]>
   	</select>
   	<insert id="insertBoardType">
   		insert into board_type(bt_type, bt_name, bt_r_authority, bt_w_authority)
-		values(#{bt.bt_type},#{bt.bt_name},#{bt.bt_r_authority},#{bt.bt_w_authority})
+  		values(#{bt.bt_type},#{bt.bt_name},#{bt.bt_r_authority},#{bt.bt_w_authority})
   	</insert>
   	<update id="updateBoardType">
   		update board_type
@@ -23,20 +25,29 @@
   	<delete id="deleteBoardType">
   		delete from board_type where bt_num = #{bt_num}
   	</delete>
-  	<!-- auto increment 빼서 ifnull로 글이 아무것도 없을때 +1 이되게 설정함 
-  	useGeneratedKeys keyProperty insert후에 알아서 기본키가 저장됨-->
-  	
-  	 	<insert id="insertBoard" 
+  	<insert id="insertBoard" 
   		useGeneratedKeys="true" 
   		keyProperty="bo.bo_num">
   		insert into board(bo_num,bo_title, bo_content, 
   			bo_me_id, bo_bt_num, bo_ori_num )
   		select ifnull(max(bo_num),0)+1, #{bo.bo_title},#{bo.bo_content},
   			#{bo.bo_me_id}, #{bo.bo_bt_num}, ifnull(max(bo_num),0)+1 
-  			from board
+  			from board 
+  			
   	</insert>
-  	
   	<select id="selectBoardList" resultType="kr.kh.spring.vo.BoardVO">
   		select * from board order by bo_num desc
+  	</select>
+  	<insert id="insertFile">
+  		insert into file(fi_ori_name, fi_name, fi_bo_num)
+  		values(#{file.fi_ori_name},#{file.fi_name},#{file.fi_bo_num})
+  	</insert>
+  	<select id="selectBoard" resultType="kr.kh.spring.vo.BoardVO">
+  		select * from board 
+  			join board_type on bo_bt_num = bt_num
+  			where bo_num = #{bo_num}
+  	</select>
+  	<select id="selectFileList" resultType="kr.kh.spring.vo.FileVO">
+  		select * from file where fi_bo_num = #{bo_num}
   	</select>
 </mapper>
