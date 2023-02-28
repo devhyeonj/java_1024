@@ -3,6 +3,7 @@ package kr.kh.spring.controller;
 import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import kr.kh.spring.service.BoardService;
+import kr.kh.spring.utils.MessageUtils;
 import kr.kh.spring.vo.BoardTypeVO;
 import kr.kh.spring.vo.BoardVO;
 import kr.kh.spring.vo.FileVO;
@@ -57,11 +59,19 @@ public class BoardController {
 	}
 	
 	@RequestMapping(value = "/board/detail/{bo_num}", method=RequestMethod.GET)
-	public ModelAndView boardDetail(ModelAndView mv,@PathVariable("bo_num")int bo_num) {
-		BoardVO board = boardService.getBoard(bo_num);
+	public ModelAndView boardDetail(ModelAndView mv,@PathVariable("bo_num")int bo_num,HttpSession session,HttpServletResponse response) {
+		MemberVO user = (MemberVO) session.getAttribute("user");
+		// 게시글을 가져올때 회원정보도 같이 넘겨줌
+		BoardVO board = boardService.getBoard(bo_num,user);
 		ArrayList<FileVO> files = boardService.getFileList(bo_num);
 		mv.addObject("board", board);
 		mv.addObject("files", files);
+		if(board == null) {
+			mv.setViewName("redirect:/board/list");
+			MessageUtils.alertAndMovePage(response,
+					"삭제되거나 조회권한이 없는 게시글 입니다."
+					, "/spring", "/board/list");
+		}else 
 		mv.setViewName("/board/detail");
 		
 		return mv;

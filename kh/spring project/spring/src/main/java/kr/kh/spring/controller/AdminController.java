@@ -22,7 +22,7 @@ public class AdminController {
 	public ModelAndView boardTypeList(ModelAndView mv) {
 		//admin서비스에게 모든 게시글 타입을 가져오라고 요청함
 		ArrayList<BoardTypeVO> list = adminService.getBoardType();
-		
+		System.out.println(list);
 		mv.addObject("list", list);
 		mv.setViewName("/admin/boardTypeList");
 		return mv;
