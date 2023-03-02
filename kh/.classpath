@@ -6,7 +6,17 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/jeong/OneDrive/デスクトップ/lombok.jar">
+	<classpathentry kind="lib" path="C:/Users/user2/Downloads/lombok.jar">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Program Files (x86)/MySQL/Connector J 8.0/mysql-connector-j-8.0.31.jar">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/user2/Downloads/mybatis-3.5.11/mybatis-3.5.11/mybatis-3.5.11.jar">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>
