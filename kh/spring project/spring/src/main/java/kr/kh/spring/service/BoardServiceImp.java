@@ -226,4 +226,9 @@ public class BoardServiceImp implements BoardService {
 		return true;
 	}
 
+	@Override
+	public void updateBoardByLikes(int bo_num) {
+		boardDao.updateBoardByLikes(bo_num);
+	}
+
 }

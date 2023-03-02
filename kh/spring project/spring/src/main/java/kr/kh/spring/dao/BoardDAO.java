@@ -47,4 +47,6 @@ public interface BoardDAO {
 	int updateBoard(@Param("bo")BoardVO board);
 
 	FileVO selectFile(@Param("fi_num")int fileNum);
+
+	void updateBoardByLikes(@Param("bo_num") int bo_num);
 }
