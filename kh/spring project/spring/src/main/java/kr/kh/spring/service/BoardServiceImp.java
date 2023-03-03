@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import kr.kh.spring.dao.BoardDAO;
+import kr.kh.spring.pagination.Criteria;
 import kr.kh.spring.utils.UploadFileUtils;
 import kr.kh.spring.vo.BoardTypeVO;
 import kr.kh.spring.vo.BoardVO;
@@ -97,8 +98,10 @@ public class BoardServiceImp implements BoardService {
 	}
 
 	@Override
-	public ArrayList<BoardVO> getBoardList() {
-		return boardDao.selectBoardList();
+	public ArrayList<BoardVO> getBoardList(Criteria cri) {
+		if(cri == null)// 현재 페이지 정보가 없으면
+			cri = new Criteria(); // 기본 생성자로 만들어줌
+		return boardDao.selectBoardList(cri);
 	}
 
 	@Override
@@ -237,6 +240,11 @@ public class BoardServiceImp implements BoardService {
 	@Override
 	public void updateBoardByLikes(int bo_num) {
 		boardDao.updateBoardByLikes(bo_num);
+	}
+
+	@Override
+	public int getBoardTotalCount(Criteria cri) {
+		return boardDao.selectBoardTotalCount(cri);
 	}
 
 }
