@@ -38,21 +38,35 @@
 	<ul class="pagination justify-content-center">
 		<c:if test="${pm.prev}">
 			<li class="page-item">
-				<a class="page-link" href="<c:url value='/board/list?page=${pm.startPage-1}'></c:url>">이전</a>
+				<a class="page-link" href="<c:url value='/board/list?page=${pm.startPage-1}&search=${pm.cri.search}&type=${pm.cri.type}'></c:url>">이전</a>
 			</li>
 		</c:if>
 		<c:forEach begin="${pm.startPage }" end="${pm.endPage }" var="i">
 			<li class="page-item <c:if test="${pm.cri.page == i}"> active</c:if>">
-				<a class="page-link" href="<c:url value='/board/list?page=${i}'></c:url>">${i}</a>
+				<a class="page-link" href="<c:url value='/board/list?page=${i}&search=${pm.cri.search}&type=${pm.cri.type}'></c:url>">${i}</a>
 			</li>
 		</c:forEach>
 
 		<c:if test="${pm.next}">
 			<li class="page-item">
-				<a class="page-link" href="<c:url value='/board/list?page=${pm.endPage+1}'></c:url>">다음</a>
+				<a class="page-link" href="<c:url value='/board/list?page=${pm.endPage+1}&search=${pm.cri.search}&type=${pm.cri.type}'></c:url>">다음</a>
 			</li>
 		</c:if>
 	</ul>
+	
+		<form class="input-group mb-3" action="<c:url value='/board/list'></c:url>">
+			<select class="input-group-prepend" name="type">
+				<option value="0">전체</option>
+				<c:forEach items="${typeList}" var="type">
+				
+					<option value="${type.bt_num}" <c:if test="${pm.cri.type == type.bt_num}"> selected </c:if>>${type.bt_name}</option>
+				</c:forEach>
+			</select>
+	  		<input type="text" class="form-control" placeholder="Search" name="search" value="${pm.cri.search}"> <!-- 페이지 이동하더라도 검색어 유지 -->
+	 		 <div class="input-group-append">
+	   			 <button class="btn btn-success" type="submit">검색</button>
+	  		</div>
+		</form>
     
 	<c:if test="${user != null }">
 		<a href="<c:url value="/board/insert"></c:url>">

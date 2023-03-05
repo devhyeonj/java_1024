@@ -43,8 +43,10 @@ public class BoardController {
 		//pagination 03-30
 		int totalCount = boardService.getBoardTotalCount(cri);
 		PageMaker pm = new PageMaker(totalCount, 3, cri);
+		ArrayList<BoardTypeVO> typeList = boardService.getBoardType(9); // 관리자 권한으로 타입리스트를 가져옴
 		mv.addObject("list",list);
 		mv.addObject("pm", pm);
+		mv.addObject("typeList", typeList);
 		mv.setViewName("/board/list");
 		return mv;
 	}
