@@ -14,8 +14,8 @@
 
 	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
 	<resources mapping="/resources/**" location="/resources/" />
-	<resources mapping="/download/**" location="file:///D:/uploadFiles/" />
-	
+	<resources mapping="/download/**" location="file:///D:/uploadfiles/" />
+
 	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
 	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<beans:property name="prefix" value="/WEB-INF/views/" />
@@ -34,26 +34,37 @@
 	        </beans:list>
 	    </beans:property>
 	</beans:bean>
+		
 	
-		<beans:bean id="loginInterceptor" 
+	<context:component-scan base-package="kr.kh.spring.*" />
+	
+	<beans:bean id="loginInterceptor" 
 		class="kr.kh.spring.interceptor.LoginInterceptor"></beans:bean>
-	<!-- 내가 지정한 상황에서만 동작하도록 설정 -->
+	<beans:bean id="memberInterceptor" 
+		class="kr.kh.spring.interceptor.MemberInterceptor"></beans:bean>
+	<beans:bean id="guestInterceptor" 
+		class="kr.kh.spring.interceptor.GuestInterceptor"></beans:bean>
+	
 	<interceptors>
 		<interceptor>
 			<mapping path="/login"/>
 			<beans:ref bean="loginInterceptor"/>
 		</interceptor>
+		<interceptor>
+			<mapping path="/board/insert"/>
+			<mapping path="/board/update/*"/>
+			<mapping path="/board/delete/*"/>
+			<beans:ref bean="memberInterceptor"/>
+		</interceptor>
+		<interceptor>
+			<mapping path="/login"/>
+			<mapping path="/signup"/>
+			<beans:ref bean="guestInterceptor"/>
+		</interceptor>
 	</interceptors>
 	
-	<!-- servlet-context.xml -->
-<beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-    <!-- 업로드 최대 크기 10Mb -->
-    <beans:property name="maxUploadSize" value="10485760"></beans:property>
-</beans:bean>
-		
-	
-	<context:component-scan base-package="kr.kh.spring.*" />
-	
-	
-	
+	<beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+	    <!-- 업로드 최대 크기 10Mb -->
+	    <beans:property name="maxUploadSize" value="10485760"></beans:property>
+	</beans:bean>
 </beans:beans>
