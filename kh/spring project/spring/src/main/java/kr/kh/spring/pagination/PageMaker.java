@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class PageMaker {
+
 	private int totalCount;
 	private int startPage;
 	private int endPage;
@@ -13,17 +14,17 @@ public class PageMaker {
 	private boolean next;
 	private int displayPageNum;
 	private Criteria cri;
-	
+
 	/* endPage, startPage, prev, next 값 계산 */
 	public void calcData() {
 		/* starPage와 endPage는 현재 페이지 정보인 criteria와 displayPageNum을 이용하여 계산
 		 * displayPageNum이 10이고 현재 페이지가 3페이지면 startPage = 1, endPage = 10이 되도록 계산 */
 		endPage = (int) (Math.ceil(cri.getPage()/(double) displayPageNum)*displayPageNum);
-		
+
 		startPage = (endPage - displayPageNum)+1;
 		/* 총 콘텐츠 갯수를 이용하여 마지막 페이지 번호를 계산 */
 		int tempEndPage = (int)(Math.ceil(totalCount/(double)cri.getPerPageNum()));
-		
+
 		/* 현재 페이지에 계산된 현재 페이지메이커의 마지막 페이지 번호와 실제 마지막 페이지 번호를 비교하여
 		 * 작은 값이 마지막 페이지 번호가 됨 */
 		if(endPage > tempEndPage) {
@@ -41,6 +42,4 @@ public class PageMaker {
 		this.cri = cri;
 		calcData();
 	}
-	
-	
 }
