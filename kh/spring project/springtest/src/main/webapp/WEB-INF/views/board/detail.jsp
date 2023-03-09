@@ -12,7 +12,7 @@
 	</div>
 	<div class="form-group">
 		<label>게시판</label>
-		<div class="form-control">${board.bo_bt_num}</div>
+		<div class="form-control">${board.bo_bt_name}</div>
 	</div>
 	<div class="form-group">
 		<label>작성자</label>
@@ -32,11 +32,22 @@
 		<label>조회수</label>
 		<div class="form-control">${board.bo_views}</div>
 	</div>
+	<div>
+		<button class="btn btn-outline-success">추천(${board.bo_up})</button>
+		<button class="btn btn-outline-danger">비추천(${board.bo_down})</button>
+	</div>
 	<div class="form-group">
 		<label>내용</label>
 		<div class="form-control" style="min-height:400px">${board.bo_content}</div>
 	</div>
+		<c:if test="${fileList != null && fileList.size( != 0}">
+		<div class="form-group mt-3">
+			<label>첨부파일</label>
+			<c:forEach items="${file}" var="file">
+				<a class="form-control" href="<c:url value='/download${file.fi_name}'></c:url>" download="${file.fi_ori_name}">${file.fi_ori_name}</a>	
+			</c:forEach>
+		</div>
+		</c:if>
 	
-		
-
+	<a class="btn btn-success" href="<c:url value='/board/list'></c:url>">목록</a>
 </div>

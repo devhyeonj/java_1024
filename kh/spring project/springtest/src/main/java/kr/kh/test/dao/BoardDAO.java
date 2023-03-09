@@ -33,4 +33,6 @@ public interface BoardDAO {
 
 	int updateViews(@Param("bo_num") int bo_num);
 
+	ArrayList<FileVO> selectFile(@Param("bo_num") int bo_num);
+
 }
