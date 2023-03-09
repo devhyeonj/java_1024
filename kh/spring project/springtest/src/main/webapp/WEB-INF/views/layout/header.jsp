@@ -3,7 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <nav class="navbar navbar-expand-md bg-dark navbar-dark">
 	<div class="container">
-	  	<a class="navbar-brand" href="#" style="padding:0">
+	  	<a class="navbar-brand" href="/test" style="padding:0">
 	  		<img height="40" alt="로고" src="<c:url value="/resources/img/bird.jpg"></c:url>">
 	  	</a>
 	  	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
@@ -25,7 +25,12 @@
 			        		<button class="nav-link" style="background: transparent;border: 0">로그아웃</button>
 			        	</form>
 			      	</li> 
-		      	</c:if>   
+		      	</c:if>
+		      		<li class="nav-item">
+			      		<form action="<c:url value='/board/list'></c:url>">
+			        		<button class="nav-link" style="background: transparent;border: 0">게시판</button>
+			        	</form>
+			      	</li>   
 		      	<li class="nav-item dropdown">
 			      <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
 			        관리자 메뉴

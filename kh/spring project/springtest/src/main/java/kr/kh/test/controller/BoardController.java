@@ -6,11 +6,14 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import kr.kh.test.pagination.Criteria;
+import kr.kh.test.pagination.PageMaker;
 import kr.kh.test.service.BoardService;
 import kr.kh.test.vo.BoardTypeVO;
 import kr.kh.test.vo.BoardVO;
@@ -49,5 +52,30 @@ public class BoardController {
 		mv.setViewName("/common/message");
 		return mv;
 	}
+	
+	@RequestMapping(value = "/board/list", method=RequestMethod.GET)
+	public ModelAndView boardList(ModelAndView mv,Criteria criteria) {
+		criteria.setPerPageNum(5);
+		MemberVO user = new MemberVO();
+		user.setMe_authority(10);
+		ArrayList<BoardTypeVO> btList = boardService.getBoardType(user);
+		ArrayList<BoardVO> list = boardService.boardList(criteria);
+		//pagination
+		int totalCount = boardService.getBoardToalCount(criteria);
+		PageMaker pm = new PageMaker(totalCount, 3, criteria);
+		mv.addObject("pm",pm);
+		mv.addObject("btList", btList);
+		mv.addObject("list", list);
+		mv.setViewName("/board/list");
+		return mv;
+	}
+	@RequestMapping(value="board/detail/{bo_num}", method = RequestMethod.GET)
+	public ModelAndView boardDetail(ModelAndView mv,
+			@PathVariable("bo_num") int bo_num) {
+			BoardVO board = boardService.getBoardAndUpdateView(bo_num);
+			mv.addObject("board", board);
+			mv.setViewName("/board/detail");
+			return mv;
+	}	
 
 }

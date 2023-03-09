@@ -1,6 +1,5 @@
 package kr.kh.test.service;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import kr.kh.test.dao.BoardDAO;
+import kr.kh.test.pagination.Criteria;
 import kr.kh.test.util.UploadFileUtils;
 import kr.kh.test.vo.BoardTypeVO;
 import kr.kh.test.vo.BoardVO;
@@ -65,6 +65,27 @@ public class BoardServiceImp implements BoardService {
 				e.printStackTrace();
 			} 
 		}
+	}
+
+	@Override
+	public ArrayList<BoardVO> boardList(Criteria criteria) {
+		ArrayList<BoardVO> list = boardDao.selectAllBoard(criteria);
+		return list;
+	}
+
+	@Override
+	public int getBoardToalCount(Criteria criteria) {
+		criteria = criteria == null? new Criteria() : criteria;
+		return boardDao.selectBoardTotalCount(criteria);
+	}
+
+	@Override
+	public BoardVO getBoardAndUpdateView(int bo_num) {
+		int res;
+		res = boardDao.updateViews(bo_num);
+		if(res == 0) // 증가가 안됨 (게시글이 없음)
+			return null;
+		return boardDao.selectBoard(bo_num);
 	}
 
 
