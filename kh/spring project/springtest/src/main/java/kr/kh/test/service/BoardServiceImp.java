@@ -108,9 +108,9 @@ public class BoardServiceImp implements BoardService {
 	}
 	
 	private void deleteFileList(ArrayList<FileVO> fileList) {
-		if(fileList == null && fileList.size() == 0)
+		if(fileList == null || fileList.size() == 0) 
 			return;
-		for (FileVO file : fileList) {
+		for(FileVO file : fileList) {
 			UploadFileUtils.removeFile(uploadPath, file.getFi_name());
 			boardDao.deleteFile(file.getFi_num());
 		}
@@ -120,7 +120,6 @@ public class BoardServiceImp implements BoardService {
 	public BoardVO getBoard(int bo_num) {
 		return boardDao.selectBoard(bo_num);
 	}
-	
 	
 
 

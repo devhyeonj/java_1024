@@ -77,7 +77,6 @@ $('.btn-times').click(function(e){
 	$(this).parents('.file-group')
 		.append('<input type="hidden" name="fileNums" value="'+$(this).data('num')+'">');
 	$(this).parent().remove();
-	//this x버튼
 })
 </script>
 

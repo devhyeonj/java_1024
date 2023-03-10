@@ -70,16 +70,17 @@ public class BoardController {
 		mv.setViewName("/board/list");
 		return mv;
 	}
-	@RequestMapping(value="board/detail/{bo_num}", method = RequestMethod.GET)
+	@RequestMapping(value="/board/detail/{bo_num}", method=RequestMethod.GET)
 	public ModelAndView boardDetail(ModelAndView mv,
-			@PathVariable("bo_num") int bo_num) {
-			BoardVO board = boardService.getBoardAndUpdateView(bo_num);
-			ArrayList<FileVO> file = boardService.getFileList(bo_num);
-			mv.addObject("board", board);
-			mv.addObject("file",file);
-			mv.setViewName("/board/detail");
-			return mv;
-	}	
+			@PathVariable("bo_num")int bo_num) {
+		BoardVO board = boardService.getBoardAndUpdateView(bo_num);
+		ArrayList<FileVO> fileList = boardService.getFileList(bo_num);
+		
+		mv.addObject("board", board);
+		mv.addObject("fileList", fileList);
+		mv.setViewName("/board/detail");
+		return mv;
+	}
 	
 	@RequestMapping(value = "board/delete/{bo_num}", method = RequestMethod.POST)
 	public ModelAndView boardDelete(ModelAndView mv,@PathVariable("bo_num") Integer bo_num,HttpSession session) {
@@ -99,14 +100,18 @@ public class BoardController {
 		return mv;
 	}
 	
-	@RequestMapping(value = "/board/update/{bo_num}", method = RequestMethod.GET)
-	public ModelAndView boardUpdate(ModelAndView mv,@PathVariable("bo_num") int bo_num,HttpSession session) {
+	@RequestMapping(value="/board/update/{bo_num}", method=RequestMethod.GET)
+	public ModelAndView boardUpdate(ModelAndView mv,
+			@PathVariable("bo_num")int bo_num,
+			HttpSession session) {
 		BoardVO board = boardService.getBoard(bo_num);
-		mv.addObject("board", board);
 		MemberVO user = (MemberVO)session.getAttribute("user");
-		ArrayList<BoardTypeVO> boardTypeList = boardService.getBoardType(user);
+		ArrayList<BoardTypeVO> btList = boardService.getBoardType(user);
 		ArrayList<FileVO> fileList = boardService.getFileList(bo_num);
-		mv.addObject("bt", boardTypeList);
+		
+		mv.addObject("fileList",fileList);
+		mv.addObject("btList",btList);
+		mv.addObject("board", board);
 		mv.setViewName("/board/update");
 		return mv;
 	}
