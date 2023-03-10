@@ -93,5 +93,35 @@ public class BoardServiceImp implements BoardService {
 		return boardDao.selectFile(bo_num);
 	}
 
+	@Override
+	public boolean deleteBoard(Integer bo_num, MemberVO user) {
+		if(user == null)
+			return false;
+		BoardVO board = boardDao.selectBoard(bo_num);
+		ArrayList<FileVO> flieList = boardDao.selectFile(bo_num);
+		deleteFileList(flieList);
+		if(board == null)
+			return false;
+		if(!(board.getBo_me_id().equals(user.getMe_id())))
+			return false; 
+		return boardDao.deleteBoard(bo_num) != 0;
+	}
+	
+	private void deleteFileList(ArrayList<FileVO> fileList) {
+		if(fileList == null && fileList.size() == 0)
+			return;
+		for (FileVO file : fileList) {
+			UploadFileUtils.removeFile(uploadPath, file.getFi_name());
+			boardDao.deleteFile(file.getFi_num());
+		}
+	}
+
+	@Override
+	public BoardVO getBoard(int bo_num) {
+		return boardDao.selectBoard(bo_num);
+	}
+	
+	
+
 
 }

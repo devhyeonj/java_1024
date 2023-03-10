@@ -80,5 +80,35 @@ public class BoardController {
 			mv.setViewName("/board/detail");
 			return mv;
 	}	
+	
+	@RequestMapping(value = "board/delete/{bo_num}", method = RequestMethod.POST)
+	public ModelAndView boardDelete(ModelAndView mv,@PathVariable("bo_num") Integer bo_num,HttpSession session) {
+		
+		MemberVO user = (MemberVO) session.getAttribute("user");
+		
+		String msg;
+		if(boardService.deleteBoard(bo_num,user)) {
+			msg = "게시글 삭제 성공!";
+		}else {
+			msg = "게시글 삭제 실패!";
+		}
+		mv.addObject("msg",msg);
+		mv.addObject("url", "/board/list");
+		
+		mv.setViewName("/common/message");
+		return mv;
+	}
+	
+	@RequestMapping(value = "/board/update/{bo_num}", method = RequestMethod.GET)
+	public ModelAndView boardUpdate(ModelAndView mv,@PathVariable("bo_num") int bo_num,HttpSession session) {
+		BoardVO board = boardService.getBoard(bo_num);
+		mv.addObject("board", board);
+		MemberVO user = (MemberVO)session.getAttribute("user");
+		ArrayList<BoardTypeVO> boardTypeList = boardService.getBoardType(user);
+		ArrayList<FileVO> fileList = boardService.getFileList(bo_num);
+		mv.addObject("bt", boardTypeList);
+		mv.setViewName("/board/update");
+		return mv;
+	}
 
 }
