@@ -12,22 +12,21 @@ import kr.kh.test.util.UploadFileUtils;
 import kr.kh.test.vo.BoardTypeVO;
 import kr.kh.test.vo.BoardVO;
 import kr.kh.test.vo.FileVO;
+import kr.kh.test.vo.LikesVO;
 import kr.kh.test.vo.MemberVO;
 
 @Service
-public class BoardServiceImp implements BoardService {
-	
+public class BoardServiceImp implements BoardService{
 	@Autowired
 	BoardDAO boardDao;
 	
-	String uploadPath = "C:\\uploadfiles";
-	
+	String uploadPath = "D:\\uploadfiles";
+
 	@Override
-	public ArrayList<BoardTypeVO> getBoardType(MemberVO user) {
+	public ArrayList<BoardTypeVO> getBoardTypeList(MemberVO user) {
 		if(user == null || user.getMe_authority() == 0)
 			return null;
-		ArrayList<BoardTypeVO> bt = boardDao.selectAllBoardType(user.getMe_authority());
-		return bt;
+		return boardDao.selectBoardTypeList(user.getMe_authority());
 	}
 
 	@Override
@@ -43,68 +42,74 @@ public class BoardServiceImp implements BoardService {
 		board.setBo_me_id(user.getMe_id());
 		
 		int isOk = boardDao.insertBoard(board);
+		
 		if(isOk == 0)
 			return false;
-
-		insertFile(files,board);
-	
+		//첨부파일 추가
+		insertFileList(board.getBo_num(), files);
 		return true;
 	}
 
-	private void insertFile(MultipartFile[] files, BoardVO board) {
-		for (MultipartFile f : files) {
-			if(f == null || f.getOriginalFilename().length() ==0 )
-				continue; // 등록안한 파일 등록안되게 if문으로 함
-			// 업로드한 경로를 변수에 저장 
-			String path;
-			try {
-				path = UploadFileUtils.uploadFile(uploadPath, f.getOriginalFilename(), f.getBytes());
-				FileVO file = new FileVO(f.getOriginalFilename(), path, board.getBo_num());
-				boardDao.insertFile(file);
-			} catch (Exception e) {
-				e.printStackTrace();
-			} 
-		}
+	@Override
+	public ArrayList<BoardVO> getBoardList(Criteria cri) {
+		cri = cri == null ? new Criteria() : cri;
+		return boardDao.selectBoardList(cri);
 	}
 
 	@Override
-	public ArrayList<BoardVO> boardList(Criteria criteria) {
-		ArrayList<BoardVO> list = boardDao.selectAllBoard(criteria);
-		return list;
-	}
-
-	@Override
-	public int getBoardToalCount(Criteria criteria) {
-		criteria = criteria == null? new Criteria() : criteria;
-		return boardDao.selectBoardTotalCount(criteria);
+	public int getTotalCountBoard(Criteria cri) {
+		cri = cri == null ? new Criteria() : cri;
+		return boardDao.selectTotalCountBoard(cri);
 	}
 
 	@Override
 	public BoardVO getBoardAndUpdateView(int bo_num) {
+		
 		int res;
 		res = boardDao.updateViews(bo_num);
-		if(res == 0) // 증가가 안됨 (게시글이 없음)
+		if(res == 0)
 			return null;
 		return boardDao.selectBoard(bo_num);
 	}
 
 	@Override
 	public ArrayList<FileVO> getFileList(int bo_num) {
-		return boardDao.selectFile(bo_num);
+		return boardDao.selectFileList(bo_num);
 	}
 
 	@Override
-	public boolean deleteBoard(Integer bo_num, MemberVO user) {
+	public boolean deleteBoard(int bo_num, MemberVO user) {
 		if(user == null)
 			return false;
 		BoardVO board = boardDao.selectBoard(bo_num);
-		ArrayList<FileVO> flieList = boardDao.selectFile(bo_num);
-		deleteFileList(flieList);
-		if(board == null)
+		if(board == null || !board.getBo_me_id().equals(user.getMe_id()))
 			return false;
-		if(!(board.getBo_me_id().equals(user.getMe_id())))
-			return false; 
-		return boardDao.deleteBoard(bo_num) != 0;
+		
+		ArrayList<FileVO> fileList = boardDao.selectFileList(bo_num);
+		deleteFileList(fileList);
+		
+		int res = boardDao.deleteBoard(bo_num);
+		if(res == 0)
+			return false;
+		return true;
+	}
+	
+	private void insertFileList(int bo_num, MultipartFile[] files) {
+		if(files == null || files.length == 0)
+			return;
+		for(MultipartFile file : files) {
+			if(file == null || file.getOriginalFilename().length() == 0)
+				continue;
+			try {
+				String path = UploadFileUtils.uploadFile(uploadPath, 
+						file.getOriginalFilename(), file.getBytes());
+				FileVO fileVo = new FileVO(bo_num, path, 
+						file.getOriginalFilename());
+				boardDao.insertFile(fileVo);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	private void deleteFileList(ArrayList<FileVO> fileList) {
@@ -120,7 +125,71 @@ public class BoardServiceImp implements BoardService {
 	public BoardVO getBoard(int bo_num) {
 		return boardDao.selectBoard(bo_num);
 	}
-	
 
+	@Override
+	public boolean updateBoard(BoardVO board, MemberVO user, MultipartFile[] files, int[] fileNums) {
+		if(user == null)
+			return false;
+		//게시글 유효성 체크
+		if(board == null || 
+			board.getBo_title().trim().length() == 0 || 
+			board.getBo_content().trim().length() == 0 || 
+			board.getBo_bt_num() <= 0)
+			return false;
+		BoardVO dbBoard = boardDao.selectBoard(board.getBo_num());
+		//게시글을 수정하려는데 없는 게시글이면
+		if(dbBoard == null)
+			return false;
+		//게시글 작성자와 로그인한 회원이 다르면
+		if(!dbBoard.getBo_me_id().equals(user.getMe_id()))
+			return false;
+		//게시글 제목,내용,게시판 수정
+		int res = boardDao.updateBoard(board);
+		if(res == 0)
+			return false;
+		//게시글 첨부파일 수정
+		//새 첨부파일 등록
+		insertFileList(board.getBo_num(), files);
+		//기존 첨부파일을 삭제 안하는 경우
+		if(fileNums == null || fileNums.length == 0)
+			return true;
+		//첨부파일을 삭제하는 메소드를 이용하기 위해서
+		//int[] 정보를 => ArrayList<FileVO>로 변환하는 작업
+		ArrayList<FileVO> fileList = new ArrayList<FileVO>();
+		for(int fileNum : fileNums) {
+			FileVO fileVo = boardDao.selectFile(fileNum);
+			if(fileVo == null)
+				continue;
+			fileList.add(fileVo);
+		}
+		//기존 첨부파일 삭제
+		deleteFileList(fileList);
+		return true;
+	}
 
+	@Override
+	public int updateLike(int li_bo_num, int li_state, MemberVO user) {
+		if(user == null)
+			return -100;
+		int res = 0;
+		LikesVO dbLikesVo = boardDao.selectLikes(li_bo_num, user.getMe_id());
+		if(dbLikesVo == null)  {
+			LikesVO likesVo = new LikesVO(li_state, user.getMe_id(), li_bo_num);
+			boardDao.insertLikes(likesVo);
+			res = li_state;
+		}else if(dbLikesVo.getLi_state() == li_state){
+			//취소
+			LikesVO likesVo = new LikesVO(0, user.getMe_id(), li_bo_num);
+			boardDao.updateLikes(likesVo);
+			res = 0;
+		}else {
+			//변경
+			LikesVO likesVo = new LikesVO(li_state, user.getMe_id(), li_bo_num);
+			boardDao.updateLikes(likesVo);
+			res = li_state;
+		}
+		boardDao.updateBoardUpAndDown(li_bo_num);
+		
+		return 0;
+	}
 }

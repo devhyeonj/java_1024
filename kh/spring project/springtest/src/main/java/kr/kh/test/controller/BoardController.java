@@ -1,6 +1,8 @@
 package kr.kh.test.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -9,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -26,18 +29,15 @@ public class BoardController {
 	@Autowired
 	BoardService boardService;
 	
-	@RequestMapping(value = "/board/insert" , method = RequestMethod.GET)
-	public ModelAndView boardInsert(ModelAndView mv,HttpSession session) {
+	@RequestMapping(value="/board/insert", method=RequestMethod.GET)
+	public ModelAndView boardInsert(ModelAndView mv, HttpSession session) {
+		MemberVO user = (MemberVO)session.getAttribute("user");
+		ArrayList<BoardTypeVO> typeList = 
+				boardService.getBoardTypeList(user);
+		mv.addObject("typeList", typeList);
 		mv.setViewName("/board/insert");
-		//로그인한 회원 정보를 가져옴
-				MemberVO user = (MemberVO) session.getAttribute("user");
-				// 가져온 회원 정보를 서비스에게 주면서 권한에 맞는 게시판 타입을 가져오라고 요청
-				ArrayList<BoardTypeVO> bt= boardService.getBoardType(user);
-				//가져온 게시판 타입 리스트를 화면에 전달
-				mv.addObject("typeList",bt);
 		return mv;
 	}
-	
 	@RequestMapping(value="/board/insert", method=RequestMethod.POST)
 	public ModelAndView boardInsertPost(ModelAndView mv, 
 			HttpSession session, BoardVO board, MultipartFile[] files) {
@@ -54,19 +54,20 @@ public class BoardController {
 		return mv;
 	}
 	
-	@RequestMapping(value = "/board/list", method=RequestMethod.GET)
-	public ModelAndView boardList(ModelAndView mv,Criteria criteria) {
-		criteria.setPerPageNum(5);
+	@RequestMapping(value="/board/list", method=RequestMethod.GET)
+	public ModelAndView boardList(ModelAndView mv, Criteria cri) {
+		cri.setPerPageNum(5);
+		ArrayList<BoardVO> list = boardService.getBoardList(cri);
+		int totalCount = boardService.getTotalCountBoard(cri);
+		int displayPageNum = 3;
+		PageMaker pm = 
+			new PageMaker(totalCount, displayPageNum, cri);
 		MemberVO user = new MemberVO();
 		user.setMe_authority(10);
-		ArrayList<BoardTypeVO> btList = boardService.getBoardType(user);
-		ArrayList<BoardVO> list = boardService.boardList(criteria);
-		//pagination
-		int totalCount = boardService.getBoardToalCount(criteria);
-		PageMaker pm = new PageMaker(totalCount, 3, criteria);
-		mv.addObject("pm",pm);
+		ArrayList<BoardTypeVO> btList = boardService.getBoardTypeList(user);
 		mv.addObject("btList", btList);
 		mv.addObject("list", list);
+		mv.addObject("pm", pm);
 		mv.setViewName("/board/list");
 		return mv;
 	}
@@ -81,32 +82,31 @@ public class BoardController {
 		mv.setViewName("/board/detail");
 		return mv;
 	}
-	
-	@RequestMapping(value = "board/delete/{bo_num}", method = RequestMethod.POST)
-	public ModelAndView boardDelete(ModelAndView mv,@PathVariable("bo_num") Integer bo_num,HttpSession session) {
-		
-		MemberVO user = (MemberVO) session.getAttribute("user");
-		
+	@RequestMapping(value="/board/delete/{bo_num}", method=RequestMethod.POST)
+	public ModelAndView boardDelete(ModelAndView mv,
+			@PathVariable("bo_num")int bo_num,
+			HttpSession session) {
+		MemberVO user = (MemberVO)session.getAttribute("user");
+		boolean res = boardService.deleteBoard(bo_num, user);
+		String url = "/board/list";
 		String msg;
-		if(boardService.deleteBoard(bo_num,user)) {
+		if(res) {
 			msg = "게시글 삭제 성공!";
 		}else {
 			msg = "게시글 삭제 실패!";
 		}
 		mv.addObject("msg",msg);
-		mv.addObject("url", "/board/list");
-		
+		mv.addObject("url", url);
 		mv.setViewName("/common/message");
 		return mv;
 	}
-	
 	@RequestMapping(value="/board/update/{bo_num}", method=RequestMethod.GET)
 	public ModelAndView boardUpdate(ModelAndView mv,
 			@PathVariable("bo_num")int bo_num,
 			HttpSession session) {
 		BoardVO board = boardService.getBoard(bo_num);
 		MemberVO user = (MemberVO)session.getAttribute("user");
-		ArrayList<BoardTypeVO> btList = boardService.getBoardType(user);
+		ArrayList<BoardTypeVO> btList = boardService.getBoardTypeList(user);
 		ArrayList<FileVO> fileList = boardService.getFileList(bo_num);
 		
 		mv.addObject("fileList",fileList);
@@ -115,5 +115,40 @@ public class BoardController {
 		mv.setViewName("/board/update");
 		return mv;
 	}
-
+	@RequestMapping(value="/board/update/{bo_num}", method=RequestMethod.POST)
+	public ModelAndView boardUpdatePost(ModelAndView mv,
+			@PathVariable("bo_num")int bo_num,
+			HttpSession session,
+			BoardVO board, 
+			MultipartFile[] files,
+			int [] fileNums) {
+		MemberVO user = (MemberVO)session.getAttribute("user");
+		boolean res = boardService.updateBoard(board, user, files, fileNums);
+		String url = "/board/detail/"+bo_num;
+		String msg;
+		if(res)
+			msg = "게시글 수정 성공!";
+		else
+			msg = "게시글 수정 실패!";
+		mv.addObject("msg",msg);
+		mv.addObject("url",url);
+		mv.setViewName("/common/message");
+		return mv;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/board/like/{li_bo_num}/{li_state}", 
+			method=RequestMethod.GET)
+	public Map<String, Object> boardLike(
+			@PathVariable("li_bo_num")int li_bo_num,
+			@PathVariable("li_state")int li_state,
+			HttpSession session){
+		Map<String, Object> map = new HashMap<String, Object>();
+		MemberVO user = (MemberVO)session.getAttribute("user");
+		int res = boardService.updateLike(li_bo_num, li_state, user);
+		map.put("state", res);
+		BoardVO board = boardService.getBoard(li_bo_num);
+		map.put("board", board);
+		return map;
+	}
 }

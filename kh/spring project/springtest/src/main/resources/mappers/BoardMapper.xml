@@ -3,103 +3,160 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.kh.test.dao.BoardDAO">
-	<select id="selectAllBoardType" resultType="kr.kh.test.vo.BoardTypeVO">
-		select * from board_type where  #{authority} >= bt_w_authority 
-	</select>
-	
-	<select id="selectOne" resultType="kr.kh.test.vo.BoardTypeVO">
-		select * from board_type where bt_name = #{bt_name}
-	</select>
-	
-	<insert id="insertBoardType">
-		insert into board_type(bt_num,bt_type,bt_name,bt_r_authority,bt_w_authority)
-			values(#{bt.bt_num},#{bt.bt_type},#{bt.bt_name},#{bt.bt_r_authority},#{bt.bt_w_authority})
-	</insert>
-	
-	<update id="updateBoardType">
-		update board_type
-		set 
-			bt_type = #{bt.bt_type},
-			bt_name = #{bt.bt_name},
-			bt_r_authority = #{bt.bt_r_authority},
-			bt_w_authority = #{bt.bt_w_authority}
-		where 
-			bt_num = #{bt.bt_num}						
-	</update>
-	<!-- update insert delete 는 resultType지정 안해도 알아서 됨 -->
-	<delete id="deleteBoardType">
-		delete 
-		from board_type
-		where bt_num = #{bt_num}
-	</delete>
-	
-	<insert id="insertBoard" useGeneratedKeys="true" keyProperty="bo.bo_num">
+  <select id="selectBoardTypeList" resultType="kr.kh.test.vo.BoardTypeVO">
+  	select * from board_type where #{authority}  >= bt_w_authority 
+  </select>
+  <select id="selectBoardTypeByName" resultType="kr.kh.test.vo.BoardTypeVO">
+  	select * from board_type where bt_name = #{bt_name}
+  </select>
+  <insert id="insertBoardType">
+  	insert into 
+  	board_type(bt_type, bt_name, bt_r_authority, bt_w_authority)
+  	values(#{bt.bt_type}, #{bt.bt_name}, 
+  		#{bt.bt_r_authority}, #{bt.bt_w_authority})
+  </insert>
+  <update id="updateBoardType">
+  	update board_type set
+  		bt_type = #{bt.bt_type},
+  		bt_name = #{bt.bt_name},
+  		bt_r_authority = #{bt.bt_r_authority},
+  		bt_w_authority = #{bt.bt_w_authority}
+  	where
+  		bt_num = #{bt.bt_num}
+  </update>
+  <delete id="deleteBoardType">
+  	delete from board_type where bt_num = #{bt_num}
+  </delete>
+  <insert id="insertBoard" useGeneratedKeys="true" keyProperty="bo.bo_num">
   	insert into board(bo_num, bo_title, bo_content, bo_me_id, bo_bt_num, bo_ori_num)
   	select ifnull(max(bo_num), 0)+1, #{bo.bo_title}, #{bo.bo_content}, #{bo.bo_me_id},
   		#{bo.bo_bt_num}, ifnull(max(bo_num), 0)+1
   		from board
-  	</insert>
-  	
-  	<insert id="insertFile">
-  	insert into file(fi_num,fi_ori_name,fi_name,fi_bo_num)
-  		values(#{f.fi_num,},#{f.fi_ori_name},#{f.fi_name},#{f.fi_bo_num})
-  	</insert>
-  	
-  	<select id="selectAllBoard" resultType="kr.kh.test.vo.BoardVO">
-  		select *
-  		from board 
-  		where
-  			(bo_title like concat('%',#{cri.search},'%')
-  			or bo_content like concat('%',#{cri.search},'%'))
-  			<if test="cri.ype != 0">
-  				and bo_bt_num = #{cri.type}
-  			</if>
+  </insert>
+  <insert id="insertFile">
+  	insert into file(fi_bo_num, fi_name, fi_ori_name)
+  	values(#{file.fi_bo_num},#{file.fi_name},#{file.fi_ori_name})
+  </insert>
+  <select id="selectBoardList" resultType="kr.kh.test.vo.BoardVO">
+  	select * from board 
+  		where (bo_title like concat('%',#{cri.search},'%')
+  			or bo_content like concat('%',#{cri.search},'%')
+  		)
+  		<if test="cri.type != 0">
+  			and bo_bt_num = #{cri.type}
+  		</if>
   		order by bo_num desc
   		limit #{cri.pageStart}, #{cri.perPageNum}
-  	</select>
-  	
-  	<select id="selectBoardTotalCount" resultType="int">
-  		select count(*) from board
-  		where
-  			(bo_title like concat('%',#{cri.search},'%')
-  			or bo_content like concat('%',#{cri.search},'%'))
-  			<if test="cri.ype != 0">
-  				and bo_bt_num = #{cri.type}
-  			</if>
-  	</select>
-  	
-  	<update id="updateViews">
-  		update 
-  			board 
-  		set 
-  			bo_views = bo_views+1 
-  		where 
-  			bo_num = #{bo_num}
-  	</update>
-  	
-  	<select id="selectBoard" resultType="kr.kh.test.vo.BoardVO">
-  		select *
-  		from board
-  		join 
-  			board_type
-  		on
-  			bo_bt_num = bt_num
-  		where bo_num = #{bo_num}
-  	</select>
-  	
-  	<select id="selectFile" resultType="kr.kh.test.vo.FileVO">
-  		select *
-  		from file
-  		where fi_bo_num = #{bo_num};
-  	</select>
-  	
-  	<delete id="deleteFile">
-  		delete from file
-  		where fi_num = #{fi_num}
-  	</delete>
-  	
-  	<delete id="deleteBoard">
-  		delete from board
-  		where bo_num = #{bo_num}
-  	</delete>
+  </select>
+  <select id="selectTotalCountBoard" resultType="int">
+  	select count(*) from board
+  		where (bo_title like concat('%',#{cri.search},'%')
+  			or bo_content like concat('%',#{cri.search},'%')
+  		)
+  		<if test="cri.type != 0">
+  			and bo_bt_num = #{cri.type}
+  		</if>
+  </select>
+  <update id="updateViews">
+  	update 
+  		board 
+	set 
+		bo_views = bo_views+1 
+	where 
+		bo_num = #{bo_num}
+  </update>
+  <select id="selectBoard" resultType="kr.kh.test.vo.BoardVO">
+  	select
+  		*
+  	from
+  		board
+  	join
+  		board_type
+  	on
+  		bo_bt_num = bt_num
+  	where
+  		bo_num = #{bo_num}
+  </select>
+  <select id="selectFileList" resultType="kr.kh.test.vo.FileVO">
+  	select
+  		*
+  	from
+  		file
+  	where
+  		fi_bo_num = #{bo_num}
+  </select>
+  <delete id="deleteFile">
+  	delete
+  	from
+  		file
+  	where
+  		fi_num = #{fi_num}
+  </delete>
+  <delete id="deleteBoard">
+  	delete 
+  	from
+  		board
+  	where
+  		bo_num = #{bo_num}
+  </delete>
+  <update id="updateBoard">
+  	update
+  		board
+  	set
+  		bo_title = #{board.bo_title},
+  		bo_content = #{board.bo_content},
+  		bo_bt_num = #{board.bo_bt_num}
+  	where
+  		bo_num = #{board.bo_num}
+  </update>
+  <select id="selectFile" resultType="kr.kh.test.vo.FileVO">
+  	select 
+  		*
+  	from
+  		file
+  	where
+  		fi_num = #{fi_num}
+  </select>
+  <select id="selectLikes" resultType="kr.kh.test.vo.LikesVO">
+  	select 
+  		*
+  	from
+  		likes
+  	where 
+  		li_me_id = #{li_me_id} and li_bo_num = #{li_bo_num}
+  </select>
+  <insert id="insertLikes">
+  	insert into
+  		likes(li_me_id, li_state, li_bo_num)
+  		values(#{li.li_me_id}, #{li.li_state}, #{li.li_bo_num})
+  </insert>
+  <update id="updateLikes">
+  	update
+  		likes
+  	set
+  		li_state = #{li.li_state}
+  	where
+  		li_me_id = #{li.li_me_id} and li_bo_num = #{li.li_bo_num}
+  </update>
+  <update id="updateBoardUpAndDown">
+  	update
+  		board
+  	set
+  		bo_up = (
+  			select 
+  				count(*) 
+  			from 
+  				likes 
+  			where 
+  				li_bo_num = #{li_bo_num} and li_state = 1),
+  		bo_down = (
+  			select 
+  				count(*) 
+  			from 
+  				likes 
+  			where 
+  				li_bo_num = #{li_bo_num} and li_state = -1)
+  	where 
+  		bo_num = #{li_bo_num}
+  </update>
 </mapper>

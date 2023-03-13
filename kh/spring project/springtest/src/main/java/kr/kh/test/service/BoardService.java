@@ -12,21 +12,25 @@ import kr.kh.test.vo.MemberVO;
 
 public interface BoardService {
 
-	ArrayList<BoardTypeVO> getBoardType(MemberVO user);
+	ArrayList<BoardTypeVO> getBoardTypeList(MemberVO user);
 
 	boolean insertBoard(BoardVO board, MemberVO user, MultipartFile[] files);
 
-	ArrayList<BoardVO> boardList(Criteria criteria);
+	ArrayList<BoardVO> getBoardList(Criteria cri);
 
-	int getBoardToalCount(Criteria criteria);
+	int getTotalCountBoard(Criteria cri);
 
 	BoardVO getBoardAndUpdateView(int bo_num);
 
 	ArrayList<FileVO> getFileList(int bo_num);
 
-	boolean deleteBoard(Integer bo_num, MemberVO user);
+	boolean deleteBoard(int bo_num, MemberVO user);
 
 	BoardVO getBoard(int bo_num);
+
+	boolean updateBoard(BoardVO board, MemberVO user, MultipartFile[] files, int[] fileNums);
+
+	int updateLike(int li_bo_num, int li_state, MemberVO user);
 
 
 }
