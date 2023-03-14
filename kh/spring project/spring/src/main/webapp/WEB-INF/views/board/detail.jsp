@@ -106,7 +106,13 @@
 			<a href="<c:url value='/board/delete/${board.bo_num}'></c:url>">
 				<button class="btn btn-outline-primary btn-delete">삭제</button>
 			</a>
+			
 		</div>
+	</c:if>
+	<c:if test="${board.bo_num == board.bo_ori_num }">
+		<a href="<c:url value='/board/insert?bo_ori_num=${board.bo_num}'></c:url>">
+			<button class="btn btn-outline-primary btn-reply">답글</button>
+		</a>
 	</c:if>
 </div>
 <script>

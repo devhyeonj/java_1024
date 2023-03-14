@@ -21,9 +21,11 @@ public class BoardVO {
 	String bo_me_id;
 	int bo_bt_num;
 	String bt_type;
+	String bt_name;
 	
 	public String getBo_register_date_str() {
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		SimpleDateFormat format = 
+			new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		return format.format(bo_register_date);
 	}
 }
