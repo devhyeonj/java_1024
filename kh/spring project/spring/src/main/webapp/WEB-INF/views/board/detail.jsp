@@ -113,12 +113,22 @@
 			<button class="btn btn-outline-primary btn-reply">답글</button>
 		</a>
 	</c:if>
-	<div class="comment-list mt-2">
-	
+	<div class="comment-list mt-2 border rounded-sm border-success">
+		<div class="comment-row p-3">
+			<div class="co_me_id">qwe123</div>
+			<div class="co_content">11</div>
+			<div class="co_register_date">2023-03-15</div>
+			<button class="btn btn-outline-success btn-reply">답글</button>
+			<button class="btn btn-outline-success btn-update">수정</button>
+			<button class="btn btn-outline-success btn-delete">삭제</button>
+			<hr>
+		</div>
 	</div>
-	<div class="comment-pagination mt-2">
-	
-	</div>
+	<ul class="comment-pagination mt-2 pagination justify-content-center">
+	    <li class="page-item" data-page=""><a class="page-link" href="#">이전</a></li>
+	    <li class="page-item" data-page=""><a class="page-link" href="#">1</a></li>
+	    <li class="page-item" data-page=""><a class="page-link" href="#">다음</a></li>
+	</ul>
 	<div class="comment-box mt-2">
 		<div class="input-group mb-3">
 			<textarea class="form-control" placeholder="댓글을 입력하세요." name="co_content"></textarea>
@@ -188,6 +198,7 @@ var swiper = new Swiper(".mySwiper", {
 });
 </script>
 <script>
+//댓글 등록 버튼 클릭
 $('.btn-comment-insert').click(function(){
 	//로그인 여부 체크
 	if('${user.me_id}' == ''){
@@ -203,15 +214,104 @@ $('.btn-comment-insert').click(function(){
 	}
 	let comment = {
 		co_content : co_content,
-		co_bo_num : '${board.bo_num}'
+		co_bo_num : bo_num
 	}
+	insertComment(comment);
+});
+//댓글 페이지네이션을 클릭하면
+$(document).on('click','.comment-pagination a', function(e){
+	e.preventDefault();
+	page = $(this).parent().data('page');
+	selectCommentList(page, bo_num);
+});
+//댓글 삭제버튼 클릭 이벤트
+$(document).on('click', '.comment-list .btn-delete',function(){
+	//댓글 번호 확인
+	let co_num = $(this).data('num');
+	let comment = {
+		co_num : co_num
+	}
+	//deleteComment 호출
+	deleteComment(comment, page);//이때 page는 전역변수 page
+})
+const bo_num = '${board.bo_num}';
+let page = 1;//댓글 페이지
+selectCommentList(1, bo_num);
+function deleteComment(comment, page){
+	ajax('POST', 
+		comment, 
+		'<c:url value="/comment/delete"></c:url>',
+		function(data){
+			console.log(data);
+			if(data.result){
+				alert('댓글을 삭제했습니다.');
+				//댓글 조회
+				selectCommentList(page, bo_num);
+			}else{
+				alert('댓글 삭제에 실패했습니다.');
+			}
+		});
+}
+function selectCommentList(page, bo_num){
+	//현재 페이지 정보
+	let cri = {
+		page : page
+	}
+	ajax('POST', 
+		cri, 
+		'<c:url value="/comment/list/'+bo_num+'"></c:url>',
+		function(data){
+			let str = '';
+			let list = data.list;
+			for(i=0; i<list.length; i++){
+				str += 
+				'<div class="comment-row p-3">' +
+					'<div class="co_me_id">'+ list[i].co_me_id +'</div>' +
+					'<div class="co_content">'+ list[i].co_content +'</div>' +
+					'<div class="co_register_date">'+ list[i].co_register_date_str +'</div>'+
+					'<button class="btn btn-outline-success btn-reply">답글</button>';
+				if('${user.me_id}' == list[i].co_me_id){
+					str += 
+					'<button class="btn btn-outline-success btn-update ml-2" data-num="'+list[i].co_num+'">수정</button>'+
+					'<button class="btn btn-outline-success btn-delete ml-2" data-num="'+list[i].co_num+'">삭제</button>';
+				}
+				str +=
+					'<hr>'+
+				'</div>';
+			}
+			$('.comment-list').html(str);
+			str = '';
+			let pm = data.pm;
+			if(pm.prev)
+				str += 
+				'<li class="page-item" data-page="'+(pm.startPage-1)+'"><a class="page-link" href="#">이전</a></li>';
+			for(i = pm.startPage; i<=pm.endPage; i++){
+				let active = i == pm.cri.page ? 'active' : '';
+				str +=
+			    '<li class="page-item '+active+'" data-page="'+i+'"><a class="page-link" href="#">'+i+'</a></li>';
+			}
+			if(pm.next)
+				str +=
+			    '<li class="page-item" data-page="'+(pm.endPage+1)+'"><a class="page-link" href="#">다음</a></li>';
+		    
+		    $('.comment-pagination').html(str);
+		});
+}
+//댓글 객체가 주어지면 댓글을 등록하는 함수
+function insertComment(comment){
 	ajax('POST', 
 		comment, 
 		'<c:url value="/comment/insert"></c:url>',
 		function(data){
-			console.log(data);
-		})
-})
+			if(data.result){
+				alert('댓글을 등록했습니다.');
+				//댓글 조회
+				selectCommentList(1, bo_num);
+			}else{
+				alert('댓글 등록에 실패했습니다.');
+			}
+		});
+}
 function ajax(method, obj, url, successFunc, errorFunc){
 	$.ajax({
 		async:false,

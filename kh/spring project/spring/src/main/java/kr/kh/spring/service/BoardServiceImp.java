@@ -258,4 +258,28 @@ public class BoardServiceImp implements BoardService {
 		return boardDao.insertComment(comment) != 0;
 	}
 
+	@Override
+	public ArrayList<CommentVO> getCommentList(Criteria cri, int co_bo_num) {
+		if(cri == null)
+			cri = new Criteria();
+		return boardDao.selectCommentList(cri, co_bo_num);
+	}
+
+	@Override
+	public int getBoardTotalCountCommentList(int co_bo_num) {
+		return boardDao.selectBoardTotalCountCommentList(co_bo_num);
+	}
+
+	@Override
+	public boolean deleteCommnet(CommentVO comment,MemberVO user) {
+		if(comment == null)
+			return false;
+		if(user == null)
+			return false;
+		CommentVO dbComment = boardDao.selectComment(comment.getCo_num());
+		if(dbComment == null || !dbComment.getCo_me_id().equals(user.getMe_id()))
+			return false;
+		return boardDao.deleteComment(comment.getCo_num()) != 0;
+	}
+
 }
