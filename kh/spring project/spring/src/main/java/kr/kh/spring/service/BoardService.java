@@ -7,6 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 import kr.kh.spring.pagination.Criteria;
 import kr.kh.spring.vo.BoardTypeVO;
 import kr.kh.spring.vo.BoardVO;
+import kr.kh.spring.vo.CommentVO;
 import kr.kh.spring.vo.FileVO;
 import kr.kh.spring.vo.LikesVO;
 import kr.kh.spring.vo.MemberVO;
@@ -36,6 +37,8 @@ public interface BoardService {
 	void updateBoardByLikes(int bo_num);
 
 	int getBoardTotalCount(Criteria cri);
+
+	boolean insertCommnet(CommentVO comment, MemberVO user);
 
 
 }
