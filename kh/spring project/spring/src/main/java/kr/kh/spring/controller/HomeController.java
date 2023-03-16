@@ -101,6 +101,8 @@ public class HomeController {
 		}
 		//세션에 있는 회원 정보를 삭제
 		session.removeAttribute("user");
+		user.setMe_session_limit(null);
+		memberService.updateMemberBySession(user);
 		mv.setViewName("redirect:/");
 		return mv;
 	}
