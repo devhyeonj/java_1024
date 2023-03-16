@@ -61,7 +61,29 @@
 	</form>
 	<a href="<c:url value='/board/update/${board.bo_num}'></c:url>" class="btn btn-outline-danger">수정</a>
 </c:if>
+	<div>
+		<textarea placeholder="댓글을 입력하세요" name="comment-contents"></textarea>
+		<button class="comment-insert">댓글 등록</button>
+	</div>
 <script>
+$('.comment-insert').click(function() {
+	if('${user.me_id}' == '') {
+		let res = confirm('로그인한 회원만 댓글을 달 수 있습니다. \n로그인 페이지로 이동 합니다.');
+	
+		if(res) {
+			location.href="<c:url value='/login'></c:url>"
+		}else {
+			return false;
+		}
+	}
+		let comment = $('[name=comment-contents]').val();
+		if(comment == '') {
+			alert('댓글을 입력해주세요.');
+		}
+	})
+
+
+
 $('.btn-up, .btn-down').click(function(){
 	if('${user.me_id}' == '') {
 		alert('로그인한 회원만 추천/비추천을 할 수 있습니다.')
