@@ -134,6 +134,14 @@ public class MemberServiceImp implements MemberService {
 		return updateCount != 0; //성공하면 true 실패하면 false;
 	}
 
+	@Override
+	public boolean checkId(MemberVO user) {
+		if(user == null || user.getMe_id() == null || user.getMe_id().trim().length() == 0)
+			return false;
+		return memberDao.selectMemberById(user.getMe_id()) ==null;
+	}
+
+
 
 	
 	

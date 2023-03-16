@@ -1,14 +1,18 @@
 package kr.kh.test.controller;
 
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import kr.kh.test.controller.utils.MessageUtils;
@@ -105,5 +109,14 @@ public class HomeController {
 		}
 		mv.setViewName("redirect:/");
 		return mv;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/check/id" , method = RequestMethod.POST)
+	public Map<String,Object> idCheck(@RequestBody MemberVO user) {
+		Map<String,Object> map = new HashMap<String, Object>();
+		boolean res = memberService.checkId(user);
+		map.put("res", res);
+		return map;
 	}
 }
