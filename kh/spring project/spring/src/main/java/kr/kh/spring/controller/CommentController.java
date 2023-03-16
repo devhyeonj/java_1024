@@ -24,7 +24,7 @@ import kr.kh.spring.vo.MemberVO;
 public class CommentController {
 	@Autowired
 	BoardService boardService;
-	
+
 	@RequestMapping(value = "/comment/insert", method=RequestMethod.POST)
 	public Map<String, Object> commnetInsert(@RequestBody CommentVO comment,
 			HttpSession session) {
