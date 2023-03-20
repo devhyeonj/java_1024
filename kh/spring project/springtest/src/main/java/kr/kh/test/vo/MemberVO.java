@@ -15,6 +15,9 @@ public class MemberVO {
 	private Date me_birthday;
 	private int me_authority;
 	private Date me_join_time;
+	String me_session_id;
+	Date me_session_limit;
+	boolean autoLogin;
 	
 	public void setMe_birthday(String str) {
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");

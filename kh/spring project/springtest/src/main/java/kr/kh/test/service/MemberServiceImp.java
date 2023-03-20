@@ -142,7 +142,15 @@ public class MemberServiceImp implements MemberService {
 	}
 
 
+	@Override
+	public void updateSession(MemberVO user) {
+		memberDao.updateSession(user);
+	}
 
+	@Override
+	public MemberVO getMemberBySession(String me_session_id) {
+		return memberDao.selectMemberBySession(me_session_id);
+	}
 	
 	
 	

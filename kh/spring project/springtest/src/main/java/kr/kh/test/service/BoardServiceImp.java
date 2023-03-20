@@ -200,4 +200,6 @@ public class BoardServiceImp implements BoardService{
 		LikesVO likesVo = boardDao.selectLikes(bo_num, user.getMe_id());
 		return likesVo;
 	}
+	
+	
 }

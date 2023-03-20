@@ -1,16 +1,24 @@
 package kr.kh.test.interceptor;
 
+import java.util.Date;
+
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
+import kr.kh.test.service.MemberService;
 import kr.kh.test.vo.MemberVO;
 
 public class LoginInterceptor extends HandlerInterceptorAdapter{
+	
+	@Autowired
+	MemberService memberService;
 	
 	@Override
 	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
@@ -26,6 +34,18 @@ public class LoginInterceptor extends HandlerInterceptorAdapter{
 				//home.jsp ${user}는 세션 정보가 불러온거임
 				HttpSession session = request.getSession();
 				session.setAttribute("user", user);
+			    if(user.isAutoLogin()) {
+		        	int time = 60 * 60 * 24 * 7;
+		        	Cookie cookie = new Cookie("testCookie", session.getId());
+		        	cookie.setPath("/");
+		        	cookie.setMaxAge(time);
+		        	response.addCookie(cookie);
+
+		        	Date date = new Date(System.currentTimeMillis() + (time)*1000L);
+		        	user.setMe_session_limit(date);
+		        	user.setMe_session_id(session.getId());
+		        	memberService.updateSession(user);
+		        }
 		}
 		
 	}
